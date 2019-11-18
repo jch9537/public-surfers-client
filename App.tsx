@@ -1,28 +1,28 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView } from 'react-native';
+// import SignPage from "./component/signPage/signPage";
+import Main from "./component/Board/Main";
 
-export interface AppProps {}
+class App extends React.Component {
 
-export interface AppState {}
-
-class App extends React.Component<AppProps, AppState> {
-    // state = { :  };
     render() {
         return (
-            <View style={styles.container}>
-                <Text>Starting ChiMe Client!!!</Text>
-            </View>
+            <View >
+                <View style={{ padding: 10 }}>
+                    <Main></Main>
+                    <KeyboardAvoidingView behavior="position" style={styles.form}>
+                        {/* <SignPage /> */}
+                    </KeyboardAvoidingView>
+                </View >
+            </View >
         );
     }
 }
+const styles = StyleSheet.create({
+    form: {
+        height: "90%"
+    }
+})
 
 export default App;
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
-});

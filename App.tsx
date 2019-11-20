@@ -1,28 +1,18 @@
-import React from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView } from 'react-native';
-// import SignPage from "./component/signPage/signPage";
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from "react-navigation-stack"
 import Main from "./component/Board/Main";
+import SignPage from "./component/Sign";
+import Board from './component/Board/Board';
+import Room from "./component/rooms/room";
+const AppNavigator = createStackNavigator({
+    SignPart: { screen: SignPage },
+    Main: { screen: Main },
+    Board: { screen: Board },
+    Room: { screen: Room }
+}, {
+        initialRouteName: "Main"
+    })
+const AppContainer = createAppContainer(AppNavigator)
 
-class App extends React.Component {
-
-    render() {
-        return (
-            <View >
-                <View style={{ padding: 10 }}>
-                    <Main></Main>
-                    <KeyboardAvoidingView behavior="position" style={styles.form}>
-                        {/* <SignPage /> */}
-                    </KeyboardAvoidingView>
-                </View >
-            </View >
-        );
-    }
-}
-const styles = StyleSheet.create({
-    form: {
-        height: "90%"
-    }
-})
-
-export default App;
+export default AppContainer;
 

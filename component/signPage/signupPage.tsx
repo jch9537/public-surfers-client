@@ -5,9 +5,9 @@ export interface State {
     name: string;
     email: string;
     password: string;
-    siginup: Boolean;
+    siginup: boolean;
     phone: string
-    error: Boolean
+    error: boolean
 }
 export default class sigininpage extends Component<{}, State> {
     state = {
@@ -51,11 +51,6 @@ export default class sigininpage extends Component<{}, State> {
                 })
         }
         //fetch 요청
-    }
-    componentDidUpdate() {
-        if (this.state.siginup) {
-
-        }
     }
     render() {
         return (

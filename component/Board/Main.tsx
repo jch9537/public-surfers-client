@@ -1,16 +1,43 @@
 import React, { Component } from 'react';
-import { View, Text, Button } from "react-native";
-import { createStackNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation';
-
-export default class Main extends Component {
+import { View, Text, Button, StyleSheet, ViewStyle } from "react-native";
+interface Props {
+    navigation: any
+}
+interface Style {
+    total: ViewStyle,
+    first: ViewStyle,
+    second: ViewStyle,
+    third: ViewStyle
+}
+export default class Main extends Component<Props> {
     render() {
-
         return (
-            <View>
-                <Text>방만들기</Text>
-                <Text>참여하기</Text>
-                <Text>my room</Text>
+            <View style={styles.total}>
+                <View style={styles.first}>
+                    <Text>방만들기</Text>
+                </View>
+                <View style={styles.second}>
+                    <Button title="방 목록 불러오기"
+                        onPress={() => this.props.navigation.navigate("Board")}></Button>
+                </View>
+                <View style={styles.third}>
+                    <Text>ㅠㅠㅠㅠ</Text>
+                </View>
             </View>
         )
     }
 }
+const styles = StyleSheet.create<Style>({
+    total: {
+        flex: 1
+    },
+    first: {
+        flex: 1
+    },
+    second: {
+        flex: 1
+    },
+    third: {
+        flex: 1
+    }
+})

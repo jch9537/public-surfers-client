@@ -5,7 +5,7 @@ import { Input, Icon } from "react-native-elements";
 interface State {
     email: string
     password: string
-    errorMsg: Boolean
+    errorMsg: boolean
     siginin: boolean
 }
 

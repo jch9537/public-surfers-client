@@ -13,7 +13,9 @@ interface Props {
 interface State {
     board: Array<Posts>
     date: string
-    location_name: string
+    ListLocal: string[]
+    choiceBoard: Array<any>
+    pickLocal: string
     page: number
 }
 interface Posts {
@@ -23,55 +25,68 @@ interface Posts {
     date: string,
 }
 export default class Board extends Component<Props, State>{
-    constructor(props: Props) {
-        super(props);
-        this.state = ({
-            board: [],
-            location_name: "",
-            date: "",
-            page: 0
-        })
-    }
+    state = ({
+        board: [],
+        ListLocal: ["---", "제주도", "천안", "부산"],
+        pickLocal: "",
+        choiceBoard: [],
+        date: "",
+        page: 0
+    })
     componentDidMount() {
         fetch("http://54.180.108.45:3000/posts")
             .then(res => res.json())
             .then(data => {
-                console.log("data", data)
                 this.setState({
-                    board: fakeBoard
+                    board: data
                 })
             })
     }
-    ChangeState = (value: string, key: any) => {
-        // const obj = { [key]: value } as Pick<State, keyof State>
-        let result = [];
+    ChangeState = (value: string) => {
+        this.setState({
+            pickLocal: value
+        })
+        let choices: Posts[] = [];
         for (let i = 0; i < this.state.board.length; i++) {
-            if (this.state.board[i][key] === value) {
-                result.push(this.state.board[i])
+            if (this.state.board[i]["location_name"] === value) {
+                choices.push(this.state.board[i]);
             }
         }
-        this.setState({ board: result })
-        //board 부분 갱신되는 거 다시 확인
+        this.setState({
+            choiceBoard: choices
+        })
+    }
+    _render = (Board: any) => {
+        return (
+            <View style={styles.total} >
+                <View style={styles.Choice}>
+                    <Choice list={this.state.ListLocal} func={this.ChangeState} />
+                </View>
+                <View style={styles.List} >
+                    <SafeAreaView>
+                        <ScrollView
+                            horizontal={false}
+                            showsHorizontalScrollIndicator={false}>
+                            {this.state[Board].map((item) => <BoardList key={item["id"]} hostName={item["host_name"]} Date={item["date"]} local={item["location_name"]} navigation={this.props.navigation} PostId={item["id"]} />)}
+                        </ScrollView>
+                    </SafeAreaView>
+                </View>
+            </View>
+        )
+
     }
 
     render() {
         if (this.state.board.length > 0) {
-            return (
-                <View style={styles.total}>
-                    <View style={styles.Choice}>
-                        <Choice board={this.state.board} func={this.ChangeState} />
-                    </View>
-                    <View style={styles.List} >
-                        <SafeAreaView>
-                            <ScrollView
-                                horizontal={false}
-                                showsHorizontalScrollIndicator={false}>
-                                {this.state.board.map((item) => <BoardList key={item["id"]} hostName={item["host_name"]} Date={item["date"]} local={item["location_name"]} navigation={this.props.navigation} PostId={item["id"]} />)}
-                            </ScrollView>
-                        </SafeAreaView>
-                    </View>
-                </View>
-            )
+            if (this.state.pickLocal.length > 0) {
+                return (
+                    this._render("choiceBoard")
+                )
+            } else {
+                return (
+                    this._render("board")
+                )
+            }
         } else {
             return (
                 <View></View>
@@ -85,9 +100,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     Choice: {
-        flex: 1,
-        backgroundColor: "red",
-        alignItems: 'center'
+        flex: 1
     },
     List: {
         flex: 7,

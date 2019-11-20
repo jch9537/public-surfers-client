@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { Text, Icon } from 'react-native-elements';
-interface Props{
-    
+interface Props {
+    hostName: string
+    Date: string
+    local: string
+    PostId: number
+    navigation: any
 }
-export default class BoardList extends Component<Porps> {
+export default class BoardList extends Component<Props> {
 
     render() {
         return (
@@ -19,7 +23,6 @@ export default class BoardList extends Component<Porps> {
                             type="antdesign"
                             size={19}
                             color='black'
-
                         />
                     </View>
                 </TouchableOpacity>

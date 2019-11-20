@@ -4,7 +4,7 @@ import {
 } from "react-native";
 
 interface Props {
-    board: Array<Posts>;
+    list: string[] 
     func: any
 }
 interface Posts {
@@ -17,11 +17,8 @@ export default class Choice extends Component<Props, {}> {
     render() {
         return (
             <View>
-                <Picker onValueChange={(itemValue) => this.props.func(itemValue, "location_name")}>
-                    {this.props.board.map(data => <Picker.Item key={data["id"]} label={data["location_name"]} value={data["location_name"]}></Picker.Item>)}
-                </Picker>
-                <Picker onValueChange={(itemValue) => this.props.func(itemValue, "date")}>
-                    {this.props.board.map(data => <Picker.Item key={data["id"]} label={data["date"]} value={data["date"]}></Picker.Item>)}
+                <Picker onValueChange={(itemValue) => this.props.func(itemValue)}>
+                    {this.props.list.map((data, index) => <Picker.Item key={index} label={data} value={data}></Picker.Item>)}
                 </Picker>
             </View>
         )

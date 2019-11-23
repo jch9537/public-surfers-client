@@ -3,15 +3,16 @@ import React, { Component } from 'react'
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from "react-navigation-stack"
 import { createDrawerNavigator } from "react-navigation-drawer";
-import ChatRoom from "./component/Chat/chat";
-import Main from "./component/Board/Main";
-import Room from "./component/rooms/room";
-import SignPage from "./component/Sign";
-import Board from './component/Board/Board';
-import SideBar from "./component/rooms/sideBar";
+import ChatRoom from "./components/Chat/chat";
+import Main from "./components/Main";
+import MakeRoom from "./components/makerooms/makeroom";
+import Room from "./components/rooms/room";
+import SignPage from "./components/Sign";
+import Board from './components/Board/Board';
+import SideBar from "./components/rooms/sideBar";
 import * as firebase from "firebase";
 import { firebaseConfig } from "./firebaseConfig";
-import MyRoomList from "./component/MyList/MyRooms";
+import MyRoomList from "./components/MyList/MyRooms";
 
 firebase.initializeApp(firebaseConfig);
 const DrawSide = createDrawerNavigator({
@@ -25,7 +26,8 @@ const BoardStack = createStackNavigator({
     Board: { screen: Board },
     MyRoomList: { screen: MyRoomList },
     Chat: { screen: ChatRoom },
-    Room: { screen: DrawSide }
+    Room: { screen: DrawSide },
+    MakeRoom: { screen: MakeRoom }
     //makeRoom: {screen : MakeRoom},
     // MyRoomList : {screen : MyRoomList}
 })

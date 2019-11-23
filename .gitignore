@@ -11,5 +11,6 @@ web-build/
 web-report/
 .prettierrc.json
 /Users/yunseunghyeon/Desktop/ChiMe/chiMe-client/firebaseConfig.tsx
+
 # macOS
 .DS_Store

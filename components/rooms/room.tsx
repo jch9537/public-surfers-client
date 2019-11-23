@@ -3,6 +3,7 @@ import { View, StyleSheet, ScrollView } from "react-native";
 import { DrawerActions } from "react-navigation-drawer";
 import { Text, Icon } from 'react-native-elements';
 import { rooms } from "../fakeData/roomData";
+import Weather from "./weather";
 
 interface Props {
     navigation: any
@@ -57,7 +58,9 @@ export default class room extends Component<Props, State> {
                         size={50}
                         name="accessibility"
                     ></Icon>
-                    <View style={styles.weatherView}></View>
+                    <View style={styles.weatherView}>
+                        <Weather />
+                    </View>
                     <Text style={styles.textSize}> {this.state.host_name} {this.state.date} {this.state.location_name}</Text>
                 </View>
                 <View style={styles.bodyScreen}>

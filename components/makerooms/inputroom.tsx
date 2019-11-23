@@ -20,7 +20,7 @@ import {
     locationDetail
 } from '../utils/util';
 
-export interface InputroomProps {}
+export interface InputroomProps { }
 
 export interface InputroomState {
     location: Array<string>;
@@ -74,7 +74,7 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
         }
     };
 
-    setDetailLocation(spot) {
+    setDetailLocation(spot: any) {
         console.log('큰지역선택', spot);
     }
 

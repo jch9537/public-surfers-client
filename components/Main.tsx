@@ -14,15 +14,16 @@ export default class Main extends Component<Props> {
         return (
             <View style={styles.total}>
                 <View style={styles.first}>
-                    <Text>방만들기</Text>
+                    <Button title="MakeRoom"
+                        onPress={() => this.props.navigation.navigate("MakeRoom")} />
                 </View>
                 <View style={styles.second}>
                     <Button title="방 목록 불러오기"
-                        onPress={() => this.props.navigation.navigate("Board")}></Button>
+                        onPress={() => this.props.navigation.navigate("Board")} />
                 </View>
                 <View style={styles.third}>
                     <Button title="나의 room"
-                        onPress={() => this.props.navigation.navigate("MyRoomList")}></Button>
+                        onPress={() => this.props.navigation.navigate("MyRoomList")} />
                 </View>
             </View>
         )

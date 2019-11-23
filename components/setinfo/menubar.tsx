@@ -4,7 +4,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import { Header } from 'react-native-elements';
 
 // export interface MenuBarProps {}
-
 // export interface MenuBarState {}
 
 class MenuBar extends Component {

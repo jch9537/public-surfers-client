@@ -33,7 +33,7 @@ class UserInfo extends Component<UserInfoProps, UserInfoState> {
         this.state = { name: null, password: null };
     }
     render() {
-        console.log('프롭확인 ', this.props);
+        // console.log('프롭확인 ', this.props);
         return (
             <View style={styles.infoContainer}>
                 <View style={styles.input}>
@@ -106,13 +106,13 @@ export default UserInfo;
 const styles = StyleSheet.create<Style>({
     infoContainer: {
         flex: 1,
-        backgroundColor: 'yellow'
+        backgroundColor: 'lightgrey'
     },
     input: {
         alignItems: 'center',
         flex: 0.7,
         top: 70,
         width: '100%',
-        backgroundColor: 'red'
+        backgroundColor: 'violet'
     }
 });

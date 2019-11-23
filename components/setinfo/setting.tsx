@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { StyleSheet, Text, View, ViewStyle, Alert } from 'react-native';
+import { StyleSheet, Text, View, ViewStyle, Alert, Button } from 'react-native';
+import { Icon } from 'react-native-elements';
 // import { Header, Avatar } from 'react-native-elements';
 
-import MenuBar from './menubar';
+// import MenuBar from './menubar';
 import UserInfo from './userInfo';
-import fetchAPI from '../fetch';
+import { fetchAPI } from '../fetch';
 
 interface Style {
     setContainer: ViewStyle;
     infoContainer: ViewStyle;
 }
-
 export interface SettingProps {}
 export interface SettingState {
     name?: any;
@@ -22,15 +22,38 @@ export interface SettingState {
 class Setting extends Component<SettingProps, SettingState> {
     constructor(props: SettingProps) {
         super(props);
+
         this.state = { name: null, password: null, inputInfo: null };
     }
+    static navigationOptions = ({ navigation }: any) => {
+        let headerTitle = 'Setting';
+        // let headerTitleStyle = { color: 'black' }; // 띄어쓰기 해야함
+        let headerRight = (
+            <Text onPress={() => Alert.alert('로그아웃')}>Logout</Text>
+        );
+        // let headerLeft = (
+        //     <Icon name="home" onPress={() => navigation.navigate('Test1')} />
+        // );
+
+        return {
+            headerTitle,
+            // headerTitleStyle,
+            headerRight
+            // headerLeft
+        };
+    };
+
+    headerButtonRight = (): void => {
+        console.log('안녕');
+    };
 
     editInfo = (): void => {
         const inputInfo = {
             name: this.state.name,
             password: this.state.password
         };
-        fetchAPI('/setting', 'POST', inputInfo); // url넣기
+        console.log('에딧인풋', inputInfo);
+        // fetchAPI('/setting', 'POST', inputInfo); // url넣기
     };
 
     editName = (name?: string | null): void => {
@@ -45,12 +68,11 @@ class Setting extends Component<SettingProps, SettingState> {
     };
 
     render() {
-        console.log('여기스테이트 :', this.state.inputInfo);
+        // console.log('세팅프롭', this.props);
+        // console.log('여기스테이트 :', this.state.inputInfo);
         return (
             <View style={styles.setContainer}>
-                <View>
-                    <MenuBar></MenuBar>
-                </View>
+                <View>{/* <MenuBar></MenuBar>필요없음 */}</View>
                 {/* style={styles.menuContainer} */}
                 <View style={styles.infoContainer}>
                     <UserInfo

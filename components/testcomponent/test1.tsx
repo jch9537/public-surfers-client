@@ -1,17 +1,13 @@
 import * as React from 'react';
-import { Component } from 'react';
-import { View, Text, StyleSheet, ViewStyle, Alert } from 'react-native';
+import { View, Text, StyleSheet, Button, Alert } from 'react-native';
 
-import Inputroom from './inputroom';
+export interface Test1Props {}
+export interface Test1State {}
 
-interface Style {
-    room: ViewStyle;
-}
-
-class MakeRoom extends Component {
+class Test1 extends React.Component<Test1Props, Test1State> {
     // state = { :  }
     static navigationOptions = ({ navigation }: any) => {
-        let headerTitle = 'MakeRoom';
+        let headerTitle = 'Home';
         // let headerTitleStyle = { color: 'black' }; // 띄어쓰기 해야함
         let headerRight = (
             <Text onPress={() => Alert.alert('로그아웃')}>Logout</Text>
@@ -29,18 +25,20 @@ class MakeRoom extends Component {
     };
     render() {
         return (
-            <View style={styles.room}>
-                <Inputroom></Inputroom>
+            <View style={styles.test}>
+                <Text>MainPage (Test1)</Text>
             </View>
         );
     }
 }
 
-export default MakeRoom;
-
-const styles = StyleSheet.create<Style>({
-    room: {
+const styles = StyleSheet.create({
+    test: {
         flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: 'lightgrey'
     }
 });
+
+export default Test1;

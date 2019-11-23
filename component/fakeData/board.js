@@ -31,6 +31,18 @@ module.exports = {
         { id: 29, host_name: "승현", location_name: "서울", date: "2019/11/1" },
         { id: 30, host_name: "승현", location_name: "서울", date: "2019/11/1" },
         { id: 31, host_name: "승현", location_name: "서울", date: "2019/11/1" },
+    ],
+    fakeRoomList: [
+        { id: 1, host_name: "승현", location_name: "천안", date: "2019/11/1" },
+        { id: 2, host_name: "승현", location_name: "부산", date: "2019/11/1" },
+        { id: 4, host_name: "승현", location_name: "서울", date: "2019/11/1" },
+        { id: 15, host_name: "승현", location_name: "ㅊㅋㅌㅊ", date: "2019/11/23" },
+        { id: 16, host_name: "승현", location_name: "세종", date: "2019/11/23" },
+        { id: 20, host_name: "승현", location_name: "제주도", date: "2019/11/11" },
+        { id: 21, host_name: "승현", location_name: "제주도", date: "2019/11/11" },
+        { id: 22, host_name: "승현", location_name: "제주도", date: "2019/11/11" },
+        { id: 28, host_name: "승현", location_name: "제주도", date: "2019/11/11" },
+        { id: 31, host_name: "승현", location_name: "서울", date: "2019/11/1" },
 
     ]
 }

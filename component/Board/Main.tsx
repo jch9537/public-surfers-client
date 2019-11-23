@@ -21,7 +21,8 @@ export default class Main extends Component<Props> {
                         onPress={() => this.props.navigation.navigate("Board")}></Button>
                 </View>
                 <View style={styles.third}>
-                    <Text>ㅠㅠㅠㅠ</Text>
+                    <Button title="나의 room"
+                        onPress={() => this.props.navigation.navigate("MyRoomList")}></Button>
                 </View>
             </View>
         )

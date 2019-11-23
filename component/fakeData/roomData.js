@@ -7,6 +7,6 @@ module.exports = {
         date: "2019.11.12",
         text: "살려줘..",
         pay: 0,
-        participants: ["ㅍㅍ", "ㅇㅁㄴㅇㄴㅁ"]
+        participants: ["승현", "꼬기"]
     }
 }

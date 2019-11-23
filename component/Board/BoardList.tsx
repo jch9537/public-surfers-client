@@ -13,7 +13,7 @@ export default class BoardList extends Component<Props> {
     render() {
         return (
             <View>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate("Room", { PostId: this.props.PostId })} >
+                <TouchableOpacity onPress={() => this.props.navigation.navigate("Room")} >
                     <View style={styles.button}>
                         <Text style={styles.text}>
                             {this.props.hostName}/{this.props.Date}/{this.props.local}

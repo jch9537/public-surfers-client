@@ -1,17 +1,24 @@
 import React from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView } from 'react-native';
-import SignPage from "./signPage/signPage"
+import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
+// import SignPage from "./signPage/signPage"
+import Google from "./signPage/google";
 
-export default class App extends React.Component {
-    static navigationOptions = { header: null };
+interface Props {
+    navigation: any
+}
+
+export default class App extends React.Component<Props> {
+    static navigationOptions = { header: Google };
 
     render() {
         return (
-            <View >
-                <View style={{ padding: 10 }}>
-                    <KeyboardAvoidingView behavior="position" style={styles.form}>
-                        <SignPage />
-                    </KeyboardAvoidingView>
+            <View style={{
+                flex: 1, justifyContent: "center", alignItems: "center"
+            }}>
+                <View style={{ padding: 10, }}>
+                    {/* <KeyboardAvoidingView behavior="position" style={styles.form}> */}
+                    <Google navigation={this.props.navigation} />
+                    {/* </KeyboardAvoidingView> */}
                 </View >
             </View >
         );

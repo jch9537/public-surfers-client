@@ -1,61 +1,49 @@
-import React from 'react';
-import { AppRegistry } from 'react-native';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { Icon } from 'react-native-elements';
 
-// import Main from "./component/Board/Main";
-// import SignPage from "./component/Sign";
-// import Board from './component/Board/Board';
-// import Room from "./component/rooms/room";
-import Setting from './components/setinfo/setting';
-import MakeRoom from './components/makerooms/makeroom';
-import Test1 from './components/testcomponent/test1';
-import Test2 from './components/testcomponent/test2';
-// import Test3 from './components/testcomponent/test3';
+import React, { Component } from 'react'
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from "react-navigation-stack"
+import { createDrawerNavigator } from "react-navigation-drawer";
+import ChatRoom from "./component/Chat/chat";
+import Main from "./component/Board/Main";
+import Room from "./component/rooms/room";
+import SignPage from "./component/Sign";
+import Board from './component/Board/Board';
+import SideBar from "./component/rooms/sideBar";
+import * as firebase from "firebase";
+import { firebaseConfig } from "./firebaseConfig";
+import MyRoomList from "./component/MyList/MyRooms";
 
-const TabNavigator = createBottomTabNavigator({
-    Home: {
-        screen: createStackNavigator({
-            Home: { screen: Test1 }
-        }),
-        navigationOptions: {
-            tabBarIcon: () => <Icon name="home" size={29}></Icon>
-        }
-    },
-    Board: {
-        screen: createStackNavigator({
-            Board: { screen: Test2 }
-        }),
-        navigationOptions: {
-            tabBarIcon: () => <Icon name="storage" size={29}></Icon>
-        }
-    },
-    MakeRoom: {
-        screen: createStackNavigator({
-            MakeRoom: { screen: MakeRoom }
-        }),
-        navigationOptions: {
-            tabBarIcon: () => <Icon name="add" size={29}></Icon>
-        }
-    },
-    Setting: {
-        screen: createStackNavigator({
-            Setting: { screen: Setting }
-        }),
-        navigationOptions: {
-            tabBarIcon: () => <Icon name="face" size={29}></Icon>
-            //아이콘 build중 선택
-        }
+firebase.initializeApp(firebaseConfig);
+const DrawSide = createDrawerNavigator({
+    RoomScress: { screen: Room }
+}, {
+        contentComponent: props => <SideBar navigation={props.navigation} />
     }
-});
-const AppContainer = createAppContainer(TabNavigator);
+)
+const BoardStack = createStackNavigator({
+    Main: { screen: Main },
+    Board: { screen: Board },
+    MyRoomList: { screen: MyRoomList },
+    Chat: { screen: ChatRoom },
+    Room: { screen: DrawSide }
+    //makeRoom: {screen : MakeRoom},
+    // MyRoomList : {screen : MyRoomList}
+})
 
-const App = () => {
-    return <AppContainer />;
+const SignMainSwitch = createSwitchNavigator({
+    MainPart: { screen: BoardStack },
+    SignPart: { screen: SignPage }
+}, {
+        initialRouteName: 'MainPart',
+    })
+
+const AppContainer = createAppContainer(SignMainSwitch)
+
+
+export default class App extends Component {
+    render() {
+        return (
+            <AppContainer />
+        )
+    }
 };
-
-export default App;
-
-AppRegistry.registerComponent('chiMe', () => App);

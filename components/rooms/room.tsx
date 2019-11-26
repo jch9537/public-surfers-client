@@ -1,55 +1,25 @@
 import React, { Component } from 'react'
 import { View, StyleSheet, ScrollView } from "react-native";
-import { DrawerActions } from "react-navigation-drawer";
+import { RoomData, roominfo } from "../src/redux/actions"
 import { Text, Icon } from 'react-native-elements';
 import { rooms } from "../fakeData/roomData";
 import Weather from "./weather";
-
+import { connect } from "react-redux";
 interface Props {
-    navigation: any
+    Room: RoomData
+    addRoom(obj: RoomData): any
 }
-interface State {
-    id?: number
-    host_id?: number
-    host_name?: string
-    location_name?: string
-    date?: string
-    text: string
-    participants?: Array<string>
-}
-
-export default class room extends Component<Props, State> {
-    state = {
-        id: 0,
-        host_id: 0,
-        host_name: "",
-        location_name: "",
-        date: "",
-        text: "",
-        participants: []
-    }
+class RoomInfo extends Component<Props> {
     componentDidMount() {
-        this.setState({
-            id: rooms["id"],
-            host_id: rooms["host_id"],
-            host_name: rooms["host_name"],
-            location_name: rooms["location_name"],
-            date: rooms["date"],
-            text: rooms["text"],
-            participants: rooms["participants"]
-        })
-
+        this.props.addRoom(rooms)
         // fetch(`url/post/${this.props.navigation.getParam("PostId")}`)
         //     .then(res => res.json())
         //     .then(data => {
-        //         //     this.setState({
-        //         //         host: data["n"]
-        //         // })
+        //         
         //     })
 
     }
     render() {
-        console.log("???????");
         return (
             <View style={styles.screen}>
                 <View style={styles.topScreen}>
@@ -61,11 +31,11 @@ export default class room extends Component<Props, State> {
                     <View style={styles.weatherView}>
                         <Weather />
                     </View>
-                    <Text style={styles.textSize}> {this.state.host_name} {this.state.date} {this.state.location_name}</Text>
+                    <Text style={styles.textSize}> {this.props.Room.host_name} {this.props.Room.location_name} {this.props.Room.date}</Text>
                 </View>
                 <View style={styles.bodyScreen}>
                     <ScrollView>
-                        <Text>{this.state.text}</Text>
+                        <Text>{this.props.Room.text}</Text>
                     </ScrollView>
                 </View>
                 <View style={styles.lowScreen}>
@@ -101,3 +71,14 @@ const styles = StyleSheet.create({
         backgroundColor: "green"
     }
 })
+function mapStatesProps(state: any) {
+    return {
+        Room: state.room
+    }
+}
+function dispatchState(dispatch: any) {
+    return {
+        addRoom: (room: RoomData): void => dispatch(roominfo(room))
+    }
+}
+export default connect(mapStatesProps, dispatchState)(RoomInfo);

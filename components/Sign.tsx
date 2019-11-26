@@ -18,6 +18,7 @@ export default class App extends React.Component<Props> {
                 <View style={{ padding: 10, }}>
                     <KeyboardAvoidingView behavior="position" style={styles.form}>
                         <Google navigation={this.props.navigation} />
+                        <SignPage></SignPage>
                     </KeyboardAvoidingView>
                 </View >
             </View >

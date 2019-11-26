@@ -3,6 +3,9 @@ import React, { Component } from 'react'
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from "react-navigation-stack"
 import { createDrawerNavigator } from "react-navigation-drawer";
+import { RoomInfo } from "./components/src/redux/reducer";
+import { Provider } from "react-redux";
+import { createStore } from "redux";
 import ChatRoom from "./components/Chat/chat";
 import Main from "./components/Main";
 import MakeRoom from "./components/makerooms/makeroom";
@@ -36,16 +39,18 @@ const SignMainSwitch = createSwitchNavigator({
     MainPart: { screen: BoardStack },
     SignPart: { screen: SignPage }
 }, {
-        initialRouteName: 'MainPart',
+        initialRouteName: 'SignPart',
     })
 
 const AppContainer = createAppContainer(SignMainSwitch)
-
+const store = createStore(RoomInfo);
 
 export default class App extends Component {
     render() {
         return (
-            <AppContainer />
+            <Provider store={store}>
+                <AppContainer />
+            </Provider>
         )
     }
 };

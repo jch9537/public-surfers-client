@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Button, StyleSheet, ViewStyle } from "react-native";
+import { View, Button, StyleSheet, ViewStyle } from "react-native";
 interface Props {
     navigation: any
 }

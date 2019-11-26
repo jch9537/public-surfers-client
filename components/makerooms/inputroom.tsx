@@ -17,19 +17,25 @@ import {
     getFormatDate,
     realTimeWeather,
     locationInfo,
-    locationDetail
+    locationDetail,
+    localPoints
 } from '../utils/util';
+import SelectLocation from './selectLocation';
+import CheckPoint from './checkPoint';
+// import Weather from './weather';
 
-export interface InputroomProps { }
+export interface InputroomProps {}
 
 export interface InputroomState {
     location: Array<string>;
-    point: string;
-    detailLocation: any;
-    surfPoint: string | null;
+    localPoint: string | null;
+    detailLocation: string[];
+    surfPoint: string | any;
     date: Date | null;
     dateText: string;
     currWeather: any;
+    // x: number | null;
+    // y: number | null;
 }
 interface Style {
     inputContainer: ViewStyle;
@@ -43,16 +49,17 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
         super(props);
         this.state = {
             location: locationInfo,
-            point: '',
-            detailLocation: locationDetail,
-            surfPoint: null,
+            localPoint: null,
+            detailLocation: ['SURFPOINT'],
+            surfPoint: '',
             date: new Date(),
             dateText: '날짜',
             currWeather: null
+            // x: null,
+            // y: null
         };
-        this.showDatePicker.bind(this);
+        // this.showDatePicker.bind(this);
     }
-
     showDatePicker = async (options: any) => {
         try {
             const {
@@ -65,7 +72,7 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
             if (action !== DatePickerAndroid.dismissedAction) {
                 let selectDate = new Date(year, month, day);
                 getFormatDate(selectDate);
-                console.log('값은: ', selectDate);
+                // console.log('값은: ', selectDate);
                 let selectDateText = getFormatDate(selectDate);
                 this.setState({ date: selectDate, dateText: selectDateText });
             }
@@ -74,28 +81,69 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
         }
     };
 
-    setDetailLocation(spot: any) {
-        console.log('큰지역선택', spot);
+    checkLocation = (location: any) => {
+        // console.log('큰지역선택', location);
+        // console.log('스테이트포인트', this.state);
+        this.setState({ localPoint: location });
+
+        for (let i = 0; i < locationDetail.length; i++) {
+            if (Object.keys(locationDetail[i])[0] === location) {
+                this.setState({ detailLocation: locationDetail[i][location] });
+            }
+        }
+        // console.log('스테이트 변경', this.state.detailLocation);
+    };
+
+    checkSpot = (spot: any) => {
+        // console.log('작은지역선택', spot);
+        this.setState({ surfPoint: spot });
+    };
+
+    weatherInput = async () => {
+        console.log('서프포인트', this.state.surfPoint);
+        let x;
+        let y;
+        for (let i = 0; i < localPoints.length; i++) {
+            if (Object.keys(localPoints[i])[0] === this.state.surfPoint) {
+                x = localPoints[i][this.state.surfPoint].x;
+                y = localPoints[i][this.state.surfPoint].y;
+            }
+        }
+        console.log('엑스와이', x, '================', y);
+        realTimeWeather(x, y).then((res: any): void =>
+            console.log('결과값', res)
+        );
+
+        console.log('결과값', resultWeather);
+        this.setState({ currWeather: resultWeather });
+    };
+
+    // fetchWeather() {
+    //     if (!(this.state.date && this.state.location)) {
+    //         Alert.alert('입력오류', '지역과 날짜를 선택해 주세요', [
+    //             { text: 'OK', onPress: () => console.log('OK Pressed') }
+    //         ]);
+    //     }
+    //     // let body = {
+    //     //     date: this.state.date,
+    //     //     location: this.state.location
+    //     // }; //확인차 넣음 나중에 빼기
+    //     // console.log('빼치', body);
+
+    //     let takedWeather = realTimeWeather();
+    //     this.setState({ currWeather: takedWeather });
+    // }
+
+    componentDidUpdate() {
+        // this.weatherInput();
     }
 
-    fetchWeather() {
-        if (!(this.state.date && this.state.location)) {
-            Alert.alert('입력오류', '지역과 날짜를 선택해 주세요', [
-                { text: 'OK', onPress: () => console.log('OK Pressed') }
-            ]);
-        }
-        // let body = {
-        //     date: this.state.date,
-        //     location: this.state.location
-        // }; //확인차 넣음 나중에 빼기
-        // console.log('빼치', body);
-        // fetchAPI('/기상청API', 'GET');
-        let takedWeather = realTimeWeather();
-        this.setState({ currWeather: takedWeather });
-    }
+    // componentDidMount() {
+    //     this.setState({ location: locationInfo });
+    // }
 
     render() {
-        console.log(this.state);
+        console.log('스테이트 상태체크', this.state);
         return (
             <SafeAreaView style={styles.inputContainer}>
                 <View style={styles.eachBox}>
@@ -108,56 +156,27 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
                             })
                         }
                     ></Button>
-
-                    <Picker
-                        selectedValue={this.state.location}
-                        style={{
-                            height: 70,
-                            width: '100%',
-                            alignItems: 'center'
-                        }}
-                        onValueChange={(itemValue, itemIndex) =>
-                            this.setState({ point: itemValue })
-                        }
-                    >
-                        {this.state.location.map(item => (
-                            <Picker.Item label={item} value={item} key={item} />
-                        ))}
-                    </Picker>
-
-                    {/* 위의 picker에서 선택하면 세부 포인트나오게하기 */}
-                    <Picker
-                        selectedValue={this.state.surfPoint}
-                        style={{
-                            height: 70,
-                            width: '100%',
-                            alignItems: 'center'
-                        }}
-                        onValueChange={(itemValue, itemIndex) =>
-                            this.setState({ point: itemValue })
-                        }
-                    >
-                        {this.state.detailLocation.map((obj: any) => {
-                            if (obj.hasOwnProperty(this.state.point)) {
-                                obj.map((item: any) => {
-                                    <Picker.Item
-                                        label={item}
-                                        value={item}
-                                    ></Picker.Item>;
-                                });
-                            }
-                        })}
-                        {/* <Picker label="SURF POINT"></Picker> */}
-                        {/* 세부포인트를 선택하면 날씨가 나오게 하기 */}
-                    </Picker>
-                    <View style={styles.text1}>
-                        {this.state.currWeather &&
-                            this.state.currWeather.map((item: any) => {
-                                let key = Object.keys(item)[0];
-                                <Text>{`${key}: ${item[key]}`}</Text>;
-                            })}
-                    </View>
-                    <Button title="방만들기" onPress={realTimeWeather}></Button>
+                    <SelectLocation
+                        selectLocation={this.state.location}
+                        checkLocation={this.checkLocation}
+                    ></SelectLocation>
+                    <CheckPoint
+                        detailLocation={this.state.detailLocation}
+                        checkSpot={this.checkSpot}
+                    ></CheckPoint>
+                    <Button
+                        title="날씨확인"
+                        onPress={this.weatherInput}
+                    ></Button>
+                </View>
+                <View>
+                    {/* <View>
+                        <Weather surfPoint={this.state.surfPoint}></Weather>
+                    </View> */}
+                    <Button
+                        title="방만들기"
+                        onPress={this.weatherInput}
+                    ></Button>
                 </View>
             </SafeAreaView>
         );

@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 
-import { createStackNavigator } from "react-navigation-stack"
-import { createDrawerNavigator } from "react-navigation-drawer";
+import { createStackNavigator } from 'react-navigation-stack';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 import { Icon } from 'react-native-elements';
 import * as firebase from 'firebase';
 import { firebaseConfig } from './firebaseConfig';
-import { RoomInfo } from "./components/src/redux/reducer";
-import { Provider } from "react-redux";
-import { createStore } from "redux";
+import { RoomInfo } from './components/src/redux/reducer';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 
-import ChatRoom from "./components/Chat/chat";
-import Main from "./components/Main";
-import MakeRoom from "./components/makerooms/makeroom";
-import Room from "./components/rooms/room";
-import SignPage from "./components/Sign";
+import ChatRoom from './components/Chat/chat';
+import Main from './components/Main';
+import MakeRoom from './components/makerooms/makeroom';
+import Room from './components/rooms/room';
+import SignPage from './components/Sign';
 import Board from './components/Board/Board';
 import SideBar from './components/rooms/sideBar';
 import MyRoomList from './components/MyList/MyRooms';
@@ -37,7 +37,7 @@ const BoardStack = createStackNavigator({
     MyRoomList: { screen: MyRoomList },
     Chat: { screen: ChatRoom },
     Room: { screen: DrawSide },
-     MakeRoom: { screen: MakeRoom },
+    MakeRoom: { screen: MakeRoom },
     Setting: { screen: Setting }
 });
 const MainTab = createBottomTabNavigator({
@@ -60,7 +60,7 @@ const SignMainSwitch = createSwitchNavigator(
         SignPart: { screen: SignPage }
     },
     {
-        initialRouteName: 'SignPart'
+        initialRouteName: 'MainPart'
     }
 );
 const AppContainer = createAppContainer(SignMainSwitch);
@@ -72,6 +72,6 @@ export default class App extends Component {
             <Provider store={store}>
                 <AppContainer />
             </Provider>
-        )
+        );
     }
 }

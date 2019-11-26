@@ -97,10 +97,11 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
     checkSpot = (spot: any) => {
         // console.log('작은지역선택', spot);
         this.setState({ surfPoint: spot });
+        this.weatherInput();
     };
 
     weatherInput = async () => {
-        console.log('서프포인트', this.state.surfPoint);
+        // console.log('서프포인트', this.state.surfPoint);
         let x;
         let y;
         for (let i = 0; i < localPoints.length; i++) {
@@ -110,37 +111,13 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
             }
         }
         console.log('엑스와이', x, '================', y);
-        realTimeWeather(x, y).then((res: any): void =>
-            console.log('결과값', res)
-        );
+        let resultWeather = await realTimeWeather(x, y);
 
         console.log('결과값', resultWeather);
+
         this.setState({ currWeather: resultWeather });
+        console.log('--------------------------------');
     };
-
-    // fetchWeather() {
-    //     if (!(this.state.date && this.state.location)) {
-    //         Alert.alert('입력오류', '지역과 날짜를 선택해 주세요', [
-    //             { text: 'OK', onPress: () => console.log('OK Pressed') }
-    //         ]);
-    //     }
-    //     // let body = {
-    //     //     date: this.state.date,
-    //     //     location: this.state.location
-    //     // }; //확인차 넣음 나중에 빼기
-    //     // console.log('빼치', body);
-
-    //     let takedWeather = realTimeWeather();
-    //     this.setState({ currWeather: takedWeather });
-    // }
-
-    componentDidUpdate() {
-        // this.weatherInput();
-    }
-
-    // componentDidMount() {
-    //     this.setState({ location: locationInfo });
-    // }
 
     render() {
         console.log('스테이트 상태체크', this.state);
@@ -164,10 +141,10 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
                         detailLocation={this.state.detailLocation}
                         checkSpot={this.checkSpot}
                     ></CheckPoint>
-                    <Button
+                    {/* <Button
                         title="날씨확인"
                         onPress={this.weatherInput}
-                    ></Button>
+                    ></Button> */}
                 </View>
                 <View>
                     {/* <View>

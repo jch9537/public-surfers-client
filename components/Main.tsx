@@ -11,6 +11,8 @@ import {
   ViewStyle,
   Alert
 } from "react-native";
+import AdBanner from "./AdBanner";
+
 interface Props {
   navigation: any;
 }
@@ -18,9 +20,10 @@ interface State {
   fontend: boolean;
 }
 interface Style {
-  Button: ViewStyle;
-  buttonDetail: ViewStyle;
+  button: ViewStyle;
   afterFont: TextStyle;
+  wrap: ViewStyle;
+  banner: ViewStyle;
 }
 export default class Main extends Component<Props, State> {
   static navigationOptions = ({ navigation }: any) => {
@@ -43,7 +46,8 @@ export default class Main extends Component<Props, State> {
   };
   async componentDidMount() {
     await Font.loadAsync({
-      NanumPenScript: require("../assets/NanumPenScript-Regular.ttf")
+      NanumPenScript: require("../assets/NanumPenScript-Regular.ttf"),
+      gaegu_regular: require("../assets/fonts/Gaegu-Regular.ttf")
     });
     this.setState({
       fontend: true
@@ -51,68 +55,70 @@ export default class Main extends Component<Props, State> {
   }
   render() {
     return (
-      <View>
-        <ImageBackground
-          source={require("./image/board.jpg")}
-          style={{ width: 500, height: 580, justifyContent: "center" }}
+      <ImageBackground
+        source={require("../assets/images/main_background.jpg")}
+        style={Styles.wrap}
+      >
+        <TouchableOpacity
+          style={Styles.button}
+          onPress={() => this.props.navigation.navigate("MakeRoom")}
         >
-          <View style={styles.Button}>
-            <TouchableOpacity
-              style={styles.buttonDetail}
-              onPress={() => this.props.navigation.navigate("MakeRoom")}
-            >
-              <Text
-                style={this.state.fontend ? styles.afterFont : { fontSize: 20 }}
-              >
-                서퍼 모집하기
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.Button}>
-            <TouchableOpacity
-              style={styles.buttonDetail}
-              onPress={() => this.props.navigation.navigate("Board")}
-            >
-              <Text
-                style={this.state.fontend ? styles.afterFont : { fontSize: 20 }}
-              >
-                서핑 참여하기
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.Button}>
-            <TouchableOpacity
-              style={styles.buttonDetail}
-              onPress={() => this.props.navigation.navigate("MyRoomList")}
-            >
-              <Text
-                style={this.state.fontend ? styles.afterFont : { fontSize: 20 }}
-              >
-                내가 참여한 방
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </ImageBackground>
-      </View>
+          <Text
+            style={this.state.fontend ? Styles.afterFont : { fontSize: 20 }}
+          >
+            서퍼 모집하기
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={Styles.button}
+          onPress={() => this.props.navigation.navigate("Board")}
+        >
+          <Text
+            style={this.state.fontend ? Styles.afterFont : { fontSize: 20 }}
+          >
+            서핑 참여하기
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={Styles.button}
+          onPress={() => this.props.navigation.navigate("MyRoomList")}
+        >
+          <Text
+            style={this.state.fontend ? Styles.afterFont : { fontSize: 20 }}
+          >
+            나의 방 목록
+          </Text>
+        </TouchableOpacity>
+
+        <View style={Styles.banner}>
+          <AdBanner />
+        </View>
+      </ImageBackground>
     );
   }
 }
-const styles = StyleSheet.create<Style>({
-  buttonDetail: {
-    backgroundColor: "#E3EECD",
+const Styles = StyleSheet.create<Style>({
+  button: {
+    backgroundColor: "#e5ffe5",
     alignItems: "center",
     justifyContent: "center",
-    height: 40,
-    width: 180
-  },
-  Button: {
-    alignItems: "baseline",
-    padding: 100,
+    height: 50,
+    width: 180,
     elevation: 5,
-    paddingBottom: 30
+    marginBottom: 50,
+    borderRadius: 10
   },
   afterFont: {
-    fontFamily: "NanumPenScript",
+    fontFamily: "gaegu_regular",
     fontSize: 25
+  },
+  wrap: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  banner: {
+    position: "absolute",
+    bottom: 0
   }
 });

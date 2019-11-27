@@ -17,7 +17,8 @@ export default class signpage extends Component {
 
   async componentDidMount() {
     await Font.loadAsync({
-      nanum_pen: require("../../assets/fonts/NanumPenScript-Regular.ttf")
+      nanum_pen: require("../../assets/fonts/NanumPenScript-Regular.ttf"),
+      gaegu_regular: require("../../assets/fonts/Gaegu-Regular.ttf")
     });
     this.setState({
       ...this.state,
@@ -37,11 +38,11 @@ export default class signpage extends Component {
         {this.state.togglePage ? <SignUp></SignUp> : <SignIn></SignIn>}
         <TouchableOpacity onPress={this.changeToggle} style={Styles.button}>
           {this.state.togglePage ? (
-            <Text style={{ fontFamily: "nanum_pen", fontSize: 25 }}>
+            <Text style={{ fontFamily: "gaegu_regular", fontSize: 25 }}>
               로그인 하기
             </Text>
           ) : (
-            <Text style={{ fontFamily: "nanum_pen", fontSize: 25 }}>
+            <Text style={{ fontFamily: "gaegu_regular", fontSize: 25 }}>
               회원가입 하기
             </Text>
           )}
@@ -61,9 +62,10 @@ const Styles = StyleSheet.create({
   button: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#63C5DA",
+    backgroundColor: "#e5ffe5",
     height: 40,
     width: 150,
-    elevation: 3
+    elevation: 3,
+    borderRadius: 8
   }
 });

@@ -22,9 +22,10 @@ export default class sigininpage extends Component<{}, State> {
 
   async componentDidMount() {
     await Font.loadAsync({
-      nanum_pen: require("../../assets/fonts/NanumPenScript-Regular.ttf")
+      nanum_pen: require("../../assets/fonts/NanumPenScript-Regular.ttf"),
+      gaegu_regular: require("../../assets/fonts/Gaegu-Regular.ttf")
     });
-    this.setState({
+    await this.setState({
       ...this.state,
       fontLoaded: true
     });
@@ -65,7 +66,7 @@ export default class sigininpage extends Component<{}, State> {
   };
 
   render() {
-    return (
+    return this.state.fontLoaded ? (
       <View style={Styles.wrap}>
         <Input
           placeholder=" Email"
@@ -84,10 +85,12 @@ export default class sigininpage extends Component<{}, State> {
           }
         />
         <TouchableOpacity onPress={this.SignIn} style={Styles.button}>
-          <Text style={{ fontFamily: "nanum_pen", fontSize: 25 }}>로그인</Text>
+          <Text style={{ fontFamily: "gaegu_regular", fontSize: 25 }}>
+            로그인
+          </Text>
         </TouchableOpacity>
       </View>
-    );
+    ) : null;
   }
 }
 
@@ -100,11 +103,12 @@ const Styles = StyleSheet.create({
   button: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#63C5DA",
+    backgroundColor: "#e5ffe5",
     height: 40,
     width: 150,
     marginBottom: 10,
     marginTop: 15,
-    elevation: 3
+    elevation: 3,
+    borderRadius: 8
   }
 });

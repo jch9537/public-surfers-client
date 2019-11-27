@@ -31,7 +31,8 @@ export default class sigininpage extends Component<{}, State> {
 
   async componentDidMount() {
     await Font.loadAsync({
-      nanum_pen: require("../../assets/fonts/NanumPenScript-Regular.ttf")
+      nanum_pen: require("../../assets/fonts/NanumPenScript-Regular.ttf"),
+      gaegu_regular: require("../../assets/fonts/Gaegu-Regular.ttf")
     });
     this.setState({
       ...this.state,
@@ -105,7 +106,7 @@ export default class sigininpage extends Component<{}, State> {
           }
         />
         <TouchableOpacity onPress={this.fetchSignUp} style={Styles.button}>
-          <Text style={{ fontFamily: "nanum_pen", fontSize: 25 }}>
+          <Text style={{ fontFamily: "gaegu_regular", fontSize: 25 }}>
             회원가입
           </Text>
         </TouchableOpacity>
@@ -123,11 +124,12 @@ const Styles = StyleSheet.create({
   button: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#63C5DA",
+    backgroundColor: "#e5ffe5",
     height: 40,
     width: 150,
     marginBottom: 10,
     marginTop: 15,
-    elevation: 3
+    elevation: 3,
+    borderRadius: 8
   }
 });

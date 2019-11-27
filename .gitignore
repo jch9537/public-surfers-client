@@ -9,7 +9,8 @@ npm-debug.*
 *.orig.*
 web-build/
 web-report/
-.prettierrc
+.prettierrc.json
+/Users/yunseunghyeon/Desktop/ChiMe/chiMe-client/firebaseConfig.tsx
 
 # macOS
 .DS_Store

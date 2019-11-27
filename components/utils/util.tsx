@@ -111,7 +111,7 @@ export function realTimeWeather(x: number, y: number) {
         day = '0' + day;
     }
     today = year + '' + month + '' + day;
-    console.log('오늘', today);
+    // console.log('오늘', today);
 
     /* 좌표 */
     var _nx = x; //x좌표,
@@ -122,21 +122,23 @@ export function realTimeWeather(x: number, y: number) {
         'http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastSpaceData';
     ForecastGribURL += '?ServiceKey=' + apikey;
     ForecastGribURL += '&base_date=' + today;
-    ForecastGribURL += '&base_time=' + '17' + '00'; //+ hours 시간수정!!
+    ForecastGribURL += '&base_time=' + hours + '00'; //+ hours 시간수정!!
     ForecastGribURL += '&nx=' + _nx + '&ny=' + _ny;
     ForecastGribURL += '&pageNo=1&numOfRows=20';
     ForecastGribURL += '&_type=json';
-    console.log('인자', ForecastGribURL);
+    // console.log('인자', ForecastGribURL);
 
     /*테스트데이터 : 새벽에 테스트 안됨
     ForecastGribURL = 'http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastSpaceData?ServiceKey=dbBOZxcc0%2FMjMwrE%2FjwPr7QSS5iBYesJaeZBmLBDCfpw4SGhwmge0fCkmk56yS5Ox2DNiDRWS3Ev%2BZwbZOdWGQ%3D%3D&base_date=20191122&base_time=1700&nx=88&ny=138&pageNo=1&numOfRows=20&_type=json'
     */
 
     // 기상청 자료요청
-    fetchAPI(ForecastGribURL, 'GET')
-        .then(res => res.json())
-        // .then(res => console.log('빼치', res));
-        .then(json => makeWeatherData(json));
+    return (
+        fetchAPI(ForecastGribURL, 'GET')
+            .then(res => res.json())
+            // .then(res => console.log('빼치', res));
+            .then(json => makeWeatherData(json))
+    );
 }
 
 //--------------------------------------응답 자료분석 콜백함수------------------------------------------------
@@ -216,7 +218,7 @@ function makeWeatherData(obj: any) {
             }
         }
     }
-    console.log('날씨', weatherInfo);
+    // console.log('날씨', weatherInfo);
     return weatherInfo;
 }
 // realTimeWeather(88, 138);

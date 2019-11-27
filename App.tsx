@@ -37,7 +37,7 @@ const BoardStack = createStackNavigator({
     MyRoomList: { screen: MyRoomList },
     Chat: { screen: ChatRoom },
     Room: { screen: DrawSide },
-     MakeRoom: { screen: MakeRoom },
+    MakeRoom: { screen: MakeRoom },
     Setting: { screen: Setting }
 });
 const MainTab = createBottomTabNavigator({
@@ -60,7 +60,7 @@ const SignMainSwitch = createSwitchNavigator(
         SignPart: { screen: SignPage }
     },
     {
-        initialRouteName: 'SignPart'
+        initialRouteName: 'MainPart'
     }
 );
 const AppContainer = createAppContainer(SignMainSwitch);

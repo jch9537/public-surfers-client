@@ -1,73 +1,93 @@
 import React, { Component } from 'react';
-import { View, Text, Button, StyleSheet, ViewStyle, Alert } from 'react-native';
+import * as Font from 'expo-font';
+import { View, Text, ImageBackground, TextStyle, Image, TouchableOpacity, StyleSheet, ViewStyle, Alert } from 'react-native';
 interface Props {
     navigation: any;
 }
-interface Style {
-    total: ViewStyle;
-    first: ViewStyle;
-    second: ViewStyle;
-    third: ViewStyle;
+interface State {
+    fontend: boolean
 }
-export default class Main extends Component<Props> {
+interface Style {
+    Button: ViewStyle
+    buttonDetail: ViewStyle
+    afterFont: TextStyle
+}
+export default class Main extends Component<Props, State> {
+
     static navigationOptions = ({ navigation }: any) => {
         let headerTitle = 'Home';
-        // let headerTitleStyle = { color: 'black' }; // 띄어쓰기 해야함
         let headerRight = (
-            <Text onPress={() => Alert.alert('로그아웃')}>Logout</Text>
+            <Text onPress={() => Alert.alert('로그아웃')} style={{ padding: 10, fontSize: 15 }}>Logout</Text>
         );
-        // let headerLeft = (
-        //     <Icon name="home" onPress={() => navigation.navigate('Test1')} />
-        // );
-
         return {
             headerTitle,
-            // headerTitleStyle,
             headerRight
-            // headerLeft
         };
     };
+    state = {
+        fontend: false
+    }
+    async componentDidMount() {
+        await Font.loadAsync({
+            'NanumPenScript': require('../assets/NanumPenScript-Regular.ttf')
+        });
+        this.setState({
+            fontend: true
+        })
+    }
     render() {
         return (
-            <View style={styles.total}>
-                <View style={styles.first}>
-                    <Button
-                        title="MakeRoom"
-                        onPress={() =>
-                            this.props.navigation.navigate('MakeRoom')
-                        }
-                    />
-                </View>
-                <View style={styles.second}>
-                    <Button
-                        title="방 목록 불러오기"
-                        onPress={() => this.props.navigation.navigate('Board')}
-                    />
-                </View>
-                <View style={styles.third}>
-                    <Button
-                        title="나의 room"
-                        onPress={() =>
-                            this.props.navigation.navigate('MyRoomList')
-                        }
-                    />
-                </View>
-                {/* <MainContainer /> */}
-            </View>
+            <View >
+                <ImageBackground source={require('./image/board.jpg')}
+                    style={{ width: 500, height: 580, justifyContent: "center" }}>
+                    <View style={styles.Button}>
+                        <TouchableOpacity
+                            style={styles.buttonDetail}
+                            onPress={() => this.props.navigation.navigate('MakeRoom')}>
+                            <Text style={this.state.fontend ? styles.afterFont : { fontSize: 20 }} >
+                                서퍼 모집하기
+                        </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.Button}>
+                        <TouchableOpacity
+                            style={styles.buttonDetail}
+                            onPress={() => this.props.navigation.navigate('Board')}>
+                            <Text style={this.state.fontend ? styles.afterFont : { fontSize: 20 }} >
+                                서핑 참여하기
+                        </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.Button}>
+                        <TouchableOpacity
+                            style={styles.buttonDetail}
+                            onPress={() => this.props.navigation.navigate('MyRoomList')} >
+                            <Text style={this.state.fontend ? styles.afterFont : { fontSize: 20 }} >
+                                내가 참여한 방
+                        </Text>
+                        </TouchableOpacity>
+                    </View >
+                </ImageBackground >
+            </View >
         );
     }
 }
 const styles = StyleSheet.create<Style>({
-    total: {
-        flex: 1
+    buttonDetail: {
+        backgroundColor: "#E3EECD",
+        alignItems: "center",
+        justifyContent: 'center',
+        height: 40,
+        width: 180
     },
-    first: {
-        flex: 1
+    Button: {
+        alignItems: "baseline",
+        padding: 100,
+        elevation: 5,
+        paddingBottom: 30
     },
-    second: {
-        flex: 1
-    },
-    third: {
-        flex: 1
+    afterFont: {
+        fontFamily: "NanumPenScript",
+        fontSize: 25
     }
 });

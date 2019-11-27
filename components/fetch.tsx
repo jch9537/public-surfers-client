@@ -1,64 +1,50 @@
-let server = "http://server.url";
+
+let server = "http://54.180.108.45:3000";
+
+let fetchOptions: RequestInit = {
+    headers: {
+        "Content-Type": "application/json"
+    },
+    credentials: "include"
+}
 export const user = (method: string, endPoint?: string, body?: object) => {
     server += "/user";
-    if (method === "GET" || method === "DELETE" || endPoint === "signout") {
+    if (method === "POST" || method === "PUT") {
         if (endPoint) {
-            server += "/" + endPoint
-        } else {
-            return new Error("잘 찾아봐라")
+            server += `/${endPoint}`
         }
-        return fetch(server, {
-            method: method,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-        })
+        fetchOptions["method"] = method;
+        fetchOptions["body"] = JSON.stringify(body);
+        return fetch(server, fetchOptions)
     } else {
-        if (endPoint) {
-            server += "/" + endPoint;
-        } else {
-            return new Error("endPoint를잘 찾아봐라")
-        }
-        return fetch(server, {
-            method: method,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(body),
-            credentials: "include",
-        })
+        return fetch(server, fetchOptions)
     }
 }
-export const post = (method: string, body?: object, postId?: number, userId?: number) => {
-    server += "/post";
-    if (method === "GET") {
-        if (postId || userId) {
-            server += "/" + (userId || postId);
-        } else {
-            return new Error("잘 찾아봐라")
-        }
-        return fetch(server, {
-            method: method,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-        })
+export const post = (method: string, body?: object, postId?: number, endPoint?: string) => {
+    server += "/posts";
+    if (endPoint) {
+        server += "my_list"
+    }
+    if (method === "POST") {
+        fetchOptions["method"] = method;
+        fetchOptions["body"] = JSON.stringify(body);
+        return fetch(server, fetchOptions)
     } else {
-        if (postId && userId) {
-            server += `?user_id=${userId}$post_id=${postId}`
-        } else {
-            return new Error("잘 찾아봐라")
+        if (postId) {
+            server += `?post_id=${postId}`
         }
-        return fetch(server, {
-            method: method,
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(body),
-            credentials: "include",
-        })
+        return fetch(server, fetchOptions)
     }
 
+}
+export function together(method: string, body?: object, postId?: number) {
+    server += "/post"
+    if (method === "POST") {
+        return fetch(server, fetchOptions)
+    } else {
+        server += `?post_id=${postId}`
+        fetchOptions["method"] = method;
+        fetchOptions["body"] = JSON.stringify(body);
+        return fetch(server, fetchOptions)
+    }
 }

@@ -12,7 +12,7 @@ interface Style {
     setContainer: ViewStyle;
     infoContainer: ViewStyle;
 }
-export interface SettingProps {}
+export interface SettingProps { }
 export interface SettingState {
     name?: any;
     password?: any;
@@ -52,18 +52,15 @@ class Setting extends Component<SettingProps, SettingState> {
             name: this.state.name,
             password: this.state.password
         };
-        console.log('에딧인풋', inputInfo);
         // fetchAPI('/setting', 'POST', inputInfo); // url넣기
     };
 
     editName = (name?: string | null): void => {
         // 안적으면 자동으로 void가 됨: 지워도 됨
-        console.log('불러온 값 비번: ', name);
         this.setState({ name });
     };
 
     editPassword = (password?: string | null): void => {
-        console.log('불러온 값 비번: ', password);
         this.setState({ password });
     };
 

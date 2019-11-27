@@ -1,92 +1,114 @@
-import React, { Component } from 'react'
-import { StyleSheet, Text, View, Button } from 'react-native';
+import React, { Component } from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Input, Icon } from "react-native-elements";
+import * as Font from "expo-font";
 
 interface State {
-    email: string
-    password: string
-    errorMsg: boolean
-    siginin: boolean
+  email: string;
+  password: string;
+  errorMsg: boolean;
+  siginin: boolean;
+  fontLoaded: boolean;
 }
 
-export default class sigininpage extends Component<{}, State>{
-    state = {
-        email: "",
-        password: "",
-        errorMsg: true,
-        siginin: false
-    }
-    SignIn = () => {
-        const { email, password } = this.state
-        if (!this.state.errorMsg) {
-            console.log("확인중")
-            fetch("url//user/signin", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, password }),
-                credentials: "include"
-            })
-                .then(res => res.json())
-                .then(resData => {
-                    if (resData.status === 200) {
-                        this.setState({
-                            siginin: !this.state.siginin
-                        })
-                    }
-                })
-        }
-    }
+export default class sigininpage extends Component<{}, State> {
+  state = {
+    email: "",
+    password: "",
+    errorMsg: true,
+    siginin: false,
+    fontLoaded: false
+  };
 
-    ChangeState = (value: string, key: any) => {
-        if (value.length > 0) {
-            const obj = { [key]: value } as Pick<State, keyof State>
-            obj["errorMsg"] = false
-            this.setState(obj)
-        } else {
+  async componentDidMount() {
+    await Font.loadAsync({
+      nanum_pen: require("../../assets/fonts/NanumPenScript-Regular.ttf"),
+      gaegu_regular: require("../../assets/fonts/Gaegu-Regular.ttf")
+    });
+    await this.setState({
+      ...this.state,
+      fontLoaded: true
+    });
+  }
+
+  SignIn = () => {
+    const { email, password } = this.state;
+    if (!this.state.errorMsg) {
+      fetch("url//user/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: "include"
+      })
+        .then(res => res.json())
+        .then(resData => {
+          if (resData.status === 200) {
             this.setState({
-                errorMsg: !this.state.errorMsg
-            })
-        }
+              siginin: !this.state.siginin
+            });
+          }
+        });
     }
+  };
 
-    render() {
-        return (
-            <View>
-                <Input
-                    placeholder=' xxx@email.com'
-                    onChangeText={(text) => this.ChangeState(text, "email")}
-                    errorMessage={this.state.errorMsg ? "error" : ""}
-                    keyboardType="email-address"
-                    leftIcon={
-                        <Icon
-                            name='idcard'
-                            type="antdesign"
-                            size={18}
-                            color='black'
-                        />
-                    }
-                />
-                <Input
-                    placeholder=' @@@@@@@@'
-                    onChangeText={(text) => this.ChangeState(text, "password")}
-                    secureTextEntry={true}
-                    errorMessage={this.state.errorMsg ? "error" : ""}
-                    leftIcon={
-                        <Icon
-                            name='key'
-                            type="antdesign"
-                            size={18}
-                            color='black'
-                        />}
-                />
-                <View>
-                    <Button onPress={this.SignIn}
-                        title="login"></Button>
-                </View>
-            </View>
-        )
+  ChangeState = (value: string, key: any) => {
+    if (value.length > 0) {
+      const obj = { [key]: value } as Pick<State, keyof State>;
+      obj["errorMsg"] = false;
+      this.setState(obj);
+    } else {
+      this.setState({
+        errorMsg: !this.state.errorMsg
+      });
     }
+  };
 
+  render() {
+    return this.state.fontLoaded ? (
+      <View style={Styles.wrap}>
+        <Input
+          placeholder=" Email"
+          onChangeText={text => this.ChangeState(text, "email")}
+          keyboardType="email-address"
+          leftIcon={
+            <Icon name="idcard" type="antdesign" size={18} color="black" />
+          }
+        />
+        <Input
+          placeholder=" Password"
+          onChangeText={text => this.ChangeState(text, "password")}
+          secureTextEntry={true}
+          leftIcon={
+            <Icon name="key" type="antdesign" size={18} color="black" />
+          }
+        />
+        <TouchableOpacity onPress={this.SignIn} style={Styles.button}>
+          <Text style={{ fontFamily: "gaegu_regular", fontSize: 25 }}>
+            로그인
+          </Text>
+        </TouchableOpacity>
+      </View>
+    ) : null;
+  }
 }
+
+const Styles = StyleSheet.create({
+  wrap: {
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "stretch"
+  },
+  button: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#e5ffe5",
+    height: 40,
+    width: 150,
+    marginBottom: 10,
+    marginTop: 15,
+    elevation: 3,
+    borderRadius: 8
+  }
+});

@@ -7,7 +7,7 @@ let fetchOptions: RequestInit = {
     },
     credentials: "include"
 }
-export const user = (method: string, endPoint?: string, body?: object) => {
+export const user = function (method: string, endPoint: string | null = null, body: object | null = null) {
     server += "/user";
     if (method === "POST" || method === "PUT") {
         if (endPoint) {
@@ -20,7 +20,7 @@ export const user = (method: string, endPoint?: string, body?: object) => {
         return fetch(server, fetchOptions)
     }
 }
-export const post = (method: string, body?: object, postId?: number, endPoint?: string) => {
+export const posts = function (method: string, body: object | null = null, postId: number | null = null, endPoint: string | null = null) {
     server += "/posts";
     if (endPoint) {
         server += "my_list"
@@ -37,7 +37,7 @@ export const post = (method: string, body?: object, postId?: number, endPoint?: 
     }
 
 }
-export function together(method: string, body?: object, postId?: number) {
+export const post = function (method: string, body: object | null = null, postId: number | null = null) {
     server += "/post"
     if (method === "POST") {
         return fetch(server, fetchOptions)

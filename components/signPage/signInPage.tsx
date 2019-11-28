@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  AsyncStorage,
+  Alert
+} from "react-native";
 import { Input, Icon } from "react-native-elements";
 import * as Font from "expo-font";
 
@@ -9,15 +16,25 @@ interface State {
   errorMsg: boolean;
   siginin: boolean;
   fontLoaded: boolean;
+  token: any;
 }
 
-export default class sigininpage extends Component<{}, State> {
+interface Props {
+  navigation: any;
+}
+
+export default class sigininpage extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+  }
+
   state = {
     email: "",
     password: "",
     errorMsg: true,
     siginin: false,
-    fontLoaded: false
+    fontLoaded: false,
+    token: null
   };
 
   async componentDidMount() {
@@ -29,25 +46,35 @@ export default class sigininpage extends Component<{}, State> {
       ...this.state,
       fontLoaded: true
     });
+    await this._getUserToken();
   }
 
-  SignIn = () => {
-    const { email, password } = this.state;
+  SignIn = async () => {
+    let body = {
+      email: this.state.email,
+      password: this.state.password
+    };
+
     if (!this.state.errorMsg) {
-      fetch("url//user/signin", {
+      await fetch("http://54.180.108.45:3000/user/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(body),
         credentials: "include"
       })
         .then(res => res.json())
-        .then(resData => {
-          if (resData.status === 200) {
-            this.setState({
-              siginin: !this.state.siginin
-            });
+        .then(res => {
+          AsyncStorage.setItem("userToken", res.token);
+          return res.message;
+        })
+        .then(res => {
+          this._getUserToken();
+          if (res === "로그인 완료") {
+            this.props.navigation.navigate("MainPart");
+          } else {
+            Alert.alert("Error", "아이디 혹은 비밀번호가 올바르지 않습니다.");
           }
         });
     }
@@ -64,6 +91,17 @@ export default class sigininpage extends Component<{}, State> {
       });
     }
   };
+
+  async _getUserToken() {
+    let result = await AsyncStorage.getItem("userToken");
+
+    console.log("userToken: ", result);
+
+    await this.setState({
+      ...this.state,
+      token: result
+    });
+  }
 
   render() {
     return this.state.fontLoaded ? (
@@ -85,7 +123,7 @@ export default class sigininpage extends Component<{}, State> {
           }
         />
         <TouchableOpacity onPress={this.SignIn} style={Styles.button}>
-          <Text style={{ fontFamily: "gaegu_regular", fontSize: 25 }}>
+          <Text style={{ fontFamily: "gaegu_regular", fontSize: 23 }}>
             로그인
           </Text>
         </TouchableOpacity>

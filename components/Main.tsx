@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   ViewStyle,
-  Alert
+  Alert,
+  AsyncStorage
 } from "react-native";
 import AdBanner from "./AdBanner";
 
@@ -44,6 +45,7 @@ export default class Main extends Component<Props, State> {
   state = {
     fontend: false
   };
+
   async componentDidMount() {
     await Font.loadAsync({
       NanumPenScript: require("../assets/NanumPenScript-Regular.ttf"),
@@ -52,43 +54,54 @@ export default class Main extends Component<Props, State> {
     this.setState({
       fontend: true
     });
+
+    await this._getUserToken();
   }
+
+  async _getUserToken() {
+    let result = await AsyncStorage.getItem("userToken");
+
+    console.log("userToken: ", result);
+  }
+
   render() {
     return (
       <ImageBackground
         source={require("../assets/images/main_background.jpg")}
         style={Styles.wrap}
       >
-        <TouchableOpacity
-          style={Styles.button}
-          onPress={() => this.props.navigation.navigate("MakeRoom")}
-        >
-          <Text
-            style={this.state.fontend ? Styles.afterFont : { fontSize: 20 }}
+        <View style={{ marginBottom: "50%" }}>
+          <TouchableOpacity
+            style={Styles.button}
+            onPress={() => this.props.navigation.navigate("MakeRoom")}
           >
-            서퍼 모집하기
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={Styles.button}
-          onPress={() => this.props.navigation.navigate("Board")}
-        >
-          <Text
-            style={this.state.fontend ? Styles.afterFont : { fontSize: 20 }}
+            <Text
+              style={this.state.fontend ? Styles.afterFont : { fontSize: 20 }}
+            >
+              서퍼 모집하기
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={Styles.button}
+            onPress={() => this.props.navigation.navigate("Board")}
           >
-            서핑 참여하기
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={Styles.button}
-          onPress={() => this.props.navigation.navigate("MyRoomList")}
-        >
-          <Text
-            style={this.state.fontend ? Styles.afterFont : { fontSize: 20 }}
+            <Text
+              style={this.state.fontend ? Styles.afterFont : { fontSize: 20 }}
+            >
+              서핑 참여하기
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={Styles.button}
+            onPress={() => this.props.navigation.navigate("MyRoomList")}
           >
-            나의 방 목록
-          </Text>
-        </TouchableOpacity>
+            <Text
+              style={this.state.fontend ? Styles.afterFont : { fontSize: 20 }}
+            >
+              나의 방 목록
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={Styles.banner}>
           <AdBanner />

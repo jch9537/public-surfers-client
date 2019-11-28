@@ -21,7 +21,7 @@ export default class App extends React.Component<Props> {
         source={require("../assets/images/login_background.jpg")}
       >
         <KeyboardAvoidingView behavior="position" style={{}}>
-          <SignPage></SignPage>
+          <SignPage navigation={this.props.navigation}></SignPage>
           <Google navigation={this.props.navigation} />
         </KeyboardAvoidingView>
       </ImageBackground>

@@ -9,7 +9,19 @@ import SignIn from "./signInPage";
 import SignUp from "./signupPage";
 import * as Font from "expo-font";
 
-export default class signpage extends Component {
+interface Props {
+  navigation: any;
+}
+
+interface State {
+  togglePage: boolean;
+  fontLoaded: boolean;
+}
+
+export default class signpage extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+  }
   state = {
     togglePage: false,
     fontLoaded: false
@@ -17,7 +29,6 @@ export default class signpage extends Component {
 
   async componentDidMount() {
     await Font.loadAsync({
-      nanum_pen: require("../../assets/fonts/NanumPenScript-Regular.ttf"),
       gaegu_regular: require("../../assets/fonts/Gaegu-Regular.ttf")
     });
     this.setState({
@@ -35,14 +46,18 @@ export default class signpage extends Component {
   render() {
     return this.state.fontLoaded ? (
       <KeyboardAvoidingView style={Styles.center}>
-        {this.state.togglePage ? <SignUp></SignUp> : <SignIn></SignIn>}
+        {this.state.togglePage ? (
+          <SignUp></SignUp>
+        ) : (
+          <SignIn navigation={this.props.navigation}></SignIn>
+        )}
         <TouchableOpacity onPress={this.changeToggle} style={Styles.button}>
           {this.state.togglePage ? (
-            <Text style={{ fontFamily: "gaegu_regular", fontSize: 25 }}>
+            <Text style={{ fontFamily: "gaegu_regular", fontSize: 23 }}>
               로그인 하기
             </Text>
           ) : (
-            <Text style={{ fontFamily: "gaegu_regular", fontSize: 25 }}>
+            <Text style={{ fontFamily: "gaegu_regular", fontSize: 23 }}>
               회원가입 하기
             </Text>
           )}

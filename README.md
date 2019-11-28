@@ -11,3 +11,5 @@ react-navigation-tabs
 
 yarn add react-navigation
 yarn add react-native-reanimated react-native-gesture-handler react-native-screens@^1.0.0-alpha.23
+
+npm i -D webpack webpack-cli

@@ -21,6 +21,7 @@ import Board from "./components/Board/Board";
 import SideBar from "./components/rooms/sideBar";
 import MyRoomList from "./components/MyList/MyRooms";
 import Setting from "./components/setinfo/setting";
+import Loading from "./components/Loading";
 
 firebase.initializeApp(firebaseConfig);
 const DrawSide = createDrawerNavigator(
@@ -60,7 +61,7 @@ const SignMainSwitch = createSwitchNavigator(
     SignPart: { screen: SignPage }
   },
   {
-    initialRouteName: "MainPart"
+    initialRouteName: "SignPart"
   }
 );
 const AppContainer = createAppContainer(SignMainSwitch);

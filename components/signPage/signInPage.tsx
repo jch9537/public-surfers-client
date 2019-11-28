@@ -67,11 +67,13 @@ export default class sigininpage extends Component<Props, State> {
         .then(res => res.json())
         .then(res => {
           AsyncStorage.setItem("userToken", res.token);
-        });
+        })
+        .then(() => this._getUserToken)
+        .then(() => this.props.navigation.navigate("MainPart"));
 
-      await this._getUserToken();
+      // await this._getUserToken();
 
-      await this.props.navigation.navigate("MainPart");
+      // await this.props.navigation.navigate("MainPart");
     }
   };
 

@@ -1,39 +1,37 @@
-import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
-import SignPage from './signPage/signPage';
-import Google from './signPage/google';
+import React from "react";
+import {
+  StyleSheet,
+  KeyboardAvoidingView,
+  ImageBackground
+} from "react-native";
+import SignPage from "./signPage/signPage";
+import Google from "./signPage/google";
 
 interface Props {
-    navigation: any;
+  navigation: any;
 }
 
 export default class App extends React.Component<Props> {
-    static navigationOptions = { header: Google };
+  static navigationOptions = { header: Google };
 
-    render() {
-        return (
-            <View
-                style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}
-            >
-                <View style={{ padding: 10 }}>
-                    <KeyboardAvoidingView
-                        behavior="position"
-                        style={styles.form}
-                    >
-                        <Google navigation={this.props.navigation} />
-                        <SignPage></SignPage>
-                    </KeyboardAvoidingView>
-                </View>
-            </View>
-        );
-    }
+  render() {
+    return (
+      <ImageBackground
+        style={Styles.wrap}
+        source={require("../assets/images/login_background.jpg")}
+      >
+        <KeyboardAvoidingView behavior="position" style={{}}>
+          <SignPage navigation={this.props.navigation}></SignPage>
+          <Google navigation={this.props.navigation} />
+        </KeyboardAvoidingView>
+      </ImageBackground>
+    );
+  }
 }
-const styles = StyleSheet.create({
-    form: {
-        height: '90%'
-    }
+const Styles = StyleSheet.create({
+  wrap: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  }
 });

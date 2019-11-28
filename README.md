@@ -5,7 +5,13 @@ react-navigation-drawer
 react-navigation-stack
 "react-native-gesture-handler": "^1.3.0"
 "react-native-reanimated": "^1.4.0"
+react-navigation-tabs
 
 
 --dev
 @types/react-redux
+
+yarn add react-navigation
+yarn add react-native-reanimated react-native-gesture-handler react-native-screens@^1.0.0-alpha.23
+
+npm i -D webpack webpack-cli

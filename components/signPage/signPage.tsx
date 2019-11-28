@@ -1,44 +1,86 @@
-import React, { Component } from 'react'
-import { StyleSheet, Text, View, ViewStyle } from 'react-native';
-import { Button } from "react-native-elements"
+import React, { Component } from "react";
+import {
+  StyleSheet,
+  Text,
+  KeyboardAvoidingView,
+  TouchableOpacity
+} from "react-native";
 import SignIn from "./signInPage";
 import SignUp from "./signupPage";
+import * as Font from "expo-font";
 
-interface Style {
-    button: ViewStyle,
-    container: ViewStyle
+interface Props {
+  navigation: any;
 }
-export default class signpage extends Component {
-    state = {
-        togglePage: false,
-    }
-    changeToggle = () => {
-        this.setState({
-            togglePage: !this.state.togglePage
-        })
-    }
-    render() {
-        return (
-            <View >
-                <View style={styles.button}>
-                    <Button
-                        onPress={this.changeToggle}
-                        title={this.state.togglePage ? "로그인 하러가기" : "회원가입 하기!"}>
-                    </Button>
-                </View>
-                <View style={styles.container}>
-                    {this.state.togglePage ? <SignUp></SignUp> : <SignIn></SignIn>}
-                </View>
-            </View>
-        )
-    }
+
+interface State {
+  togglePage: boolean;
+  fontLoaded: boolean;
 }
-const styles = StyleSheet.create<Style>({
-    button: {
-        height: "80%",
-        justifyContent: 'center'
-    },
-    container: {
-        height: "3%"
-    }
-})
+
+export default class signpage extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+  }
+  state = {
+    togglePage: false,
+    fontLoaded: false
+  };
+
+  async componentDidMount() {
+    await Font.loadAsync({
+      gaegu_regular: require("../../assets/fonts/Gaegu-Regular.ttf")
+    });
+    this.setState({
+      ...this.state,
+      fontLoaded: true
+    });
+  }
+
+  changeToggle = () => {
+    this.setState({
+      togglePage: !this.state.togglePage
+    });
+  };
+
+  render() {
+    return this.state.fontLoaded ? (
+      <KeyboardAvoidingView style={Styles.center}>
+        {this.state.togglePage ? (
+          <SignUp></SignUp>
+        ) : (
+          <SignIn navigation={this.props.navigation}></SignIn>
+        )}
+        <TouchableOpacity onPress={this.changeToggle} style={Styles.button}>
+          {this.state.togglePage ? (
+            <Text style={{ fontFamily: "gaegu_regular", fontSize: 23 }}>
+              로그인 하기
+            </Text>
+          ) : (
+            <Text style={{ fontFamily: "gaegu_regular", fontSize: 23 }}>
+              회원가입 하기
+            </Text>
+          )}
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+    ) : null;
+  }
+}
+
+const Styles = StyleSheet.create({
+  center: {
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  container: {},
+  wrap: {},
+  button: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#e5ffe5",
+    height: 40,
+    width: 150,
+    elevation: 3,
+    borderRadius: 8
+  }
+});

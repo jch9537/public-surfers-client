@@ -51,15 +51,22 @@ export default class sigininpage extends Component<{}, State> {
       });
     }
   };
+
   fetchSignUp = () => {
-    const { email, password, name, phone } = this.state;
+    let body = {
+      name: "" + this.state.name,
+      email: "" + this.state.email,
+      password: "" + this.state.password,
+      phone: "" + this.state.phone,
+      oAuth: 0
+    };
     if (!this.state.error) {
-      fetch("url//user/signin", {
+      fetch("http://54.180.108.45:3000/user/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ name, email, password, phone }),
+        body: JSON.stringify(body),
         credentials: "include"
       })
         .then(res => res.json())
@@ -68,6 +75,7 @@ export default class sigininpage extends Component<{}, State> {
             this.setState({
               siginup: !this.state.siginup
             });
+            // console.log("signup: ", resData);
           }
         });
     }
@@ -106,7 +114,7 @@ export default class sigininpage extends Component<{}, State> {
           }
         />
         <TouchableOpacity onPress={this.fetchSignUp} style={Styles.button}>
-          <Text style={{ fontFamily: "gaegu_regular", fontSize: 25 }}>
+          <Text style={{ fontFamily: "gaegu_regular", fontSize: 23 }}>
             회원가입
           </Text>
         </TouchableOpacity>

@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Image,
   Text,
-  Animated
+  Animated,
+  AsyncStorage
 } from "react-native";
 
 export default class Loading extends Component<any, any> {
@@ -18,7 +19,7 @@ export default class Loading extends Component<any, any> {
     fadeAnim: new Animated.Value(0)
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     Animated.timing(
       // Uses easing functions
       this._opacity, // The value to drive
@@ -28,12 +29,20 @@ export default class Loading extends Component<any, any> {
         delay: 200
       } // Configuration
     ).start();
+
+    await this._getUserToken();
+  }
+
+  async _getUserToken() {
+    let result = await AsyncStorage.getItem("userToken");
+
+    console.log("userToken: ", result);
   }
 
   render() {
     return (
       <Animated.View style={Styles.container}>
-        {Math.random() < 1 ? (
+        {Math.random() < 0.5 ? (
           <Image source={require("../assets/images/loading1.jpg")} />
         ) : (
           <Image source={require("../assets/images/loading2.jpg")} />

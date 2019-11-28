@@ -1,43 +1,66 @@
 import React, { Component } from 'react'
-import { View, TouchableOpacity, StyleSheet } from "react-native";
-import { Text, Icon } from 'react-native-elements';
+import { View, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { Text, Icon, ListItem } from 'react-native-elements';
+
 interface Props {
     hostName: string
     Date: string
     local: string
     PostId: number
     navigation: any
+    participate: boolean
 }
-export default class BoardList extends Component<Props> {
-
+interface State {
+    iconNames: string[]
+}
+export default class BoardList extends Component<Props, State> {
     render() {
         return (
             <View>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate("Room")} >
-                    <View style={styles.button}>
-                        <Text style={styles.text}>
-                            {this.props.hostName}/{this.props.Date}/{this.props.local}
+                <TouchableOpacity onPress={() => this.props.navigation.navigate("Room")}
+                    style={styles.button} >
+                    <Image
+                        source={require("/Users/yunseunghyeon/Desktop/ChiMe/chiMe-client/assets/surfer.png")}
+                        style={{ width: 40, height: 40, borderRadius: 15, marginTop: 5 }}
+                    />
+                    <Text style={styles.text}>
+                        <Text style={{ fontSize: 15 }}>
+                            {this.props.Date}  {this.props.local}
                         </Text>
-                        <Icon
-                            name='right'
-                            type="antdesign"
-                            size={19}
-                            color='black'
-                        />
-                    </View>
+                        <Text style={{ color: "gray", fontSize: 13 }}>
+                            {`\n${this.props.hostName}`}
+                        </Text>
+                    </Text>
+                    <Icon
+                        name='arrow-right'
+                        type="feather"
+                        size={30}
+                        color='gray'
+                        containerStyle={{ position: 'absolute', marginTop: 10, right: 40, alignItems: "flex-end" }}
+                    />
                 </TouchableOpacity>
+                <View style={{
+                    borderBottomColor: 'black',
+                    borderBottomWidth: 0.8,
+                    opacity: 0.3
+                }} />
             </View>
         )
     }
 }
+
+
 const styles = StyleSheet.create({
     button: {
-        flex: 1,
-        height: 24,
         flexDirection: 'row',
-        backgroundColor: "white"
+        height: 55,
+        marginTop: 17,
+        marginBottom: 10,
+        marginLeft: 20
     },
     text: {
-        fontSize: 20,
+        height: 50,
+        lineHeight: 25,
+        marginLeft: 25
     }
 })

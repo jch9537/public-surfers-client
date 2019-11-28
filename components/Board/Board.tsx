@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import {
     View,
-    SafeAreaView,
     ScrollView,
     StyleSheet,
     Text,
     Alert
 } from 'react-native';
+import { post } from "../fetch";
 import { fakeBoard } from '../fakeData/board';
 import BoardList from './BoardList';
 import Choice from './Choice';
@@ -50,16 +50,17 @@ export default class Board extends Component<Props, State> {
         ListLocal: ['---', '제주도', '천안', '부산'],
         pickLocal: '',
         choiceBoard: [],
-        date: ''
+        date: '',
     };
-    componentDidMount() {
+    async componentDidMount() {
         this.setState({
             board: fakeBoard
-        });
-        // fetch("http://54.180.108.45:3000/posts")
-        //     .then(res => res.json())
+        })
+        // post("GET")
+        //     .then(res => { console.log("res", res); return res.json() })
         //     .then(data => {
-        //         this.setState({
+        //         console.log(data);
+        //         return this.setState({
         //             board: data
         //         })
         //     })
@@ -79,67 +80,32 @@ export default class Board extends Component<Props, State> {
         });
     };
     _render = (Board: any): any => {
-        if (Board === 'board') {
-            return (
-                <View style={styles.total}>
-                    <View style={styles.Choice}>
-                        <Choice
-                            list={this.state.ListLocal}
-                            func={this.ChangeState}
-                        />
-                    </View>
-                    <View style={styles.List}>
-                        <SafeAreaView>
-                            <ScrollView
-                                horizontal={false}
-                                showsHorizontalScrollIndicator={false}
-                            >
-                                {this.state.board.map(item => (
-                                    <BoardList
-                                        key={item['id']}
-                                        hostName={item['host_name']}
-                                        Date={item['date']}
-                                        local={item['location_name']}
-                                        navigation={this.props.navigation}
-                                        PostId={item['id']}
-                                    />
-                                ))}
-                            </ScrollView>
-                        </SafeAreaView>
-                    </View>
+        return (
+            <View>
+                <Choice
+                    list={this.state.ListLocal}
+                    func={this.ChangeState}
+                />
+                <View style={styles.List}>
+                    <ScrollView
+                        horizontal={false}
+                        showsHorizontalScrollIndicator={false}
+                    >
+                        {this.state[Board].map((item: any) => (
+                            <BoardList
+                                key={item['id']}
+                                hostName={item['host_name']}
+                                Date={item['date']}
+                                local={item['location_name']}
+                                navigation={this.props.navigation}
+                                PostId={item['id']}
+                                participate={item["participate"]}
+                            />
+                        ))}
+                    </ScrollView>
                 </View>
-            );
-        } else {
-            return (
-                <View style={styles.total}>
-                    <View style={styles.Choice}>
-                        <Choice
-                            list={this.state.ListLocal}
-                            func={this.ChangeState}
-                        />
-                    </View>
-                    <View style={styles.List}>
-                        <SafeAreaView>
-                            <ScrollView
-                                horizontal={false}
-                                showsHorizontalScrollIndicator={false}
-                            >
-                                {this.state.choiceBoard.map(item => (
-                                    <BoardList
-                                        key={item['id']}
-                                        hostName={item['host_name']}
-                                        Date={item['date']}
-                                        local={item['location_name']}
-                                        navigation={this.props.navigation}
-                                        PostId={item['id']}
-                                    />
-                                ))}
-                            </ScrollView>
-                        </SafeAreaView>
-                    </View>
-                </View>
-            );
-        }
+            </View >
+        );
     };
 
     render() {
@@ -156,14 +122,7 @@ export default class Board extends Component<Props, State> {
 }
 
 const styles = StyleSheet.create({
-    total: {
-        flex: 1
-    },
-    Choice: {
-        flex: 1
-    },
     List: {
-        flex: 7,
-        backgroundColor: 'green'
+        backgroundColor: 'white'
     }
 });

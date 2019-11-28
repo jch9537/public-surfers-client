@@ -67,11 +67,20 @@ export default class sigininpage extends Component<Props, State> {
         .then(res => res.json())
         .then(res => {
           AsyncStorage.setItem("userToken", res.token);
+          return res.message;
+        })
+        .then(res => {
+          this._getUserToken();
+          if (res === "로그인 완료") {
+            this.props.navigation.navigate("MainPart");
+          } else {
+            Alert.alert("Error", "올바른 회원정보를 입력하세요.");
+          }
         });
 
-      await this._getUserToken();
+      // await this._getUserToken();
 
-      await this.props.navigation.navigate("MainPart");
+      // await this.props.navigation.navigate("MainPart");
     }
   };
 

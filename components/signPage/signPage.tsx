@@ -29,7 +29,6 @@ export default class signpage extends Component<Props, State> {
 
   async componentDidMount() {
     await Font.loadAsync({
-      nanum_pen: require("../../assets/fonts/NanumPenScript-Regular.ttf"),
       gaegu_regular: require("../../assets/fonts/Gaegu-Regular.ttf")
     });
     this.setState({

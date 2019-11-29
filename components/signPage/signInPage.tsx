@@ -95,8 +95,6 @@ export default class sigininpage extends Component<Props, State> {
   async _getUserToken() {
     let result = await AsyncStorage.getItem("userToken");
 
-    console.log("userToken: ", result);
-
     await this.setState({
       ...this.state,
       token: result

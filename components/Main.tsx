@@ -114,7 +114,8 @@ const Styles = StyleSheet.create<Style>({
   wrap: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    height: "100%"
   },
   banner: {
     position: "absolute",

@@ -75,7 +75,8 @@ const Styles = StyleSheet.create({
     alignItems: "center",
     padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: "#CCCDC6"
+    borderBottomColor: "#CCCDC6",
+    backgroundColor: "#ffffff"
   },
   ParticipantWrap: {
     flexDirection: "row",

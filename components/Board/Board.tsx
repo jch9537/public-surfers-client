@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, ScrollView, StyleSheet, Text, Alert } from "react-native";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  Alert,
+  ImageBackground
+} from "react-native";
 import { post } from "../fetch";
 import { fakeBoard } from "../fakeData/board";
 import BoardList from "./BoardList";
@@ -104,7 +111,10 @@ export default class Board extends Component<Props, State> {
 
   render() {
     return (
-      <View>
+      <ImageBackground
+        source={require("../../assets/images/main_background.jpg")}
+        style={Styles.background}
+      >
         <Choice list={this.state.ListLocal} func={this.changeLocal} />
         <ScrollView horizontal={false} showsHorizontalScrollIndicator={false}>
           {this.state.filteredBoard.map((item: any) => (
@@ -120,11 +130,11 @@ export default class Board extends Component<Props, State> {
           ))}
           <Text style={{ paddingBottom: 30 }}> </Text>
         </ScrollView>
-      </View>
+      </ImageBackground>
     );
   }
 }
 
 const Styles = StyleSheet.create({
-  List: {}
+  background: { height: "100%" }
 });

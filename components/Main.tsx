@@ -22,7 +22,7 @@ interface State {
 }
 interface Style {
   button: ViewStyle;
-  afterFont: TextStyle;
+  text: TextStyle;
   wrap: ViewStyle;
   banner: ViewStyle;
 }
@@ -60,46 +60,32 @@ export default class Main extends Component<Props, State> {
 
   async _getUserToken() {
     let result = await AsyncStorage.getItem("userToken");
-
-    console.log("userToken: ", result);
   }
 
   render() {
-    return (
+    return this.state.fontend ? (
       <ImageBackground
         source={require("../assets/images/main_background.jpg")}
         style={Styles.wrap}
       >
-        <View style={{ marginBottom: "50%" }}>
+        <View style={{ marginBottom: "35%" }}>
           <TouchableOpacity
             style={Styles.button}
             onPress={() => this.props.navigation.navigate("MakeRoom")}
           >
-            <Text
-              style={this.state.fontend ? Styles.afterFont : { fontSize: 20 }}
-            >
-              서퍼 모집하기
-            </Text>
+            <Text style={Styles.text}>서퍼 모집하기</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={Styles.button}
             onPress={() => this.props.navigation.navigate("Board")}
           >
-            <Text
-              style={this.state.fontend ? Styles.afterFont : { fontSize: 20 }}
-            >
-              서핑 참여하기
-            </Text>
+            <Text style={Styles.text}>서핑 참여하기</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={Styles.button}
             onPress={() => this.props.navigation.navigate("MyRoomList")}
           >
-            <Text
-              style={this.state.fontend ? Styles.afterFont : { fontSize: 20 }}
-            >
-              나의 방 목록
-            </Text>
+            <Text style={Styles.text}>나의 방 목록</Text>
           </TouchableOpacity>
         </View>
 
@@ -107,7 +93,7 @@ export default class Main extends Component<Props, State> {
           <AdBanner />
         </View>
       </ImageBackground>
-    );
+    ) : null;
   }
 }
 const Styles = StyleSheet.create<Style>({
@@ -121,7 +107,7 @@ const Styles = StyleSheet.create<Style>({
     marginBottom: 50,
     borderRadius: 10
   },
-  afterFont: {
+  text: {
     fontFamily: "gaegu_regular",
     fontSize: 25
   },

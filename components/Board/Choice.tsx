@@ -1,26 +1,24 @@
-import React, { Component } from 'react'
-import {
-    View, Picker
-} from "react-native";
+import React, { Component } from "react";
+import { View, Picker } from "react-native";
 
 interface Props {
-    list: string[] 
-    func: any
+  list: string[];
+  func: any;
 }
 interface Posts {
-    id: number,
-    host_name: string,
-    location_name: string,
-    date: string,
+  id: number;
+  host_name: string;
+  location_name: string;
+  date: string;
 }
 export default class Choice extends Component<Props, {}> {
-    render() {
-        return (
-            <View>
-                <Picker onValueChange={(itemValue) => this.props.func(itemValue)}>
-                    {this.props.list.map((data, index) => <Picker.Item key={index} label={data} value={data}></Picker.Item>)}
-                </Picker>
-            </View>
-        )
-    }
+  render() {
+    return (
+      <Picker onValueChange={itemValue => this.props.func(itemValue)}>
+        {this.props.list.map((data, index) => (
+          <Picker.Item key={index} label={data} value={data}></Picker.Item>
+        ))}
+      </Picker>
+    );
+  }
 }

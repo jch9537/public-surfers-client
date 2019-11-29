@@ -58,10 +58,11 @@ const MainTab = createBottomTabNavigator({
 const SignMainSwitch = createSwitchNavigator(
   {
     MainPart: { screen: MainTab },
-    SignPart: { screen: SignPage }
+    SignPart: { screen: SignPage },
+    LoadingPart: { screen: Loading }
   },
   {
-    initialRouteName: "SignPart"
+    initialRouteName: "LoadingPart"
   }
 );
 const AppContainer = createAppContainer(SignMainSwitch);

@@ -111,10 +111,7 @@ export default class Board extends Component<Props, State> {
 
   render() {
     return (
-      <ImageBackground
-        source={require("../../assets/images/main_background.jpg")}
-        style={Styles.background}
-      >
+      <View>
         <Choice list={this.state.ListLocal} func={this.changeLocal} />
         <ScrollView horizontal={false} showsHorizontalScrollIndicator={false}>
           {this.state.filteredBoard.map((item: any) => (
@@ -130,7 +127,7 @@ export default class Board extends Component<Props, State> {
           ))}
           <Text style={{ paddingBottom: 30 }}> </Text>
         </ScrollView>
-      </ImageBackground>
+      </View>
     );
   }
 }

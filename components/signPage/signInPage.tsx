@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Input, Icon } from "react-native-elements";
 import * as Font from "expo-font";
+import registerForPushNotificationsAsync from "../Chat/resistPushToken";
 
 interface State {
   email: string;
@@ -67,6 +68,7 @@ export default class sigininpage extends Component<Props, State> {
         .then(res => res.json())
         .then(res => {
           AsyncStorage.setItem("userToken", res.token);
+          registerForPushNotificationsAsync(this.state.email);
           return res.message;
         })
         .then(res => {

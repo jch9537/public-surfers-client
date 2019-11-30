@@ -81,6 +81,7 @@ export default class Loading extends Component<any, any> {
   }
 
   render() {
+    AsyncStorage.clear();
     return (
       <Animated.View
         style={[Styles.container, { opacity: this.state.fadeAnim }]}

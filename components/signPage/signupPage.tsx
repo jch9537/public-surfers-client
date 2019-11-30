@@ -4,7 +4,8 @@ import {
   Text,
   View,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  Alert
 } from "react-native";
 import { Input, Icon } from "react-native-elements";
 import * as Font from "expo-font";
@@ -13,7 +14,6 @@ export interface State {
   name: string;
   email: string;
   password: string;
-  siginup: boolean;
   phone: string;
   error: boolean;
   fontLoaded: boolean;
@@ -24,7 +24,6 @@ export default class sigininpage extends Component<{}, State> {
     email: "",
     password: "",
     phone: "",
-    siginup: false,
     error: true,
     fontLoaded: false
   };
@@ -71,11 +70,11 @@ export default class sigininpage extends Component<{}, State> {
       })
         .then(res => res.json())
         .then(resData => {
-          if (resData.status === 200) {
-            this.setState({
-              siginup: !this.state.siginup
-            });
-            // console.log("signup: ", resData);
+          console.log(resData);
+          if (resData.message === "회원가입 성공") {
+            Alert.alert("성공", "회원가입에 성공하였습니다.");
+          } else {
+            Alert.alert("error", "이미 사용중인 email입니다.");
           }
         });
     }

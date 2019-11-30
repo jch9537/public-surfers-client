@@ -11,6 +11,9 @@ web-build/
 web-report/
 .prettierrc
 
+## json file ##
+
+google-services.json
 
 
 # macOS

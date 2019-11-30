@@ -67,7 +67,6 @@ export default class Loading extends Component<any, any> {
 
   async _routeToPages() {
     let token = await this._getUserToken();
-    console.log("token: ", token);
     if (token === null) {
       this.props.navigation.navigate("SignPart");
     } else {
@@ -77,8 +76,6 @@ export default class Loading extends Component<any, any> {
 
   async _getUserToken() {
     let result = await AsyncStorage.getItem("userToken");
-
-    console.log("userToken: ", result);
 
     return result;
   }

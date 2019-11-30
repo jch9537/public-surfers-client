@@ -22,6 +22,7 @@ import SideBar from "./components/rooms/sideBar";
 import MyRoomList from "./components/MyList/MyRooms";
 import Setting from "./components/setinfo/setting";
 import Loading from "./components/Loading";
+import NewChatScreen from "./screens/newChatScreen";
 
 firebase.initializeApp(firebaseConfig);
 const DrawSide = createDrawerNavigator(
@@ -58,10 +59,11 @@ const MainTab = createBottomTabNavigator({
 const SignMainSwitch = createSwitchNavigator(
   {
     MainPart: { screen: MainTab },
-    SignPart: { screen: SignPage }
+    SignPart: { screen: SignPage },
+    LoadingPart: { screen: Loading }
   },
   {
-    initialRouteName: "SignPart"
+    initialRouteName: "LoadingPart"
   }
 );
 const AppContainer = createAppContainer(SignMainSwitch);

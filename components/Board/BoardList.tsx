@@ -1,66 +1,98 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 import { View, TouchableOpacity, StyleSheet, Image } from "react-native";
-import { Text, Icon, ListItem } from 'react-native-elements';
+import { Text, Icon } from "react-native-elements";
+import * as Font from "expo-font";
 
 interface Props {
-    hostName: string
-    Date: string
-    local: string
-    PostId: number
-    navigation: any
-    participate: boolean
+  hostName: string;
+  Date: string;
+  local: string;
+  PostId: number;
+  navigation: any;
+  participate: boolean;
 }
 interface State {
-    iconNames: string[]
+  iconNames: string[];
+  fontLoaded: boolean;
+  participant: boolean;
 }
 export default class BoardList extends Component<Props, State> {
-    render() {
-        return (
-            <View>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate("Room")}
-                    style={styles.button} >
-                    <Image
-                        source={require("/Users/yunseunghyeon/Desktop/ChiMe/chiMe-client/assets/surfer.png")}
-                        style={{ width: 40, height: 40, borderRadius: 15, marginTop: 5 }}
-                    />
-                    <Text style={styles.text}>
-                        <Text style={{ fontSize: 15 }}>
-                            {this.props.Date}  {this.props.local}
-                        </Text>
-                        <Text style={{ color: "gray", fontSize: 13 }}>
-                            {`\n${this.props.hostName}`}
-                        </Text>
-                    </Text>
-                    <Icon
-                        name='arrow-right'
-                        type="feather"
-                        size={30}
-                        color='gray'
-                        containerStyle={{ position: 'absolute', marginTop: 10, right: 40, alignItems: "flex-end" }}
-                    />
-                </TouchableOpacity>
-                <View style={{
-                    borderBottomColor: 'black',
-                    borderBottomWidth: 0.8,
-                    opacity: 0.3
-                }} />
-            </View>
-        )
-    }
+  constructor(props: Props) {
+    super(props);
+  }
+
+  state: State = {
+    iconNames: [],
+    fontLoaded: false,
+    participant: false
+  };
+
+  async componentDidMount() {
+    await Font.loadAsync({
+      gaegu_regular: require("../../assets/fonts/Gaegu-Regular.ttf"),
+      gaegu_bold: require("../../assets/fonts/Gaegu-Bold.ttf")
+    });
+    this.setState({
+      ...this.state,
+      fontLoaded: true
+    });
+  }
+
+  render() {
+    return this.state.fontLoaded ? (
+      <TouchableOpacity
+        onPress={() => this.props.navigation.navigate("Room")}
+        style={
+          this.props.participate
+            ? Styles.ParticipantWrap
+            : Styles.nonParticipantWrap
+        }
+      >
+        <Image
+          source={require("../../assets/surfer.png")}
+          style={Styles.profileImage}
+        />
+        <View>
+          <Text style={Styles.title}>
+            {this.props.Date} {this.props.local}
+          </Text>
+          <Text style={Styles.hostName}>{`\n${this.props.hostName}`}</Text>
+        </View>
+        <Icon
+          name="arrow-right"
+          type="feather"
+          size={20}
+          containerStyle={Styles.icon}
+        />
+      </TouchableOpacity>
+    ) : null;
+  }
 }
 
-
-const styles = StyleSheet.create({
-    button: {
-        flexDirection: 'row',
-        height: 55,
-        marginTop: 17,
-        marginBottom: 10,
-        marginLeft: 20
-    },
-    text: {
-        height: 50,
-        lineHeight: 25,
-        marginLeft: 25
-    }
-})
+const Styles = StyleSheet.create({
+  nonParticipantWrap: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#CCCDC6",
+    backgroundColor: "#ffffff"
+  },
+  ParticipantWrap: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#CCCDC6",
+    backgroundColor: "#e5ffe5"
+  },
+  profileImage: {
+    width: 35,
+    height: 35,
+    borderRadius: 10,
+    marginRight: 20
+  },
+  title: { fontFamily: "gaegu_bold", fontSize: 22 },
+  hostName: { fontFamily: "gaegu_regular", fontSize: 15 },
+  icon: { opacity: 0.3, position: "absolute", right: 40 }
+});

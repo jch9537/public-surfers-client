@@ -10,7 +10,14 @@ npm-debug.*
 web-build/
 web-report/
 .prettierrc.json
-/Users/yunseunghyeon/Desktop/ChiMe/chiMe-client/firebaseConfig.tsx
+./firebaseConfig.tsx
+google-services.json
+
+## json file ##
+
+google-services.json
+
 
 # macOS
 .DS_Store
+

@@ -62,7 +62,7 @@ export default class NewChatScreen extends React.Component<
   //   }
 
   componentDidMount() {
-    const socket = io.connect("http://localhost:3000/chatroom");
+    const socket = io.connect("http://54.180.108.45:3000/chatroom");
     const post_id = this.state.post_id + "";
 
     if (!this.state.chatLoaded) {
@@ -92,20 +92,20 @@ export default class NewChatScreen extends React.Component<
     // this.setState((previousState: any) => ({
     //   messages: GiftedChat.append(previousState.messages, newmessages)
     // }));
-    const socket = io.connect("http://localhost:3000/chatroom");
+    const socket = io.connect("http://54.180.108.45:3000/chatroom");
     socket.emit("message", newmessages[0]);
   }
 
   _loadOldMessage() {
     const post_id = this.state.post_id;
-    fetch("http://localhost:3000/chats?post_id=" + post_id)
+    fetch("http://54.180.108.45:3000/chat?post_id=" + post_id)
       .then(res => res.json())
       .then(datas => {
         this.setState({
           ...this.state,
           messages: datas.reverse()
         });
-        // console.log(datas);
+        console.log(datas);
       });
   }
 

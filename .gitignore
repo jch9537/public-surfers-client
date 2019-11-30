@@ -12,6 +12,7 @@ web-report/
 .prettierrc.json
 ./firebaseConfig.tsx
 google-services.json
+package-lock.json
 
 ## json file ##
 

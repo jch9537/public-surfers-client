@@ -1,6 +1,6 @@
 let server = "http://54.180.108.45:3000";
 
-let fetchOptions: RequestInit = {
+let fetchOptions: RequestInit = { 
   headers: {
     "Content-Type": "application/json"
   },

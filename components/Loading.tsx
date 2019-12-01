@@ -8,7 +8,7 @@ import {
   Animated,
   AsyncStorage
 } from "react-native";
-import { start } from "repl";
+import { reset } from "expo/build/AR";
 
 export default class Loading extends Component<any, any> {
   public _opacity: any;
@@ -67,7 +67,9 @@ export default class Loading extends Component<any, any> {
 
   async _routeToPages() {
     let token = await this._getUserToken();
-    if (token === null) {
+    let verify = await this._verifyToken(token);
+    console.log("token verify: ", verify);
+    if (verify === false) {
       this.props.navigation.navigate("SignPart");
     } else {
       this.props.navigation.navigate("MainPart");
@@ -80,8 +82,26 @@ export default class Loading extends Component<any, any> {
     return result;
   }
 
+  async _verifyToken(token: any) {
+    // console.log("trying to verify this token: ", token);
+    let result;
+    await fetch("http://15.164.218.247:3000/user", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: token
+      },
+      credentials: "include"
+    })
+      .then(res => res.json())
+      .then(res => {
+        result = res.message;
+      });
+
+    return result;
+  }
+
   render() {
-    AsyncStorage.clear();
     return (
       <Animated.View
         style={[Styles.container, { opacity: this.state.fadeAnim }]}

@@ -154,7 +154,7 @@ const SignMainSwitch = createSwitchNavigator(
     LoadingPart: { screen: Loading }
   },
   {
-    initialRouteName: "MainPart"
+    initialRouteName: "SignPart"
   }
 );
 const AppContainer = createAppContainer(SignMainSwitch);

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, AsyncStorage } from "react-native";
 import * as Google from "expo-google-app-auth";
 import { ClientId } from "./MyID";
 interface Props {

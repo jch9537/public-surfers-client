@@ -22,7 +22,8 @@ import SideBar from "./components/rooms/sideBar";
 import MyRoomList from "./components/MyList/MyRooms";
 import Setting from "./components/setinfo/setting";
 import Loading from "./components/Loading";
-import NewChatScreen from "./screens/newChatScreen";
+import ChatScreen from "./components/chatScreen";
+import Test from "./components/test";
 
 firebase.initializeApp(firebaseConfig);
 const DrawSide = createDrawerNavigator(
@@ -73,7 +74,7 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <AppContainer />
+        <ChatScreen />
       </Provider>
     );
   }

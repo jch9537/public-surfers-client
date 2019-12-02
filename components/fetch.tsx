@@ -1,11 +1,12 @@
 let server = "http://54.180.108.45:3000";
 
-let fetchOptions: RequestInit = { 
+let fetchOptions: RequestInit = {
   headers: {
     "Content-Type": "application/json"
   },
   credentials: "include"
 };
+
 export const user = function(
   method: string,
   endPoint?: string | null,
@@ -23,6 +24,7 @@ export const user = function(
     return fetch(server, fetchOptions);
   }
 };
+
 export const posts = function(
   method: string,
   body?: object | null,
@@ -44,6 +46,7 @@ export const posts = function(
     return fetch(server, fetchOptions);
   }
 };
+
 export const post = function(
   method: string,
   body?: object | null,
@@ -59,6 +62,7 @@ export const post = function(
     return fetch(server, fetchOptions);
   }
 };
+
 export const LocationData = function(
   endPoint: string,
   location_name?: string | null

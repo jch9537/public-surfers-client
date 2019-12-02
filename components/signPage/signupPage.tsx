@@ -57,7 +57,9 @@ export default class sigininpage extends Component<{}, State> {
       email: "" + this.state.email,
       password: "" + this.state.password,
       phone: "" + this.state.phone,
-      oAuth: 0
+      oAuth: 0,
+      img_url:
+        "https://www.clipartwiki.com/clipimg/detail/31-312536_surf-icon-illustration.png"
     };
     if (!this.state.error) {
       fetch("http://15.164.218.247:3000/user/signup", {

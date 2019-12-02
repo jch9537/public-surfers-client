@@ -1,3 +1,4 @@
+
 interface settingInfo {
   name: string;
   password: string;
@@ -8,7 +9,7 @@ interface joinChatbody {
 }
 //login 하는 fetch 
 export const userSignin = function (body: any) {
-  let server = "http://15.164.218.247:3000/user/singin";
+  let server = "http://15.164.218.247:3000/user/signin";
   return fetch(server, {
     method: "POST",
     headers: {
@@ -20,7 +21,7 @@ export const userSignin = function (body: any) {
 }
 //회원가입하는 fetch
 export const userSignup = function (body: any) {
-  let server = "http://15.164.218.247:3000/user/singup";
+  let server = "http://15.164.218.247:3000/user/signup";
   return fetch(server, {
     method: "POST",
     headers: {
@@ -98,9 +99,11 @@ export const makeRoom = function (body: any, token: string) {
 //방 이름들 혹은 방 정보 가져오는 fetch
 export const GetRoomlistOrGetRoominfo = function (token: string, post_Id?: number | null) {
   let server = "http://15.164.218.247:3000/posts";
+  console.log(post_Id)
   if (post_Id) {
-    server += `?post_id=${post_Id}`
+    server = `http://15.164.218.247:3000/post?post_id=${post_Id}`;
   }
+  console.log("serverurl", server)
   return fetch(server, {
     method: "GET",
     headers: {
@@ -122,7 +125,7 @@ export const GetMyRooms = function (token: string) {
   })
 }
 //sideBar에서 chat쪽 참여 하는 fetch 부분
-export const JoinChatfromSideBar = function (token: string, post_id?: number, body?: null | joinChatbody) {
+export const JoinChatfromSideBar = function (token: string, post_id?: number | null, body?: null | joinChatbody) {
   let server = "http://15.164.218.247:3000/post";
   if (body) {
     return fetch(server, {

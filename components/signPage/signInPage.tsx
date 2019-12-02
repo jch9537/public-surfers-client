@@ -8,6 +8,7 @@ import {
   Alert
 } from "react-native";
 import { Input, Icon } from "react-native-elements";
+import { userSignin } from "../fetch";
 import * as Font from "expo-font";
 import registerForPushNotificationsAsync from "../Chat/resistPushToken";
 
@@ -57,21 +58,18 @@ export default class sigininpage extends Component<Props, State> {
     };
 
     //푸쉬토큰 DB에 등록.
-    await registerForPushNotificationsAsync(
-      "http://15.164.218.247:3000/chat/push_token",
-      this.state.email
-    );
+    // await registerForPushNotificationsAsync(
+    //   "http://15.164.218.247:3000/chat/push_token",
+    //   this.state.email
+    // );
 
-    await fetch("http://15.164.218.247:3000/user/signin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body),
-      credentials: "include"
-    })
-      .then(res => res.json())
+    return userSignin(body)
       .then(res => {
+        console.log("Res", res);
+        return res.json()
+      })
+      .then(res => {
+        console.log("Res", res)
         AsyncStorage.setItem("userToken", res.token);
         console.log("sign in: ", res);
         return res.message;

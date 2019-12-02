@@ -41,7 +41,7 @@ export default class BoardList extends Component<Props, State> {
   render() {
     return this.state.fontLoaded ? (
       <TouchableOpacity
-        onPress={() => this.props.navigation.navigate("Room")}
+        onPress={() => this.props.navigation.navigate("Room", { Post_id: this.props.PostId })}
         style={
           this.props.participate
             ? Styles.ParticipantWrap

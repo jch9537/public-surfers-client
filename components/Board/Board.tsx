@@ -7,7 +7,7 @@ import {
   Alert,
   AsyncStorage
 } from "react-native";
-import { posts, RoomlistInfo } from "../fetch";
+import { GetRoomlistOrGetRoominfo } from "../fetch";
 import { fakeBoard } from "../fakeData/board";
 import BoardList from "./BoardList";
 import Choice from "./Choice";
@@ -29,8 +29,8 @@ interface Posts {
 }
 
 interface State {
-  board: Array<Posts>;
-  filteredBoard: Array<Posts>;
+  board: Posts[];
+  filteredBoard: Posts[];
   spotList: string[];
   date: string;
   ListLocal: string[];
@@ -44,28 +44,32 @@ export default class Board extends Component<Props, State> {
 
   state: State = {
     board: [],
-    ListLocal: ["모든지역", "제주도", "천안", "부산"],
+    ListLocal: ["모든지역", "제주도", "강원도", "부산", "기타"],
     spotList: [],
     pickLocal: "",
     filteredBoard: [],
     date: ""
   };
   async componentDidMount() {
-    let token = await AsyncStorage.getItem("userToken", data => data)
+    let token = await AsyncStorage.getItem("userToken");
     console.log("board token", token)
-    return await RoomlistInfo(`${token}`)
+    return GetRoomlistOrGetRoominfo(`${token}`)
       .then(res => {
-        console.log("Board res", res);
-        return res.json()
+        console.log("Res", res)
+        if (res["status"] === 200) {
+          return res.json();
+        } else {
+          Alert.alert("다음번에..");
+        }
       })
       .then(res => {
-        console.log("STate", res);
+        console.log("res", res)
         let data = this.state.board.concat(res);
-        if (res.status === 200) {
-          return this.setState({
-            board: data
-          })
-        }
+        console.log("DAta", data)
+        return this.setState({
+          board: data,
+          filteredBoard: data
+        })
       })
   }
   changeLocal = (value: string): any => {
@@ -105,6 +109,7 @@ export default class Board extends Component<Props, State> {
   };
 
   render() {
+    console.log("this.state", this.state.board)
     return (
       <View>
         <Choice list={this.state.ListLocal} func={this.changeLocal} />

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, ScrollView, Text, Alert } from 'react-native';
 import ListView from '../Board/BoardList';
 import { fakeRoomList } from '../fakeData/board';
+import Logout from "../utils/logout";
 interface State {
     myRooms: Array<Posts>;
 }
@@ -15,23 +16,6 @@ interface Posts {
     date: string;
 }
 export default class MyRooms extends Component<Props, State> {
-    static navigationOptions = ({ navigation }: any) => {
-        let headerTitle = 'MyRoom';
-        // let headerTitleStyle = { color: 'black' }; // 띄어쓰기 해야함
-        let headerRight = (
-            <Text onPress={() => Alert.alert('로그아웃')}>Logout</Text>
-        );
-        // let headerLeft = (
-        //     <Icon name="home" onPress={() => navigation.navigate('Test1')} />
-        // );
-
-        return {
-            headerTitle,
-            // headerTitleStyle,
-            headerRight
-            // headerLeft
-        };
-    };
     state = {
         myRooms: []
     };

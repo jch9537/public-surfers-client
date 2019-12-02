@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Text } from "react-native";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 
 import { createStackNavigator } from "react-navigation-stack";
@@ -12,7 +13,6 @@ import { RoomInfo } from "./components/src/redux/reducer";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 
-import ChatRoom from "./components/Chat/chat";
 import Main from "./components/Main";
 import MakeRoom from "./components/makerooms/makeroom";
 import Room from "./components/rooms/room";
@@ -22,26 +22,131 @@ import SideBar from "./components/rooms/sideBar";
 import MyRoomList from "./components/MyList/MyRooms";
 import Setting from "./components/setinfo/setting";
 import Loading from "./components/Loading";
+import Logout from "./components/utils/logout";
 import ChatScreen from "./components/chatScreen";
-import Test from "./components/test";
 
 firebase.initializeApp(firebaseConfig);
 const DrawSide = createDrawerNavigator(
   {
-    RoomScress: { screen: Room }
+    RoomScreen: { screen: Room }
   },
   {
-    contentComponent: props => <SideBar navigation={props.navigation} />
+    contentComponent: (props: any) => <SideBar navigation={props.navigation} />
   }
 );
 const BoardStack = createStackNavigator({
-  Main: { screen: Main },
-  Board: { screen: Board },
-  MyRoomList: { screen: MyRoomList },
-  Chat: { screen: ChatRoom },
-  Room: { screen: DrawSide },
-  MakeRoom: { screen: MakeRoom },
-  Setting: { screen: Setting }
+  Main: {
+    screen: Main,
+    navigationOptions: ({ navigation }: any) => {
+      let headerTitle = "Main";
+      let headerRight = (
+        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+          Logout
+        </Text>
+      );
+
+      return {
+        headerTitle,
+        headerRight
+      };
+    }
+  },
+  Board: {
+    screen: Board,
+    navigationOptions: ({ navigation }: any) => {
+      let headerTitle = "Board";
+      let headerRight = (
+        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+          Logout
+        </Text>
+      );
+
+      return {
+        headerTitle,
+        headerRight
+      };
+    }
+  },
+  MyRoomList: {
+    screen: MyRoomList,
+    navigationOptions: ({ navigation }: any) => {
+      let headerTitle = "MyRooms";
+      let headerRight = (
+        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+          Logout
+        </Text>
+      );
+
+      return {
+        headerTitle,
+        headerRight
+      };
+    }
+  },
+  Chat: {
+    screen: ChatScreen,
+    navigationOptions: ({ navigation }: any) => {
+      let headerTitle = "Chat";
+      let headerRight = (
+        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+          Logout
+        </Text>
+      );
+
+      return {
+        headerTitle,
+        headerRight
+      };
+    }
+  },
+  Room: {
+    screen: DrawSide,
+    navigationOptions: ({ navigation }: any) => {
+      let headerTitle = "Room";
+      let headerRight = (
+        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+          Logout
+        </Text>
+      );
+
+      return {
+        headerTitle,
+        headerRight
+      };
+    }
+  },
+  MakeRoom: {
+    screen: MakeRoom,
+    navigationOptions: ({ navigation }: any) => {
+      let headerTitle = "MakeRoom";
+      let headerRight = (
+        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+          Logout
+        </Text>
+      );
+
+      return {
+        headerTitle,
+        headerRight
+      };
+    }
+  },
+  Setting: {
+    screen: Setting,
+    navigationOptions: ({ navigation }: any) => {
+      let headerTitle = "Setting";
+      let headerRight = (
+        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+          Logout
+        </Text>
+      );
+
+      return {
+        headerTitle,
+        headerRight
+      };
+    }
+  }
 });
 const MainTab = createBottomTabNavigator({
   Surf: {
@@ -64,7 +169,7 @@ const SignMainSwitch = createSwitchNavigator(
     LoadingPart: { screen: Loading }
   },
   {
-    initialRouteName: "LoadingPart"
+    initialRouteName: "MainPart"
   }
 );
 const AppContainer = createAppContainer(SignMainSwitch);
@@ -74,7 +179,7 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <ChatScreen />
+        <AppContainer />
       </Provider>
     );
   }

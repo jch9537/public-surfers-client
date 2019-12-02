@@ -1,24 +1,76 @@
 import React, { Component } from "react";
-import { View, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Alert,
+  AsyncStorage
+} from "react-native";
 import { RoomData, joinChat } from "../src/redux/actions";
 import { Text, Icon } from "react-native-elements";
 import { connect } from "react-redux";
-import { posts } from "../fetch";
+import { JoinChatfromSideBar, GetMyRooms } from "../fetch";
 interface Props {
   navigation: any;
   Room: RoomData;
   join: boolean;
-  JoinChat(): any;
+  JoinChat(): void;
 }
 class SideBar extends Component<Props> {
-  componentDidMount() {
-    posts("GET", null, null, "my_list");
+  async componentDidMount() {
+    let token = await AsyncStorage.getItem("userToken");
+    GetMyRooms(`${token}`)
+      .then(res => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          Alert.alert("경고창");
+        }
+      })
+      .then(resData => {
+        for (let i = 0; i < resData.length; i++) {
+          if (resData[i] === this.props.Room.id) {
+            return this.props.JoinChat();
+          }
+        }
+      });
   }
-  joinChat = () => {
-    this.props.JoinChat();
+  joinChat = async () => {
+    let body = {
+      post_id: this.props.Room.id
+    };
+    let token = await AsyncStorage.getItem("userToken");
+    JoinChatfromSideBar(`${token}`, null, body)
+      .then(res => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          Alert.alert("같이가기 실패");
+        }
+      })
+      .then(res => {
+        if (res) {
+          this.props.JoinChat();
+          return this.props.navigation.navigate("Chat");
+        }
+      });
   };
-  getOut = () => {
-    this.props.JoinChat();
+  getOut = async () => {
+    let token = await AsyncStorage.getItem("userToken");
+    return JoinChatfromSideBar(`${token}`, this.props.Room.id)
+      .then(res => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          Alert.alert("나가기 실패");
+        }
+      })
+      .then(res => {
+        if (res) {
+          this.props.JoinChat();
+        }
+      });
   };
   render() {
     return (

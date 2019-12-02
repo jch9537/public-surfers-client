@@ -5,12 +5,13 @@ import {
   StyleSheet,
   Text,
   Alert,
-  ImageBackground
+  AsyncStorage
 } from "react-native";
-import { post } from "../fetch";
+import { GetRoomlistOrGetRoominfo } from "../fetch";
 import { fakeBoard } from "../fakeData/board";
 import BoardList from "./BoardList";
 import Choice from "./Choice";
+import { BooleanLiteral } from "@babel/types";
 
 interface Props {
   navigation: any;
@@ -18,14 +19,18 @@ interface Props {
 
 interface Posts {
   id: number;
+  host_id: number;
   host_name: string;
   location_name: string;
   date: string;
+  participate: boolean;
+  spot_name: string;
+  text: string
 }
 
 interface State {
-  board: Array<Posts>;
-  filteredBoard: Array<Posts>;
+  board: Posts[];
+  filteredBoard: Posts[];
   spotList: string[];
   date: string;
   ListLocal: string[];
@@ -39,25 +44,33 @@ export default class Board extends Component<Props, State> {
 
   state: State = {
     board: [],
-    ListLocal: ["모든지역", "제주도", "천안", "부산"],
+    ListLocal: ["모든지역", "제주도", "강원도", "부산", "기타"],
     spotList: [],
     pickLocal: "",
     filteredBoard: [],
     date: ""
   };
   async componentDidMount() {
-    await this.setState({
-      board: fakeBoard,
-      filteredBoard: fakeBoard
-    });
-    // post("GET")
-    //     .then(res => { console.log("res", res); return res.json() })
-    //     .then(data => {
-    //         console.log(data);
-    //         return this.setState({
-    //             board: data
-    //         })
-    //     })
+    let token = await AsyncStorage.getItem("userToken");
+    console.log("board token", token)
+    return GetRoomlistOrGetRoominfo(`${token}`)
+      .then(res => {
+        console.log("Res", res)
+        if (res["status"] === 200) {
+          return res.json();
+        } else {
+          Alert.alert("다음번에..");
+        }
+      })
+      .then(res => {
+        console.log("res", res)
+        let data = this.state.board.concat(res);
+        console.log("DAta", data)
+        return this.setState({
+          board: data,
+          filteredBoard: data
+        })
+      })
   }
   changeLocal = (value: string): any => {
     if (value === "모든지역") {
@@ -96,6 +109,7 @@ export default class Board extends Component<Props, State> {
   };
 
   render() {
+    console.log("this.state", this.state.board)
     return (
       <View>
         <Choice list={this.state.ListLocal} func={this.changeLocal} />

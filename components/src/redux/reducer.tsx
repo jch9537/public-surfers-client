@@ -19,6 +19,7 @@ export const Room: RoomInfomation = {
     date: "",
     text: "",
     pay: 0,
+    spot_name: "",
     participants: []
   },
   Join: false

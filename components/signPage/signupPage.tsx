@@ -4,11 +4,12 @@ import {
   Text,
   View,
   TouchableOpacity,
-  TextInput,
-  Alert
+  Alert,
+  AsyncStorage
 } from "react-native";
 import { Input, Icon } from "react-native-elements";
 import * as Font from "expo-font";
+import { userSignup } from "../fetch";
 
 export interface State {
   name: string;
@@ -62,14 +63,7 @@ export default class sigininpage extends Component<{}, State> {
         "https://www.clipartwiki.com/clipimg/detail/31-312536_surf-icon-illustration.png"
     };
     if (!this.state.error) {
-      fetch("http://15.164.218.247:3000/user/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body),
-        credentials: "include"
-      })
+      userSignup(body)
         .then(res => res.json())
         .then(resData => {
           console.log(resData);

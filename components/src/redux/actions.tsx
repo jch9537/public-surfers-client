@@ -11,6 +11,7 @@ export interface RoomData {
   date: string;
   text: string;
   pay: number;
+  spot_name: string;
   participants: string[];
 }
 // room 의 데이터

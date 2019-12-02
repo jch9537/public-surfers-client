@@ -13,6 +13,7 @@ import { RoomInfo } from "./components/src/redux/reducer";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 
+import ChatRoom from "./components/chatScreen";
 import Main from "./components/Main";
 import MakeRoom from "./components/makerooms/makeroom";
 import Room from "./components/rooms/room";
@@ -169,7 +170,7 @@ const SignMainSwitch = createSwitchNavigator(
     LoadingPart: { screen: Loading }
   },
   {
-    initialRouteName: "MainPart"
+    initialRouteName: "LoadingPart"
   }
 );
 const AppContainer = createAppContainer(SignMainSwitch);

@@ -1,12 +1,16 @@
 import React, { Component } from "react";
-import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  AsyncStorage
+} from "react-native";
 import { RoomData, roominfo } from "../src/redux/actions";
-import { Text, Button } from "react-native-elements";
-import { rooms } from "../fakeData/roomData";
+import { Text } from "react-native-elements";
 import Weather from "./weather";
 import { connect } from "react-redux";
-import { post } from "../fetch";
-import Logout from "../utils/logout";
+import { GetRoomlistOrGetRoominfo } from "../fetch";
 import AdBanner from "../AdBanner";
 interface Props {
   Room: RoomData;
@@ -14,19 +18,30 @@ interface Props {
   addRoom(obj: RoomData): any;
 }
 class RoomInfo extends Component<Props> {
-  componentDidMount() {
-    this.props.addRoom(rooms);
-    // fetch(`url/post/${this.props.navigation.getParam("PostId")}`)
-    //     .then(res => res.json())
-    //     .then(data => {})
+  async componentDidMount() {
+    let token = await AsyncStorage.getItem("userToken");
+    console.log("room 안에서", token);
+    let postid = this.props.navigation.state.params.Post_id;
+    console.log(typeof postid, postid);
+    GetRoomlistOrGetRoominfo(`${token}`, postid)
+      .then(res => {
+        console.log("Room res", res);
+        return res.json();
+      })
+      .then(res => {
+        console.log("DATa", res);
+        this.props.addRoom(res);
+      });
   }
   editButtonPress = () => {
     //edit페이지로 이동
   };
   deleteButtonPress = () => {
+    console.log("????");
     // return await post("DELETE", null, this.props.Room.id);
   };
   render() {
+    console.log("data", this.props.Room);
     return (
       <View>
         <View style={{ flexDirection: "row", height: "100%" }}>

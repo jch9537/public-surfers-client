@@ -37,20 +37,6 @@ export default class Board extends Component<Props, State> {
     this.changeLocal = this.changeLocal.bind(this);
   }
 
-  static navigationOptions = ({ navigation }: any) => {
-    let headerTitle = "RoomList";
-    // let headerTitleStyle = { color: 'black' }; // 띄어쓰기 해야함
-    let headerRight = (
-      <Text onPress={() => Alert.alert("로그아웃")}>Logout</Text>
-    );
-
-    return {
-      headerTitle,
-      // headerTitleStyle,
-      headerRight
-      // headerLeft
-    };
-  };
   state: State = {
     board: [],
     ListLocal: ["모든지역", "제주도", "천안", "부산"],

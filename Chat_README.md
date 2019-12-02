@@ -11,3 +11,5 @@ npm install --save react-native-gifted-chat
 npm install --save react-native-firebase
 
 expo install expo-ads-admob
+
+npm install --save expo-server-sdk

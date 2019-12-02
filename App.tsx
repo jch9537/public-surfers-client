@@ -24,12 +24,13 @@ import MyRoomList from "./components/MyList/MyRooms";
 import Setting from "./components/setinfo/setting";
 import Loading from "./components/Loading";
 import Logout from "./components/utils/logout";
-
+import ChatScreen from "./components/chatScreen";
 
 firebase.initializeApp(firebaseConfig);
-const DrawSide = createDrawerNavigator({
-  RoomScreen: { screen: Room }
-},
+const DrawSide = createDrawerNavigator(
+  {
+    RoomScreen: { screen: Room }
+  },
   {
     contentComponent: (props: any) => <SideBar navigation={props.navigation} />
   }
@@ -40,7 +41,9 @@ const BoardStack = createStackNavigator({
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "Main";
       let headerRight = (
-        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>Logout</Text>
+        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+          Logout
+        </Text>
       );
 
       return {
@@ -54,7 +57,9 @@ const BoardStack = createStackNavigator({
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "Board";
       let headerRight = (
-        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>Logout</Text>
+        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+          Logout
+        </Text>
       );
 
       return {
@@ -68,7 +73,9 @@ const BoardStack = createStackNavigator({
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "MyRooms";
       let headerRight = (
-        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>Logout</Text>
+        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+          Logout
+        </Text>
       );
 
       return {
@@ -78,11 +85,13 @@ const BoardStack = createStackNavigator({
     }
   },
   Chat: {
-    screen: ChatRoom
-    , navigationOptions: ({ navigation }: any) => {
+    screen: ChatScreen,
+    navigationOptions: ({ navigation }: any) => {
       let headerTitle = "Chat";
       let headerRight = (
-        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>Logout</Text>
+        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+          Logout
+        </Text>
       );
 
       return {
@@ -96,7 +105,9 @@ const BoardStack = createStackNavigator({
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "Room";
       let headerRight = (
-        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>Logout</Text>
+        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+          Logout
+        </Text>
       );
 
       return {
@@ -106,10 +117,13 @@ const BoardStack = createStackNavigator({
     }
   },
   MakeRoom: {
-    screen: MakeRoom, navigationOptions: ({ navigation }: any) => {
+    screen: MakeRoom,
+    navigationOptions: ({ navigation }: any) => {
       let headerTitle = "MakeRoom";
       let headerRight = (
-        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>Logout</Text>
+        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+          Logout
+        </Text>
       );
 
       return {
@@ -123,7 +137,9 @@ const BoardStack = createStackNavigator({
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "Setting";
       let headerRight = (
-        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>Logout</Text>
+        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+          Logout
+        </Text>
       );
 
       return {
@@ -159,6 +175,7 @@ const SignMainSwitch = createSwitchNavigator(
 );
 const AppContainer = createAppContainer(SignMainSwitch);
 const store = createStore(RoomInfo);
+const store2 = createStore(RoomInfo);
 
 export default class App extends Component {
   render() {

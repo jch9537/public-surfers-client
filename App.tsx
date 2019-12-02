@@ -40,7 +40,12 @@ const BoardStack = createStackNavigator({
   Chat: { screen: ChatRoom },
   Room: { screen: DrawSide },
   MakeRoom: { screen: MakeRoom },
-  Setting: { screen: Setting }
+  Setting: {
+    screen: Setting,
+    navigationOptions: {
+      title: "Setting"
+    }
+  }
 });
 const MainTab = createBottomTabNavigator({
   Surf: {

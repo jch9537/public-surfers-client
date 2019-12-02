@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { View, StyleSheet, ScrollView, TouchableOpacity, AsyncStorage } from "react-native";
 import { RoomData, roominfo } from "../src/redux/actions"
-import { Text, Button } from 'react-native-elements';
-import { rooms } from "../fakeData/roomData";
+import { Text } from 'react-native-elements';
 import Weather from "./weather";
 import { connect } from "react-redux";
-import { posts } from "../fetch";
+import { GetRoomlistOrGetRoominfo } from "../fetch";
 import AdBanner from "../AdBanner";
 interface Props {
     Room: RoomData
@@ -15,13 +14,16 @@ interface Props {
 class RoomInfo extends Component<Props> {
     async componentDidMount() {
         let token = await AsyncStorage.getItem("userToken")
-        posts("GET", `${token}`, null, this.props.Room.id, null)
+        console.log("room 안에서", token)
+        let postid = this.props.navigation.state.params.Post_id;
+        console.log(typeof postid, postid)
+        GetRoomlistOrGetRoominfo(`${token}`, postid)
             .then(res => {
                 console.log("Room res", res);
                 return res.json()
             })
             .then(res => {
-                console.log(res);
+                console.log("DATa", res);
                 this.props.addRoom(res)
             })
     }
@@ -33,6 +35,7 @@ class RoomInfo extends Component<Props> {
         // return await post("DELETE", null, this.props.Room.id);
     }
     render() {
+        console.log("data", this.props.Room);
         return (
             <View >
                 <View style={{ flexDirection: "row", height: "100%" }}>

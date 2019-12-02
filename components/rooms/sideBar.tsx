@@ -3,69 +3,70 @@ import { View, TouchableOpacity, StyleSheet, ScrollView, Alert, AsyncStorage } f
 import { RoomData, joinChat } from "../src/redux/actions"
 import { Text, Icon } from 'react-native-elements';
 import { connect } from "react-redux";
-import { post, posts } from "../fetch";
+import { JoinChatfromSideBar, GetMyRooms } from "../fetch";
 interface Props {
     navigation: any
     Room: RoomData
     join: boolean
-    JoinChat(): any
+    JoinChat(): void
 }
 class SideBar extends Component<Props> {
-    componentDidMount() {
-        let token = AsyncStorage.getItem("userToken")
-        posts("GET", `${token}`, null, null, "my_list")
-            .then(res => {
-                console.log("sideBar res", res);
-                return res.json()
-            })
+    async componentDidMount() {
+        let token = await AsyncStorage.getItem("userToken")
+        GetMyRooms(`${token}`)
             .then(res => {
                 if (res.status === 200) {
-                    for (let i = 0; i < res.length; i++) {
-                        if (this.props.Room.id === res[i]["id"]) {
-                            this.props.JoinChat();
-                        }
-                    }
+                    return res.json();
                 } else {
-                    Alert.alert("render 실패")
+                    Alert.alert("경고창")
+                }
+            }).then(resData => {
+                for (let i = 0; i < resData.length; i++) {
+                    if (resData[i] === this.props.Room.id) {
+                        return this.props.JoinChat();
+                    }
                 }
             })
-
-        // fetch("url/posts")
-        //     .then(res => res.json())
-        //     .then(data => {
-        //         if (data.status === 200) {
-        //         }
-        //     })
     }
     joinChat = async () => {
         let body = {
             post_id: this.props.Room.id
         }
         let token = await AsyncStorage.getItem("userToken")
-        post("POST", `${token}`, body, null)
-            .then(res => res.json())
+        JoinChatfromSideBar(`${token}`, null, body)
             .then(res => {
                 if (res.status === 200) {
-                    this.props.JoinChat();
-                    Alert.alert("성공적");
+                    return res.json();
                 } else {
-                    Alert.alert("다시 시도해주세요");
+                    Alert.alert("같이가기 실패")
+                }
+            })
+            .then(res => {
+                if (res) {
+                    this.props.JoinChat();
+                    return this.props.navigation.navigate("Chat");
                 }
             })
     }
     getOut = async () => {
-        let token = AsyncStorage.getItem("userToken")
-        return post("DELETE", `${token}`, null, this.props.Room.id)
-            .then(res => res.json())
+        let token = await AsyncStorage.getItem("userToken")
+        return JoinChatfromSideBar(`${token}`, this.props.Room.id)
             .then(res => {
                 if (res.status === 200) {
+                    return res.json()
+                }
+                else {
+                    Alert.alert("나가기 실패")
+                }
+            })
+            .then(res => {
+                if (res) {
                     this.props.JoinChat();
-                } else {
-                    Alert.alert("다시 시도해주세요")
                 }
             })
     }
     render() {
+
         return (
             <View style={styles.center}>
                 <View style={{ height: "90%", width: "100%", marginBottom: 10 }}>

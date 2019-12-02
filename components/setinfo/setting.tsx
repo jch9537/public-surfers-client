@@ -3,10 +3,10 @@ import { Component } from 'react';
 import { StyleSheet, Text, View, ViewStyle, Alert, Button } from 'react-native';
 import { Icon } from 'react-native-elements';
 // import { Header, Avatar } from 'react-native-elements';
-
+import Logout from "../utils/logout";
 // import MenuBar from './menubar';
 import UserInfo from './userInfo';
-import { fetchAPI } from '../fetch';
+// import {  } from '../fetch';
 
 interface Style {
     setContainer: ViewStyle;
@@ -25,23 +25,6 @@ class Setting extends Component<SettingProps, SettingState> {
 
         this.state = { name: null, password: null, inputInfo: null };
     }
-    static navigationOptions = ({ navigation }: any) => {
-        let headerTitle = 'Setting';
-        // let headerTitleStyle = { color: 'black' }; // 띄어쓰기 해야함
-        let headerRight = (
-            <Text onPress={() => Alert.alert('로그아웃')}>Logout</Text>
-        );
-        // let headerLeft = (
-        //     <Icon name="home" onPress={() => navigation.navigate('Test1')} />
-        // );
-
-        return {
-            headerTitle,
-            // headerTitleStyle,
-            headerRight
-            // headerLeft
-        };
-    };
 
     headerButtonRight = (): void => {
         console.log('안녕');

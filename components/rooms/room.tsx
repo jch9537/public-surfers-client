@@ -10,20 +10,27 @@ import { RoomData, roominfo } from "../src/redux/actions";
 import { Text } from "react-native-elements";
 import Weather from "./weather";
 import { connect } from "react-redux";
-import { GetRoomlistOrGetRoominfo } from "../fetch";
+import { GetRoomlistOrGetRoominfo, identifyUser } from "../fetch";
 import AdBanner from "../AdBanner";
+
 interface Props {
   Room: RoomData;
   navigation: any;
   addRoom(obj: RoomData): any;
 }
-class RoomInfo extends Component<Props> {
+interface State {
+  amIHost: boolean;
+}
+class RoomInfo extends Component<Props, State> {
+  state: State = {
+    amIHost: false
+  };
+
   async componentDidMount() {
     let token = await AsyncStorage.getItem("userToken");
-    console.log("room 안에서", token);
     let postid = this.props.navigation.state.params.Post_id;
-    console.log(typeof postid, postid);
-    GetRoomlistOrGetRoominfo(`${token}`, postid)
+
+    await GetRoomlistOrGetRoominfo(`${token}`, postid)
       .then(res => {
         console.log("Room res", res);
         return res.json();
@@ -32,6 +39,15 @@ class RoomInfo extends Component<Props> {
         console.log("DATa", res);
         this.props.addRoom(res);
       });
+
+    let userInfo = await identifyUser(token);
+
+    if (this.props.Room.host_id === userInfo.id) {
+      await this.setState({
+        ...this.state,
+        amIHost: true
+      });
+    }
   }
   editButtonPress = () => {
     //edit페이지로 이동
@@ -41,43 +57,36 @@ class RoomInfo extends Component<Props> {
     // return await post("DELETE", null, this.props.Room.id);
   };
   render() {
-    console.log("data", this.props.Room);
     return (
       <View>
-        <View style={{ flexDirection: "row", height: "100%" }}>
+        <View style={Styles.mainWrap}>
           <TouchableOpacity
             onPress={this.props.navigation.openDrawer}
-            style={styles.sideBar}
-          ></TouchableOpacity>
-          <View style={styles.contents}>
-            <View
-              style={{ width: "100%", height: 60, backgroundColor: "yellow" }}
-            >
+            style={Styles.sideBar}
+          />
+          <View style={Styles.contents}>
+            <View style={Styles.weatherBox}>
               <Weather />
             </View>
-            <ScrollView style={styles.text}>
-              <Text style={{ fontSize: 15 }}>{this.props.Room.text}</Text>
+            <ScrollView style={Styles.textBox}>
+              <Text>{this.props.Room.text}</Text>
             </ScrollView>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "flex-end",
-                marginRight: 14
-              }}
-            >
-              <TouchableOpacity
-                style={styles.button}
-                onPress={this.editButtonPress}
-              >
-                <Text> EDIT </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={this.deleteButtonPress}
-              >
-                <Text> DELETE </Text>
-              </TouchableOpacity>
-            </View>
+            {this.state.amIHost ? (
+              <View style={Styles.buttonBox}>
+                <TouchableOpacity
+                  style={[Styles.button, { backgroundColor: "#ffffb1" }]}
+                  onPress={this.editButtonPress}
+                >
+                  <Text> EDIT </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[Styles.button, { backgroundColor: "#ffb2b2" }]}
+                  onPress={this.deleteButtonPress}
+                >
+                  <Text> DELETE </Text>
+                </TouchableOpacity>
+              </View>
+            ) : null}
           </View>
         </View>
         <View style={{ bottom: 0, position: "absolute" }}>
@@ -97,54 +106,60 @@ function dispatchState(dispatch: any) {
     addRoom: (room: RoomData): void => dispatch(roominfo(room))
   };
 }
-const styles = StyleSheet.create({
+const Styles = StyleSheet.create({
+  mainWrap: { flexDirection: "row", height: "100%" },
   sideBar: {
     width: "8%",
     height: "85%",
-    backgroundColor: "white",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 16
-    },
-    shadowOpacity: 0.58,
-    shadowRadius: 16.0,
+    backgroundColor: "#ffffff",
     elevation: 10,
     marginTop: 10,
     marginRight: 10
-  },
-
-  room: {
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  button: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: 60,
-    height: 25,
-    margin: 10,
-    backgroundColor: "white"
   },
   contents: {
     marginTop: 10,
     width: "85%",
     flexDirection: "column",
-    backgroundColor: "white",
+    backgroundColor: "#ffffff",
     height: "85%",
-    marginRight: 40,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 300
-    },
-    shadowOpacity: 0.58,
-    shadowRadius: 16.0,
-    elevation: 10
+    marginRight: 20,
+    elevation: 3,
+    justifyContent: "center",
+    alignItems: "center"
   },
-  text: {
-    width: "100%",
-    height: "100%"
+  weatherBox: {
+    backgroundColor: "#e5ffe5",
+    borderRadius: 15,
+    width: "95%",
+    marginTop: 8,
+    height: 100,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 8
+  },
+  textBox: {
+    width: "95%",
+    height: "100%",
+    marginLeft: 8,
+    marginRight: 8,
+    backgroundColor: "#e5ffe5",
+    borderRadius: 15,
+    padding: 10,
+    marginBottom: 8
+  },
+  buttonBox: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 8
+  },
+  button: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 70,
+    height: 25,
+    marginRight: 15,
+    borderRadius: 5
   }
 });
 export default connect(mapStatesProps, dispatchState)(RoomInfo);

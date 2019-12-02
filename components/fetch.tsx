@@ -7,6 +7,8 @@ interface joinChatbody {
   post_id: number;
 }
 //login 하는 fetch
+let server = "http://15.164.218.247:3000";
+
 export const userSignin = function(body: any) {
   let server = "http://15.164.218.247:3000/user/signin";
   return fetch(server, {
@@ -99,16 +101,16 @@ export const makeRoom = function(body: any, token: string) {
 };
 
 //방 이름들 혹은 방 정보 가져오는 fetch
-export const GetRoomlistOrGetRoominfo = function(
+export const GetRoomlistOrGetRoominfo = async function(
   token: string,
   post_Id?: number | null
 ) {
   let server = "http://15.164.218.247:3000/posts";
-  console.log(post_Id);
+  // console.log(post_Id);
   if (post_Id) {
     server = `http://15.164.218.247:3000/post?post_id=${post_Id}`;
   }
-  console.log("serverurl", server);
+  // console.log("serverurl", server);
   return fetch(server, {
     method: "GET",
     headers: {
@@ -118,9 +120,8 @@ export const GetRoomlistOrGetRoominfo = function(
     credentials: "include"
   });
 };
-export const GetMyRooms = function(token: string) {
-  let server = "http://15.164.218.247:3000/posts/my_list";
-  return fetch(server, {
+export const GetMyRooms = async (token: any) => {
+  let data = await fetch(server + "/posts/my_list", {
     method: "GET",
     headers: {
       "Content-type": "application/json",
@@ -128,7 +129,9 @@ export const GetMyRooms = function(token: string) {
     },
     credentials: "include"
   });
+  return data.json();
 };
+
 //sideBar에서 chat쪽 참여 하는 fetch 부분
 export const JoinChatfromSideBar = function(
   token: string,
@@ -164,5 +167,27 @@ export const weatherAPI = function(url: string, method: string) {
     headers: {
       "Content-Type": "application/json"
     }
+  });
+};
+
+export const identifyUser = async (token: any) => {
+  let identifyFetch = await fetch(server + "/identify", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token
+    }
+  });
+  return await identifyFetch.json();
+};
+
+export const participateRoom = async (token: any, post_id: number) => {
+  await fetch(server + "/post", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token
+    },
+    body: JSON.stringify({ post_id: post_id })
   });
 };

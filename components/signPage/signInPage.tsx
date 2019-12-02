@@ -66,10 +66,10 @@ export default class sigininpage extends Component<Props, State> {
     return userSignin(body)
       .then(res => {
         console.log("Res", res);
-        return res.json()
+        return res.json();
       })
       .then(res => {
-        console.log("Res", res)
+        console.log("Res", res);
         AsyncStorage.setItem("userToken", res.token);
         console.log("sign in: ", res);
         return res.message;
@@ -113,16 +113,18 @@ export default class sigininpage extends Component<Props, State> {
           onChangeText={text => this.ChangeState(text, "email")}
           keyboardType="email-address"
           leftIcon={
-            <Icon name="idcard" type="antdesign" size={18} color="black" />
+            <Icon name="idcard" type="antdesign" size={18} color="gray" />
           }
+          leftIconContainerStyle={{ marginRight: 15 }}
+          inputContainerStyle={{ marginBottom: 5 }}
         />
         <Input
           placeholder=" Password"
           onChangeText={text => this.ChangeState(text, "password")}
           secureTextEntry={true}
-          leftIcon={
-            <Icon name="key" type="antdesign" size={18} color="black" />
-          }
+          leftIcon={<Icon name="key" type="antdesign" size={18} color="gray" />}
+          leftIconContainerStyle={{ marginRight: 15 }}
+          inputContainerStyle={{ marginBottom: 5 }}
         />
         <TouchableOpacity onPress={this.SignIn} style={Styles.button}>
           <Text style={{ fontFamily: "gaegu_regular", fontSize: 23 }}>

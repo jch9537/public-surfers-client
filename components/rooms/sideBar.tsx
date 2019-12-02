@@ -5,60 +5,70 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
-  AsyncStorage
+  AsyncStorage,
+  Image
 } from "react-native";
 import { RoomData, joinChat } from "../src/redux/actions";
 import { Text, Icon } from "react-native-elements";
 import { connect } from "react-redux";
-import { JoinChatfromSideBar, GetMyRooms } from "../fetch";
+import {
+  JoinChatfromSideBar,
+  GetMyRooms,
+  identifyUser,
+  participateRoom
+} from "../fetch";
+
 interface Props {
   navigation: any;
   Room: RoomData;
   join: boolean;
   JoinChat(): void;
 }
-class SideBar extends Component<Props> {
+
+interface State {
+  amIParticipant: boolean;
+}
+
+class SideBar extends Component<Props, State> {
+  state: State = {
+    amIParticipant: false
+  };
+
   async componentDidMount() {
     let token = await AsyncStorage.getItem("userToken");
-    GetMyRooms(`${token}`)
-      .then(res => {
-        if (res.status === 200) {
-          return res.json();
-        } else {
-          Alert.alert("경고창");
-        }
-      })
-      .then(resData => {
-        for (let i = 0; i < resData.length; i++) {
-          if (resData[i] === this.props.Room.id) {
-            return this.props.JoinChat();
-          }
-        }
+
+    //참여여부 확인
+    let userData = await identifyUser(token);
+    let participants = this.props.Room.participants;
+
+    if (participants.includes(userData.name)) {
+      this.setState({
+        ...this.state,
+        amIParticipant: true
       });
+    }
   }
+
+  //채팅창 입장
   joinChat = async () => {
-    let body = {
-      post_id: this.props.Room.id
-    };
-    let token = await AsyncStorage.getItem("userToken");
-    JoinChatfromSideBar(`${token}`, null, body)
-      .then(res => {
-        if (res.status === 200) {
-          return res.json();
-        } else {
-          Alert.alert("같이가기 실패");
-        }
-      })
-      .then(res => {
-        if (res) {
-          this.props.JoinChat();
-          return this.props.navigation.navigate("Chat");
-        }
-      });
+    return this.props.navigation.navigate("Chat");
   };
+
+  //방에 참여
+  joinRoom = async () => {
+    let token = await AsyncStorage.getItem("userToken");
+    await participateRoom(token, this.props.Room.id);
+
+    await this.setState({
+      ...this.state,
+      amIParticipant: true
+    });
+  };
+
+  //방에서 나가기
   getOut = async () => {
     let token = await AsyncStorage.getItem("userToken");
-    return JoinChatfromSideBar(`${token}`, this.props.Room.id)
+    await JoinChatfromSideBar(`${token}`, this.props.Room.id)
       .then(res => {
         if (res.status === 200) {
           return res.json();
@@ -71,148 +81,128 @@ class SideBar extends Component<Props> {
           this.props.JoinChat();
         }
       });
+    await this.setState({
+      ...this.state,
+      amIParticipant: false
+    });
   };
+
   render() {
+    console.log("sidebarState: ", this.state);
     return (
-      <View style={styles.center}>
-        <View style={{ height: "90%", width: "100%", marginBottom: 10 }}>
-          <View style={styles.head}>
-            <Icon
-              iconStyle={styles.headerDetails}
-              type="feather"
-              name="user"
-              size={68.4}
-              color="black"
+      <View style={Styles.wrap}>
+        <View style={Styles.head}>
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <Image
+              source={{
+                uri:
+                  "https://www.clipartwiki.com/clipimg/detail/31-312536_surf-icon-illustration.png"
+              }}
+              style={Styles.host_image}
             />
-            <View
-              style={{
-                marginTop: 10,
-                justifyContent: "center",
-                alignItems: "center",
-                marginBottom: 10
-              }}
-            >
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                {this.props.Room.host_name}
-              </Text>
-            </View>
+            <Text style={Styles.host_name}>{this.props.Room.host_name}</Text>
           </View>
-          <View style={{ alignItems: "center" }}>
-            <Text style={styles.title}>참여자 목록</Text>
-          </View>
-          <ScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
-            style={{ width: "100%", height: 300 }}
-          >
-            {this.props.Room.participants.map((data, index) => (
-              <View key={index} style={{ alignItems: "center" }}>
-                <Text key={index} style={styles.contents}>
-                  {data}
-                </Text>
-              </View>
-            ))}
-          </ScrollView>
         </View>
-        <View style={{ height: "10%" }}>
-          {this.props.join ? (
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("Chat")}
-            >
-              <Text>채팅방 GO!</Text>
+
+        <Text style={Styles.title}>참여자 목록</Text>
+        <ScrollView>
+          {this.props.Room.participants.map((data, index) => (
+            <Text key={index} style={Styles.contents}>
+              {data}
+            </Text>
+          ))}
+        </ScrollView>
+
+        {/* 하단버튼 */}
+        {this.state.amIParticipant ? (
+          <View style={Styles.buttonWrap}>
+            <TouchableOpacity style={Styles.button} onPress={this.joinChat}>
+              <Text style={Styles.activated}>채팅방 들어가기</Text>
             </TouchableOpacity>
-          ) : (
-            <View />
-          )}
-        </View>
-        <View style={styles.bottom}>
-          {this.props.join ? (
-            <View
-              style={{
-                alignItems: "flex-end",
-                marginRight: 10
-              }}
-            >
-              <TouchableOpacity onPress={this.getOut} style={styles.bottomText}>
-                <Text style={{ fontSize: 15 }}>나가기</Text>
-                <Icon type="feather" name="log-out" size={22} />
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <View
-              style={{
-                alignItems: "flex-end",
-                marginRight: 10
-              }}
-            >
-              <TouchableOpacity
-                onPress={this.joinChat}
-                style={styles.bottomText}
-              >
-                <Text style={{ fontSize: 15 }}>참여하기</Text>
-                <Icon type="feather" name="log-in" size={22} />
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
+            <TouchableOpacity style={Styles.button} onPress={this.getOut}>
+              <Text style={Styles.activated}>모임에서 나가기</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={Styles.button}>
+              <Text style={Styles.unactivated}>모임에 참여하기</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={Styles.buttonWrap}>
+            <TouchableOpacity style={Styles.button}>
+              <Text style={Styles.unactivated}>채팅방 들어가기</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={Styles.button}>
+              <Text style={Styles.unactivated}>모임에서 나가기</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={Styles.button} onPress={this.joinRoom}>
+              <Text style={Styles.activated}>모임에 참여하기</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     );
   }
 }
-const styles = StyleSheet.create({
-  center: {
+
+const Styles = StyleSheet.create({
+  wrap: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
   },
-  headerDetails: {
-    backgroundColor: "white",
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    marginTop: 20,
-    justifyContent: "center"
-  },
   head: {
-    width: "100%",
-    height: 130,
+    height: 100,
     backgroundColor: "#88D8B0",
     justifyContent: "center",
-    alignContent: "center"
+    alignContent: "center",
+    paddingTop: 60,
+    paddingBottom: 50,
+    flexDirection: "column",
+    width: "100%"
   },
-  bottom: {
-    width: "100%",
-    height: "5%",
-    bottom: 0,
-    position: "absolute",
-    justifyContent: "flex-end",
-    backgroundColor: "#88D8B0"
+  host_name: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginTop: 7
+  },
+  host_image: {
+    width: 50,
+    height: 50,
+    borderRadius: 25
   },
   title: {
     fontSize: 20,
     marginTop: 30,
-    marginBottom: 30
+    marginBottom: 20
   },
   contents: {
-    fontSize: 15
+    fontSize: 15,
+    marginBottom: 5
   },
-  bottomText: {
-    marginBottom: 4,
-    borderRadius: 8,
-    marginLeft: 3,
-    backgroundColor: "white",
-    flexDirection: "row",
-    alignContent: "flex-end"
+  activated: {},
+  unactivated: { opacity: 0.2 },
+  buttonWrap: { width: "100%" },
+  button: {
+    padding: 10,
+    borderTopWidth: 0.5,
+    height: 40,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
+
 function mapStatesProps(state: any) {
   return {
     Room: state.room,
     join: state.Join
   };
 }
+
 function dispatchState(dispatch: any) {
   return {
     JoinChat: (): void => dispatch(joinChat())
   };
 }
+
 export default connect(mapStatesProps, dispatchState)(SideBar);

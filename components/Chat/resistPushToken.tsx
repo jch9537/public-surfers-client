@@ -25,8 +25,6 @@ export default async function registerForPushNotificationsAsync(
   let token = await Notifications.getExpoPushTokenAsync();
   await AsyncStorage.setItem("pushToken", token);
 
-  await console.log("push_token: ", token);
-
   let body = {
     push_token: token,
     email: email

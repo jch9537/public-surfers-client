@@ -175,7 +175,6 @@ const SignMainSwitch = createSwitchNavigator(
 );
 const AppContainer = createAppContainer(SignMainSwitch);
 const store = createStore(RoomInfo);
-const store2 = createStore(RoomInfo);
 
 export default class App extends Component {
   render() {

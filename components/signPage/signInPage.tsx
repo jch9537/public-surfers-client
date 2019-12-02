@@ -56,30 +56,34 @@ export default class sigininpage extends Component<Props, State> {
       password: this.state.password
     };
 
-    if (!this.state.errorMsg) {
-      await fetch("http://54.180.108.45:3000/user/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body),
-        credentials: "include"
+    //푸쉬토큰 DB에 등록.
+    await registerForPushNotificationsAsync(
+      "http://15.164.218.247:3000/chat/push_token",
+      this.state.email
+    );
+
+    await fetch("http://15.164.218.247:3000/user/signin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body),
+      credentials: "include"
+    })
+      .then(res => res.json())
+      .then(res => {
+        AsyncStorage.setItem("userToken", res.token);
+        console.log("sign in: ", res);
+        return res.message;
       })
-        .then(res => res.json())
-        .then(res => {
-          AsyncStorage.setItem("userToken", res.token);
-          registerForPushNotificationsAsync(this.state.email);
-          return res.message;
-        })
-        .then(res => {
-          this._getUserToken();
-          if (res === "로그인 완료") {
-            this.props.navigation.navigate("MainPart");
-          } else {
-            Alert.alert("Error", "아이디 혹은 비밀번호가 올바르지 않습니다.");
-          }
-        });
-    }
+      .then(res => {
+        this._getUserToken();
+        if (res === "로그인 완료") {
+          this.props.navigation.navigate("MainPart");
+        } else {
+          Alert.alert("Error", "아이디 혹은 비밀번호가 올바르지 않습니다.");
+        }
+      });
   };
 
   ChangeState = (value: string, key: any) => {

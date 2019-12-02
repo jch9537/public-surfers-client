@@ -6,6 +6,7 @@ import { rooms } from "../fakeData/roomData";
 import Weather from "./weather";
 import { connect } from "react-redux";
 import { post } from "../fetch";
+import Logout from '../utils/logout';
 import AdBanner from "../AdBanner";
 interface Props {
   Room: RoomData;

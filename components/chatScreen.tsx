@@ -4,14 +4,15 @@ import {
   Image,
   Text,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  AsyncStorage
 } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 import io from "socket.io-client";
-import AdBanner from "../components/AdBanner";
+import AdBanner from "./AdBanner";
 import { Icon } from "react-native-elements";
 
-// const socket = io.connect("http://localhost:3000/chatroom");
+// const socket = io.connect("http://15.164.218.247:3000/chatroom");
 
 interface User {
   _id: number | string;
@@ -32,9 +33,11 @@ interface NewChatScreenStates {
   post_id: number | string;
   chatLoaded: boolean;
   user_id: number;
+  user_name: string;
+  user_image: string;
 }
 
-export default class NewChatScreen extends React.Component<
+export default class ChatScreen extends React.Component<
   NewChatScreenProps,
   NewChatScreenStates
 > {
@@ -46,7 +49,9 @@ export default class NewChatScreen extends React.Component<
   state: NewChatScreenStates = {
     messages: [],
     post_id: 0,
-    user_id: 0,
+    user_id: 1,
+    user_name: "",
+    user_image: "",
     chatLoaded: false
   };
 
@@ -61,16 +66,16 @@ export default class NewChatScreen extends React.Component<
   //     },
   //   }
 
-  componentDidMount() {
-    const socket = io.connect("http://54.180.108.45:3000/chatroom");
-    const post_id = this.state.post_id + "";
+  async componentDidMount() {
+    const socket = io.connect("http://15.164.218.247:3000/chatroom");
+    const post_id = this.state.post_id;
 
     if (!this.state.chatLoaded) {
       this._loadOldMessage();
       this.state.chatLoaded = true;
     }
 
-    socket.emit("joinRoom", post_id);
+    socket.emit("joinRoom", "" + post_id);
     socket.on("message", (msgs: any) => {
       // msgs는 어레이에 들어있는 데이터들.
       // console.log("state messages: ", this.state.messages);
@@ -80,37 +85,53 @@ export default class NewChatScreen extends React.Component<
         messages: [msgs].concat(this.state.messages)
       });
     });
+
+    let push_token: any = await AsyncStorage.getItem("pushToken");
+    console.log("push_token: ", push_token);
   }
 
-  _onSend(messages: Array<any> = []) {
-    const post_id = this.state.post_id + "";
+  async _onSend(messages: Array<any> = []) {
+    const post_id = this.state.post_id;
 
     const newmessages = messages;
     newmessages[0].post_id = post_id;
+    let push_token: any = await AsyncStorage.getItem("pushToken");
+    console.log("push_token: ", push_token);
+    // authorization:push_token
+
     // console.log("newmessages: ", newmessages);
 
     // this.setState((previousState: any) => ({
     //   messages: GiftedChat.append(previousState.messages, newmessages)
     // }));
-    const socket = io.connect("http://54.180.108.45:3000/chatroom");
+    const socket = io.connect("http://15.164.218.247:3000/chatroom");
     socket.emit("message", newmessages[0]);
+
+    await fetch("http://15.164.218.247:3000/chat/push_noti", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        push_token: push_token
+      },
+      body: JSON.stringify({ post_id: post_id })
+    });
   }
 
   _loadOldMessage() {
     const post_id = this.state.post_id;
-    fetch("http://54.180.108.45:3000/chat?post_id=" + post_id)
+    fetch("http://15.164.218.247:3000/chat?post_id=" + post_id)
       .then(res => res.json())
       .then(datas => {
         this.setState({
           ...this.state,
           messages: datas.reverse()
         });
-        console.log(datas);
+        // console.log(datas);
       });
   }
 
   _renderMessager(message: Message) {
-    console.log("message: ", message);
+    // console.log("message: ", message);
     return this.state.user_id !== message.user._id ? (
       <View
         style={{
@@ -187,8 +208,8 @@ export default class NewChatScreen extends React.Component<
           messages={this.state.messages}
           onSend={messages => this._onSend(messages)}
           user={{
-            _id: 0,
-            name: "Hyun",
+            _id: this.state.user_id,
+            name: this.state.user_name,
             avatar:
               "https://t1.daumcdn.net/news/201908/07/tvreport/20190807162900279rijn.jpg"
           }}

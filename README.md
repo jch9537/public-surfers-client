@@ -3,7 +3,7 @@ npm install --save expo-google-app-auth
 npm install --save react-native-vector-icons
 npm install --save react-navigation-drawer
 npm install --save react-navigation-stack
-npm install --save react-native-gesture-handler
+npm install --save react-native-gesture-handler@1
 npm install --save react-native-reanimated
 npm install --save react-navigation-tabs
 

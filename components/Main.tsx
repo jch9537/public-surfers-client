@@ -27,21 +27,8 @@ interface Style {
   banner: ViewStyle;
 }
 export default class Main extends Component<Props, State> {
-  static navigationOptions = ({ navigation }: any) => {
-    let headerTitle = "Home";
-    let headerRight = (
-      <Text
-        onPress={() => Alert.alert("로그아웃")}
-        style={{ padding: 10, fontSize: 15 }}
-      >
-        Logout
-      </Text>
-    );
-    return {
-      headerTitle,
-      headerRight
-    };
-  };
+
+    
   state = {
     fontend: false
   };

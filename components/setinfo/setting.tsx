@@ -5,37 +5,25 @@ import {
   Text,
   View,
   ViewStyle,
+  SafeAreaView,
   Alert,
   Button,
   KeyboardAvoidingView
 } from "react-native";
 import { Header } from "react-native-elements";
 // import { Header, Avatar } from 'react-native-elements';
-
-// import MenuBar from './menubar';
+import Logout from "../utils/logout";
 import UserInfo from "./userInfo";
-import { fetchAPI } from "../fetch";
-import SafeAreaView from "react-native-safe-area-view";
+// import {  } from '../fetch';
 
 export interface SettingProps {}
 export interface SettingState {
   name?: any;
   password?: any;
-  inputInfo?: any;
 }
 
 class Setting extends Component<SettingProps, SettingState> {
-  state = { name: null, password: null, inputInfo: null };
-
-  //   static navigationOptions = ({ navigation }: any) => {
-  //     let headerTitle = "Setting";
-  //     // let headerTitleStyle = { color: 'black' }; // 띄어쓰기 해야함
-  //     let headerRight = (
-  //       <Text onPress={() => Alert.alert("로그아웃")}>Logout</Text>
-  //     );
-  //     // let headerLeft = (
-  //     //     <Icon name="home" onPress={() => navigation.navigate('Test1')} />
-  //     // );
+  state = { name: null, password: null };
 
   //     return {
   //       headerTitle,

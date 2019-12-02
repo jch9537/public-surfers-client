@@ -60,7 +60,7 @@ export default class sigininpage extends Component<{}, State> {
       oAuth: 0
     };
     if (!this.state.error) {
-      fetch("http://54.180.108.45:3000/user/signup", {
+      fetch("http://15.164.218.247:3000/user/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

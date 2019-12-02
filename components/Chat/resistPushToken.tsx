@@ -1,9 +1,13 @@
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
+import { AsyncStorage } from "react-native";
 
-const PUSH_ENDPOINT = "https://localhost:3000/chat/push_token";
+const PUSH_ENDPOINT = "http://15.164.218.247:3000/chat/push_token";
 
-export default async function registerForPushNotificationsAsync(email: string) {
+export default async function registerForPushNotificationsAsync(
+  server: string,
+  email: string
+) {
   const { status: existingStatus } = await Permissions.getAsync(
     Permissions.NOTIFICATIONS
   );
@@ -19,18 +23,23 @@ export default async function registerForPushNotificationsAsync(email: string) {
   }
 
   let token = await Notifications.getExpoPushTokenAsync();
+  await AsyncStorage.setItem("pushToken", token);
 
   await console.log("push_token: ", token);
 
-  return fetch(PUSH_ENDPOINT, {
-    method: "POST",
+  let body = {
+    push_token: token,
+    email: email
+  };
+
+  await fetch(server, {
+    method: "PUT",
     headers: {
-      Accept: "application/json",
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({
-      push_token: token,
-      email: email
-    })
-  });
+    body: JSON.stringify(body),
+    credentials: "include"
+  })
+    .then(res => res)
+    .then(res => console.log("post push token result: ", res));
 }

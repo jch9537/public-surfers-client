@@ -69,12 +69,6 @@ export class ChatScreen extends React.Component<
       post_id: this.props.Room.id
     });
 
-    //옛날 채팅 로딩
-    if (!this.state.chatLoaded) {
-      await this._loadOldMessage();
-      this.state.chatLoaded = true;
-    }
-
     //소켓 연결
     const socket = io.connect("http://15.164.218.247:3000/chatroom");
     const post_id = this.state.post_id;
@@ -97,6 +91,20 @@ export class ChatScreen extends React.Component<
       user_id: myInfo.id,
       user_name: myInfo.name,
       user_image: myInfo.img_url
+    });
+
+    let oldMessages;
+    //옛날 채팅 로딩
+    if (!this.state.chatLoaded) {
+      oldMessages = await this._loadOldMessage();
+      this.state.chatLoaded = true;
+    }
+
+    let sortedMessages = await this._sortChats(oldMessages);
+
+    await this.setState({
+      ...this.state,
+      messages: sortedMessages
     });
   }
 
@@ -127,17 +135,28 @@ export class ChatScreen extends React.Component<
     });
   }
 
-  _loadOldMessage() {
+  async _loadOldMessage() {
     const post_id = this.state.post_id;
-    fetch("http://15.164.218.247:3000/chat?post_id=" + post_id)
-      .then(res => res.json())
-      .then(datas => {
-        this.setState({
-          ...this.state,
-          messages: datas.reverse()
-        });
-        // console.log(datas);
-      });
+    let dataChunk = await fetch(
+      "http://15.164.218.247:3000/chat?post_id=" + post_id
+    );
+    let parsedData = dataChunk.json();
+
+    await console.log("messages: ", parsedData);
+
+    return parsedData;
+  }
+
+  async _sortChats(chatArray: Array<any>) {
+    return chatArray.sort((a, b) => {
+      if (a._id > b._id) {
+        return -1;
+      }
+      if (a._id < b._id) {
+        return 1;
+      }
+      return 0;
+    });
   }
 
   _renderMessager(message: Message) {

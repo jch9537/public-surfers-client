@@ -1,30 +1,30 @@
 {
   "name": "surfclient",
-  "displayName": "surf_client",
+  "displayName": "surf-client",
   "expo": {
     "name": "surfclient",
-    "slug": "surf_client",
+    "slug": "surf-client",
     "privacy": "public",
     "sdkVersion": "35.0.0",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "entryPoint": "node_modules/expo/AppEntry.js",
     "platforms": ["ios", "android", "web"],
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
+    },
+    "android": {
+      "package": "com.hyun133.surfclub",
+      "googleServicesFile": "./google-services.json",
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-9828921339355562~2396561843"
+      }
     }
   },
   "updates": {
     "fallbackToCacheTimeout": 0
   },
-  "assetBundlePatterns": ["**/*"],
-  "android": {
-    "googleServicesFile": "./google-services.json",
-    "package": "com.hyun133.surfclub",
-    "config": {
-      "googleMobileAdsAppId": "ca-app-pub-9828921339355562~2396561843"
-    }
-  }
+  "assetBundlePatterns": ["**/*"]
 }

@@ -7,7 +7,7 @@ const logoutAlert = (nav: any): void => {
       text: "나가기",
       onPress: () => {
         AsyncStorage.removeItem("userToken");
-        nav.navigate("LoadingPart");
+        nav.navigate("SignPart");
       }
     },
     {

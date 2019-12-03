@@ -5,12 +5,14 @@ import {
   Text,
   KeyboardAvoidingView,
   Platform,
-  AsyncStorage
+  AsyncStorage,
+  StyleSheet
 } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 import io from "socket.io-client";
 import AdBanner from "./AdBanner";
-import { Icon } from "react-native-elements";
+import { connect } from "react-redux";
+import { getPostId, RoomData } from "./src/redux/actions";
 
 // const socket = io.connect("http://15.164.218.247:3000/chatroom");
 
@@ -27,7 +29,10 @@ interface Message {
   user: User;
 }
 
-interface NewChatScreenProps {}
+interface NewChatScreenProps {
+  getRoomState(): any;
+  Room: RoomData;
+}
 interface NewChatScreenStates {
   messages: Array<any>;
   post_id: number | string;
@@ -37,7 +42,7 @@ interface NewChatScreenStates {
   user_image: string;
 }
 
-export default class ChatScreen extends React.Component<
+export class ChatScreen extends React.Component<
   NewChatScreenProps,
   NewChatScreenStates
 > {
@@ -49,45 +54,50 @@ export default class ChatScreen extends React.Component<
   state: NewChatScreenStates = {
     messages: [],
     post_id: 0,
-    user_id: 1,
-    user_name: "",
-    user_image: "",
+    user_id: 0,
+    user_name: "Tester",
+    user_image:
+      "https://post-phinf.pstatic.net/MjAxNzA4MjVfMTA1/MDAxNTAzNjQ1OTIzNDQ4.R3tizgK7EWN-eDfSaMO8huwh-vYCW1E4wfv4zlkoPfAg.5ZKwL8T_kX3KPpyvreKUuXQjPchQ2bUJhn_VSuN7DAEg.PNG/%EC%9D%B4%EB%AF%B8%EC%A7%80_7.png?type=w1200",
     chatLoaded: false
   };
 
-  //   {
-  //     _id: 1,
-  //     text: "Hello developer",
-  //     createdAt: new Date(),
-  //     user: {
-  //       _id: 2,
-  //       name: "React Native",
-  //       avatar: "https://placeimg.com/140/140/any"
-  //     },
-  //   }
-
   async componentDidMount() {
+    //방정보 불러오기
+    await this.props.getRoomState();
+    await this.setState({
+      ...this.state,
+      post_id: this.props.Room.id
+    });
+
+    //소켓 연결
     const socket = io.connect("http://15.164.218.247:3000/chatroom");
     const post_id = this.state.post_id;
 
+    //옛날 채팅 로딩
     if (!this.state.chatLoaded) {
       this._loadOldMessage();
       this.state.chatLoaded = true;
     }
 
+    //채팅방 참가
     socket.emit("joinRoom", "" + post_id);
+
+    //업데이트되는 채팅 불러오기
     socket.on("message", (msgs: any) => {
-      // msgs는 어레이에 들어있는 데이터들.
-      // console.log("state messages: ", this.state.messages);
-      // console.log("incoming msgs: ", msgs);
       this.setState({
         ...this.state,
         messages: [msgs].concat(this.state.messages)
       });
     });
 
-    let push_token: any = await AsyncStorage.getItem("pushToken");
-    console.log("push_token: ", push_token);
+    //내 정보 불러오기.
+    const myInfo = await this._getMyInfo();
+    await this.setState({
+      ...this.state,
+      user_id: myInfo.id,
+      user_name: myInfo.name,
+      user_image: myInfo.img_url
+    });
   }
 
   async _onSend(messages: Array<any> = []) {
@@ -96,7 +106,7 @@ export default class ChatScreen extends React.Component<
     const newmessages = messages;
     newmessages[0].post_id = post_id;
     let push_token: any = await AsyncStorage.getItem("pushToken");
-    console.log("push_token: ", push_token);
+    // console.log("push_token: ", push_token);
     // authorization:push_token
 
     // console.log("newmessages: ", newmessages);
@@ -133,27 +143,14 @@ export default class ChatScreen extends React.Component<
   _renderMessager(message: Message) {
     // console.log("message: ", message);
     return this.state.user_id !== message.user._id ? (
-      <View
-        style={{
-          alignItems: "flex-start",
-          justifyContent: "flex-start",
-          display: "flex",
-          flexDirection: "row",
-          marginBottom: 15,
-          marginLeft: 15,
-          alignSelf: "flex-start",
-          backgroundColor: "#eeeeee",
-          padding: 12,
-          borderRadius: 15
-        }}
-      >
+      <View style={Styles.incomingWrap}>
         <Image
           source={{
             uri: message.user.avatar
           }}
-          style={{ width: 35, height: 35, borderRadius: 20, marginRight: 10 }}
+          style={Styles.incomingImg}
         />
-        <View>
+        <View style={Styles.incomingText}>
           <Text style={{ fontSize: 15, fontWeight: "600", marginBottom: 3 }}>
             {message.user.name}
           </Text>
@@ -161,47 +158,45 @@ export default class ChatScreen extends React.Component<
         </View>
       </View>
     ) : (
-      <View>
-        <View
-          style={{
-            alignItems: "flex-end",
-            justifyContent: "flex-start",
-            display: "flex",
-            flexDirection: "row",
-            marginBottom: 15,
-            marginRight: 15,
-            alignSelf: "flex-end",
-            backgroundColor: "#0BB5FF",
-            padding: 12,
-            borderRadius: 15
-          }}
-        >
-          <Image
-            source={{
-              uri: message.user.avatar
+      <View style={Styles.outGoingWarp}>
+        <View style={Styles.outGoingText}>
+          <Text
+            style={{
+              fontSize: 15,
+              fontWeight: "600",
+              marginBottom: 3
             }}
-            style={{ width: 35, height: 35, borderRadius: 20, marginRight: 10 }}
-          />
-          <View>
-            <Text
-              style={{
-                fontSize: 15,
-                fontWeight: "600",
-                marginBottom: 3
-              }}
-            >
-              {message.user.name}
-            </Text>
-            <Text style={{}}>{message.text}</Text>
-          </View>
+          >
+            {message.user.name}
+          </Text>
+          <Text style={{}}>{message.text}</Text>
         </View>
+        <Image
+          source={{
+            uri: message.user.avatar
+          }}
+          style={Styles.outGoingImg}
+        />
       </View>
     );
   }
 
+  async _getMyInfo() {
+    let user_token: any = await AsyncStorage.getItem("userToken");
+
+    let myInfo = await fetch("http://15.164.218.247:3000/identify", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: user_token
+      }
+    }).then(res => res.json());
+
+    return myInfo;
+  }
+
   render() {
-    // console.log(this.state.messages);
-    return (
+    return Platform.OS === "android" ? (
       <View style={{ flex: 1 }}>
         <AdBanner />
         <GiftedChat
@@ -210,8 +205,7 @@ export default class ChatScreen extends React.Component<
           user={{
             _id: this.state.user_id,
             name: this.state.user_name,
-            avatar:
-              "https://t1.daumcdn.net/news/201908/07/tvreport/20190807162900279rijn.jpg"
+            avatar: this.state.user_image
           }}
           renderUsernameOnMessage={true}
           renderMessage={(item: any) => {
@@ -220,9 +214,71 @@ export default class ChatScreen extends React.Component<
           }}
         />
         {Platform.OS === "android" && (
-          <KeyboardAvoidingView behavior="padding" />
+          <KeyboardAvoidingView
+            behavior="padding"
+            keyboardVerticalOffset={100}
+            enabled
+          />
         )}
       </View>
-    );
+    ) : null;
   }
 }
+
+function mapStatesProps(state: any) {
+  return {
+    Room: state.room
+  };
+}
+function getRoomState(dispatch: any) {
+  return {
+    getRoomState: (): void => dispatch(getPostId())
+  };
+}
+
+const Styles = StyleSheet.create({
+  incomingWrap: {
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    display: "flex",
+    marginBottom: 15,
+    marginLeft: 15,
+    alignSelf: "flex-start",
+    flexDirection: "row"
+  },
+  incomingImg: {
+    width: 35,
+    height: 35,
+    borderRadius: 20,
+    marginRight: 10
+  },
+  incomingText: {
+    backgroundColor: "#eeeeee",
+    padding: 8,
+    borderRadius: 15,
+    alignSelf: "flex-start"
+  },
+  outGoingWarp: {
+    alignItems: "flex-end",
+    justifyContent: "flex-start",
+    display: "flex",
+    marginBottom: 15,
+    marginRight: 15,
+    alignSelf: "flex-end",
+    flexDirection: "row"
+  },
+  outGoingText: {
+    backgroundColor: "#88D8B0",
+    padding: 8,
+    borderRadius: 15,
+    alignSelf: "flex-end"
+  },
+  outGoingImg: {
+    width: 35,
+    height: 35,
+    borderRadius: 20,
+    marginLeft: 10
+  }
+});
+
+export default connect(mapStatesProps, getRoomState)(ChatScreen);

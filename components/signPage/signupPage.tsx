@@ -4,11 +4,12 @@ import {
   Text,
   View,
   TouchableOpacity,
-  TextInput,
-  Alert
+  Alert,
+  AsyncStorage
 } from "react-native";
 import { Input, Icon } from "react-native-elements";
 import * as Font from "expo-font";
+import { userSignup } from "../fetch";
 
 export interface State {
   name: string;
@@ -57,17 +58,12 @@ export default class sigininpage extends Component<{}, State> {
       email: "" + this.state.email,
       password: "" + this.state.password,
       phone: "" + this.state.phone,
-      oAuth: 0
+      oAuth: 0,
+      img_url:
+        "https://www.clipartwiki.com/clipimg/detail/31-312536_surf-icon-illustration.png"
     };
     if (!this.state.error) {
-      fetch("http://15.164.218.247:3000/user/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body),
-        credentials: "include"
-      })
+      userSignup(body)
         .then(res => res.json())
         .then(resData => {
           console.log(resData);
@@ -87,30 +83,36 @@ export default class sigininpage extends Component<{}, State> {
           placeholder=" Name"
           onChangeText={(text: string) => this.ChangeState(text, "name")}
           leftIcon={
-            <Icon name="user" type="antdesign" size={18} color="black" />
+            <Icon name="user" type="antdesign" size={18} color="gray" />
           }
+          leftIconContainerStyle={{ marginRight: 15 }}
+          inputContainerStyle={{ marginBottom: 5 }}
         />
         <Input
           placeholder=" Email"
           onChangeText={(text: string) => this.ChangeState(text, "email")}
           leftIcon={
-            <Icon name="idcard" type="antdesign" size={18} color="black" />
+            <Icon name="idcard" type="antdesign" size={18} color="gray" />
           }
+          leftIconContainerStyle={{ marginRight: 15 }}
+          inputContainerStyle={{ marginBottom: 5 }}
         />
         <Input
           placeholder=" Password"
           secureTextEntry={true}
           onChangeText={(text: string) => this.ChangeState(text, "password")}
-          leftIcon={
-            <Icon name="key" type="antdesign" size={18} color="black" />
-          }
+          leftIcon={<Icon name="key" type="antdesign" size={18} color="gray" />}
+          leftIconContainerStyle={{ marginRight: 15 }}
+          inputContainerStyle={{ marginBottom: 5 }}
         />
         <Input
           placeholder=" Phone"
           onChangeText={(text: string) => this.ChangeState(text, "phone")}
           leftIcon={
-            <Icon name="phone" type="antdesign" size={18} color="black" />
+            <Icon name="phone" type="antdesign" size={18} color="gray" />
           }
+          leftIconContainerStyle={{ marginRight: 15 }}
+          inputContainerStyle={{ marginBottom: 5 }}
         />
         <TouchableOpacity onPress={this.fetchSignUp} style={Styles.button}>
           <Text style={{ fontFamily: "gaegu_regular", fontSize: 23 }}>

@@ -9,7 +9,8 @@ interface Props {
   local: string;
   PostId: number;
   navigation: any;
-  participate: boolean;
+  participate?: boolean;
+  spotName?: string;
 }
 interface State {
   iconNames: string[];
@@ -41,7 +42,9 @@ export default class BoardList extends Component<Props, State> {
   render() {
     return this.state.fontLoaded ? (
       <TouchableOpacity
-        onPress={() => this.props.navigation.navigate("Room")}
+        onPress={() =>
+          this.props.navigation.navigate("Room", { Post_id: this.props.PostId })
+        }
         style={
           this.props.participate
             ? Styles.ParticipantWrap
@@ -54,14 +57,14 @@ export default class BoardList extends Component<Props, State> {
         />
         <View>
           <Text style={Styles.title}>
-            {this.props.Date} {this.props.local}
+            {this.props.Date} {this.props.local} {this.props.spotName}
           </Text>
           <Text style={Styles.hostName}>{`\n${this.props.hostName}`}</Text>
         </View>
         <Icon
           name="arrow-right"
           type="feather"
-          size={20}
+          size={15}
           containerStyle={Styles.icon}
         />
       </TouchableOpacity>
@@ -73,7 +76,7 @@ const Styles = StyleSheet.create({
   nonParticipantWrap: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 15,
+    padding: 18,
     borderBottomWidth: 1,
     borderBottomColor: "#CCCDC6",
     backgroundColor: "#ffffff"
@@ -81,7 +84,7 @@ const Styles = StyleSheet.create({
   ParticipantWrap: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 15,
+    padding: 18,
     borderBottomWidth: 1,
     borderBottomColor: "#CCCDC6",
     backgroundColor: "#e5ffe5"
@@ -92,7 +95,7 @@ const Styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: 20
   },
-  title: { fontFamily: "gaegu_bold", fontSize: 22 },
-  hostName: { fontFamily: "gaegu_regular", fontSize: 15 },
-  icon: { opacity: 0.3, position: "absolute", right: 40 }
+  title: { fontFamily: "gaegu_bold", fontSize: 19 },
+  hostName: { fontFamily: "gaegu_regular", fontSize: 15, opacity: 0.4 },
+  icon: { opacity: 0.4, position: "absolute", right: 40 }
 });

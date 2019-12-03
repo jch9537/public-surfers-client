@@ -25,6 +25,7 @@ import MyRoomList from "./components/MyList/MyRooms";
 import Setting from "./components/setinfo/setting";
 import Loading from "./components/Loading";
 import Logout from "./components/utils/logout";
+import ChatScreen from "./components/chatScreen";
 
 firebase.initializeApp(firebaseConfig);
 const DrawSide = createDrawerNavigator(
@@ -64,6 +65,7 @@ const BoardStack = createStackNavigator({
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "Board";
       let headerRight = (
+
         <View style={styles.container}>
           <Image
             source={require("./assets/images/logout.png")}
@@ -106,7 +108,8 @@ const BoardStack = createStackNavigator({
     }
   },
   Chat: {
-    screen: ChatRoom,
+
+    screen: ChatScreen,
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "Chat";
       let headerRight = (

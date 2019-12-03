@@ -7,7 +7,7 @@ import {
   Alert,
   AsyncStorage
 } from "react-native";
-import { posts, RoomlistInfo } from "../fetch";
+import { GetRoomlistOrGetRoominfo } from "../fetch";
 import { fakeBoard } from "../fakeData/board";
 import BoardList from "./BoardList";
 import Choice from "./Choice";
@@ -25,18 +25,19 @@ interface Posts {
   date: string;
   participate: boolean;
   spot_name: string;
-  text: string
+  text: string;
 }
 
 interface State {
-  board: Array<Posts>;
-  filteredBoard: Array<Posts>;
+  board: Posts[];
+  filteredBoard: Posts[];
   spotList: string[];
   date: string;
   ListLocal: string[];
   pickLocal: string;
 }
 export default class Board extends Component<Props, State> {
+  public focusListener: any;
   constructor(props: Props) {
     super(props);
     this.changeLocal = this.changeLocal.bind(this);
@@ -44,29 +45,52 @@ export default class Board extends Component<Props, State> {
 
   state: State = {
     board: [],
-    ListLocal: ["모든지역", "제주도", "천안", "부산"],
+    ListLocal: ["모든지역", "제주도", "강원도", "부산", "기타"],
     spotList: [],
     pickLocal: "",
     filteredBoard: [],
     date: ""
   };
   async componentDidMount() {
-    let token = await AsyncStorage.getItem("userToken", data => data)
-    console.log("board token", token)
-    return await RoomlistInfo(`${token}`)
+    let token = await AsyncStorage.getItem("userToken");
+
+    //화면 띄웠을때 항상 방목록 다시 불러오기.
+    this.focusListener = await this.props.navigation.addListener(
+      "didFocus",
+      async () => {
+        let dataChunk: any = await GetRoomlistOrGetRoominfo(`${token}`);
+        let boardList = await dataChunk.json();
+
+        console.log("boardList: ", boardList);
+
+        await this.setState({
+          ...this.state,
+          board: boardList.reverse(),
+          filteredBoard: boardList.reverse()
+        });
+      }
+    );
+
+    //방목록 불러오기.
+    // console.log("board token", token)
+    await GetRoomlistOrGetRoominfo(`${token}`)
       .then(res => {
-        console.log("Board res", res);
-        return res.json()
-      })
-      .then(res => {
-        console.log("STate", res);
-        let data = this.state.board.concat(res);
-        if (res.status === 200) {
-          return this.setState({
-            board: data
-          })
+        // console.log("Res", res)
+        if (res["status"] === 200) {
+          return res.json();
+        } else {
+          Alert.alert("다음번에..");
         }
       })
+      .then(res => {
+        // console.log("res", res)
+        let data = this.state.board.concat(res);
+        // console.log("DAta", data)
+        return this.setState({
+          board: data.reverse(),
+          filteredBoard: data.reverse()
+        });
+      });
   }
   changeLocal = (value: string): any => {
     if (value === "모든지역") {
@@ -105,11 +129,12 @@ export default class Board extends Component<Props, State> {
   };
 
   render() {
+    // console.log("this.state", this.state.board);
     return (
       <View>
         <Choice list={this.state.ListLocal} func={this.changeLocal} />
         <ScrollView horizontal={false} showsHorizontalScrollIndicator={false}>
-          {this.state.filteredBoard.map((item: any) => (
+          {this.state.filteredBoard.reverse().map((item: any) => (
             <BoardList
               key={item["id"]}
               hostName={item["host_name"]}
@@ -118,6 +143,7 @@ export default class Board extends Component<Props, State> {
               navigation={this.props.navigation}
               PostId={item["id"]}
               participate={item["participate"]}
+              spotName={item.spot_name}
             />
           ))}
           <Text style={{ paddingBottom: 30 }}> </Text>

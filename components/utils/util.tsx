@@ -6,10 +6,8 @@ export function getFormatDate(date: Date): string {
   month = month >= 10 ? month : "0" + month; //month 두자리로 저장
   let day: number | string = date.getDate(); //d
   day = day >= 10 ? day : "0" + day; //day 두자리로 저장
-  let week = new Array("일", "월", "화", "수", "목", "금", "토");
-  return (
-    year + "년 " + month + "월" + day + "일 " + week[date.getDay()] + "요일"
-  );
+  // let week = new Array("일", "월", "화", "수", "목", "금", "토");
+  return year + "-" + month + "-" + day;
 }
 
 // 지역정보 fakeData
@@ -106,10 +104,10 @@ export function realTimeWeather(x: number, y: number) {
   if (minutes < 59) {
     minutes = "00";
   }
-  if (hours < 2) {
-    today.setDate(today.getDate() - 1);
-    day = today.getDate();
-  }
+  // if (hours < 2) {
+  //   today.setDate(today.getDate() - 1);
+  //   day = today.getDate();
+  // }
 
   let basetime;
   let time = `${hours}${minutes}`;
@@ -122,7 +120,7 @@ export function realTimeWeather(x: number, y: number) {
     year = today.getFullYear();
     basetime = weatherBaseTime[weatherBaseTime.length - 1];
   } else if (
-    Number(time) > Number(weatherBaseTime[weatherBaseTime.length - 1])
+    Number(time) >= Number(weatherBaseTime[weatherBaseTime.length - 1])
   ) {
     basetime = weatherBaseTime[weatherBaseTime.length - 1];
   } else {
@@ -143,7 +141,7 @@ export function realTimeWeather(x: number, y: number) {
     day = "0" + day;
   }
   today = year + "" + month + "" + day;
-  console.log("오늘", today);
+  // console.log("오늘", today);
 
   /* 좌표 */
   var _nx = x; //x좌표,
@@ -158,7 +156,7 @@ export function realTimeWeather(x: number, y: number) {
   ForecastGribURL += "&nx=" + _nx + "&ny=" + _ny;
   ForecastGribURL += "&pageNo=1&numOfRows=14";
   ForecastGribURL += "&_type=json";
-  // console.log('인자', ForecastGribURL);
+  // console.log("인자", ForecastGribURL);
 
   // 기상청 자료요청
   return (
@@ -202,29 +200,37 @@ function makeWeatherData(obj: any) {
         if (itemObj[i].category === "POP") {
           weatherDetail["강수확률"] = itemObj[i].fcstValue + "%";
           weatherInfo.push(weatherDetail);
-        } else if (itemObj[i].category === "R06") {
-          weatherDetail["시간당강수량"] = itemObj[i].fcstValue + "mm";
+        }
+        // else if (itemObj[i].category === "R06") {
+        //   weatherDetail["시간당강수량"] = itemObj[i].fcstValue + "mm";
+        //   weatherInfo.push(weatherDetail);
+        // }
+        // else if (itemObj[i].category === "TMN") {
+        //   weatherDetail["최저기온"] = itemObj[i].fcstValue + "℃";
+        //   weatherInfo.push(weatherDetail);
+        // }
+        // else if (itemObj[i].category === "TMX") {
+        //   weatherDetail["최고기온"] = itemObj[i].fcstValue + "℃";
+        //   weatherInfo.push(weatherDetail);
+        // }
+        // else if (itemObj[i].category === "T3H") {
+        //   weatherDetail["풍속(동서)"] = itemObj[i].fcstValue + "m/s";
+        //   weatherInfo.push(weatherDetail);
+        // }
+        // else if (itemObj[i].category === "UUU") {
+        //   weatherDetail["풍속(남북)"] = itemObj[i].fcstValue + "M";
+        //   weatherInfo.push(weatherDetail);
+        // }
+        else if (itemObj[i].category === "VVV") {
+          weatherDetail["파고"] = itemObj[i].fcstValue + "M";
           weatherInfo.push(weatherDetail);
-        } else if (itemObj[i].category === "TMN") {
-          weatherDetail["최저기온"] = itemObj[i].fcstValue + "℃";
-          weatherInfo.push(weatherDetail);
-        } else if (itemObj[i].category === "TMX") {
-          weatherDetail["최고기온"] = itemObj[i].fcstValue + "℃";
-          weatherInfo.push(weatherDetail);
-        } else if (itemObj[i].category === "T3H") {
-          weatherDetail["풍속(동서)"] = itemObj[i].fcstValue + "m/s";
-          weatherInfo.push(weatherDetail);
-        } else if (itemObj[i].category === "UUU") {
-          weatherDetail["풍속(남북)"] = itemObj[i].fcstValue + "M";
-          weatherInfo.push(weatherDetail);
-        } else if (itemObj[i].category === "VVV") {
-          weatherDetail["파고"] = itemObj[i].fcstValue + "mm";
-          weatherInfo.push(weatherDetail);
-        } else if (itemObj[i].category === "WAV") {
-          weatherDetail["풍향"] = itemObj[i].fcstValue + "m/s";
-          weatherInfo.push(weatherDetail);
-        } else if (itemObj[i].category === "WSD") {
-          weatherDetail["풍속"] = itemObj[i].fcstValue + "";
+        }
+        // else if (itemObj[i].category === "WAV") {
+        //   weatherDetail["풍향"] = itemObj[i].fcstValue + "m/s";
+        //   weatherInfo.push(weatherDetail);
+        // }
+        else if (itemObj[i].category === "WSD") {
+          weatherDetail["풍속"] = itemObj[i].fcstValue + "m/s";
           weatherInfo.push(weatherDetail);
         } else if (itemObj[i].category === "SKY") {
           if (itemObj[i].fcstValue <= 5) {
@@ -241,6 +247,6 @@ function makeWeatherData(obj: any) {
       }
     }
   }
-  // console.log('날씨', weatherInfo);
+  // console.log("날씨", weatherInfo);
   return weatherInfo;
 }

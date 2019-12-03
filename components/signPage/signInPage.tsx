@@ -52,6 +52,7 @@ export default class sigininpage extends Component<Props, State> {
   }
 
   SignIn = async () => {
+    console.log("-----------------------");
     let body = {
       email: this.state.email,
       password: this.state.password
@@ -62,7 +63,6 @@ export default class sigininpage extends Component<Props, State> {
     //   "http://15.164.218.247:3000/chat/push_token",
     //   this.state.email
     // );
-
     return userSignin(body)
       .then(res => {
         console.log("Res", res);

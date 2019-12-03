@@ -27,8 +27,6 @@ interface Style {
   banner: ViewStyle;
 }
 export default class Main extends Component<Props, State> {
-
-    
   state = {
     fontend: false
   };

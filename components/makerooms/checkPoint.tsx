@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Picker, View, Text } from "react-native";
+import * as Font from "expo-font";
+import { Picker, View, Text, Alert, StyleSheet } from "react-native";
 
 export interface CheckPointProps {
   detailLocation: string[];
@@ -8,21 +9,26 @@ export interface CheckPointProps {
 
 export interface CheckPointState {
   surfPoint: string;
+  fontent: boolean;
 }
 
 class CheckPoint extends React.Component<CheckPointProps, CheckPointState> {
-  state = { surfPoint: "" };
+  state = {
+    surfPoint: "",
+    fontend: false
+  };
+  async componentDidMount() {
+    await Font.loadAsync({
+      gaegu_regular: require("../../assets/fonts/Gaegu-Regular.ttf")
+    });
+    await this.setState({ fontend: true });
+  }
   render() {
     // console.log('체크포인트 프롭', this.props.checkSpot);
     return (
       <View>
         <Picker
           selectedValue={this.state.surfPoint}
-          style={{
-            height: 70,
-            width: "100%",
-            alignItems: "center"
-          }}
           onValueChange={itemValue => {
             this.setState({ surfPoint: itemValue });
             this.props.checkSpot(itemValue);

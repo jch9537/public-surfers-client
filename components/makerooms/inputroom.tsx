@@ -1,50 +1,47 @@
 import * as React from "react";
+import * as Font from "expo-font";
 import { Component } from "react";
 import {
+  AsyncStorage,
   View,
-  Text,
   StyleSheet,
-  TextInput,
   ViewStyle,
   SafeAreaView,
-  Picker,
   DatePickerAndroid,
   Button,
-  Alert
+  Alert,
+  TouchableOpacity,
+  Text,
+  ImageBackground
 } from "react-native";
+import { createAppContainer } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
 
-import {
-  getFormatDate,
-  realTimeWeather,
-  locationInfo,
-  locationDetail,
-  localPoints
-} from "../utils/util";
-import { posts } from "../fetch";
+import { getFormatDate, realTimeWeather } from "../utils/util";
+import { GetLocationOrSpot, makeRoom } from "../fetch";
 import SelectLocation from "./selectLocation";
 import CheckPoint from "./checkPoint";
 import Weather from "./weather";
 import InputText from "./inputText";
+import RoomInfo from "../rooms/room";
+import AdBanner from "../AdBanner";
 
-export interface InputroomProps {}
+export interface InputroomProps {
+  navigation: any;
+}
 
 export interface InputroomState {
-  location: Array<string> | null;
+  location: Array<string>;
   localPoint: string | null;
   detailLocation: string[];
+  spotPoints: Array<object>;
   surfPoint: string | any;
   date: Date | null;
   dateText: string;
   currWeather: any;
   text: string;
-  // x: number | null;
-  // y: number | null;
-}
-interface Style {
-  inputContainer: ViewStyle;
-  eachBox: ViewStyle;
-  text: ViewStyle;
-  text1: ViewStyle;
+  postId: number | null;
+  fontend: boolean;
 }
 
 class Inputroom extends Component<InputroomProps, InputroomState> {
@@ -54,13 +51,14 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
       location: [],
       localPoint: "",
       detailLocation: [],
+      spotPoints: [],
       surfPoint: "",
       date: new Date(),
-      dateText: "날짜",
+      dateText: "날짜선택",
       currWeather: null,
-      text: ""
-      // x: null,
-      // y: null
+      text: "",
+      postId: null,
+      fontend: false
     };
   }
   showDatePicker = async (options: any) => {
@@ -71,7 +69,7 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
       if (action !== DatePickerAndroid.dismissedAction) {
         let selectDate = new Date(year, month, day);
         getFormatDate(selectDate);
-        // console.log('값은: ', selectDate);
+        // console.log("값은: ", selectDate);
         let selectDateText = getFormatDate(selectDate);
         this.setState({ date: selectDate, dateText: selectDateText });
       }
@@ -80,37 +78,56 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
     }
   };
 
-  checkLocation = (location: any) => {
+  async componentDidMount() {
+    await Font.loadAsync({
+      gaegu_regular: require("../../assets/fonts/Gaegu-Regular.ttf")
+    });
+    let token = await AsyncStorage.getItem("userToken");
+    GetLocationOrSpot("location", `${token}`)
+      .then(res => res.json())
+      .then(json => this.setState({ location: json }));
+  }
+
+  checkLocation = async (location: any) => {
+    // if (this.state.dateText === "날짜선택") {
+    //   Alert.alert("날짜를 선택해주세요");
+    // }
+    let locationDetail: string[] = [];
     console.log("큰지역선택", location);
     // console.log('스테이트포인트', this.state);
     this.setState({ localPoint: location });
-
-    //데이터베이스에 넣으면 지워야 할 코드
-    for (let i = 0; i < locationDetail.length; i++) {
-      if (Object.keys(locationDetail[i])[0] === location) {
-        this.setState({ detailLocation: locationDetail[i][location] });
-        break;
-      }
-    }
-    // await 빼치 들고와서 하나보냄(): location-> 제주도, 부산, 강원도
+    let token = await AsyncStorage.getItem("userToken");
+    GetLocationOrSpot(`${location}`, `${token}`)
+      .then(res => res.json())
+      .then(json => {
+        this.setState({ spotPoints: json });
+        for (let i = 0; i < json.length; i++) {
+          console.log(Object.keys(json[i])[0]);
+          locationDetail.push(Object.keys(json[i])[0]);
+        }
+        this.setState({ detailLocation: locationDetail });
+      });
   };
 
   checkSpot = async (spot: any) => {
+    if (!this.state.localPoint) {
+      Alert.alert("지역을 선택해주세요");
+    }
     // console.log('작은지역선택', spot);
     await this.setState({ surfPoint: spot });
-    this.weatherInput();
+    await this.weatherInput();
   };
 
   weatherInput = async () => {
-    console.log("서프포인트", this.state.surfPoint);
-    if (this.state.surfPoint) {
-      let x;
-      let y;
-      for (let i = 0; i < localPoints.length; i++) {
-        if (Object.keys(localPoints[i])[0] === this.state.surfPoint) {
-          x = localPoints[i][this.state.surfPoint].x;
-          y = localPoints[i][this.state.surfPoint].y;
-          break;
+    // console.log("서프포인트", this.state.surfPoint);
+    const { surfPoint, spotPoints } = this.state;
+    if (surfPoint) {
+      let x: any;
+      let y: any;
+      for (let i = 0; i < spotPoints.length; i++) {
+        if (Object.keys(spotPoints[i])[0] === surfPoint) {
+          x = spotPoints[i][surfPoint].x;
+          y = spotPoints[i][surfPoint].y;
         }
       }
       let resultWeather = await realTimeWeather(x, y);
@@ -119,58 +136,108 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
   };
 
   textInput = (text: string) => {
-    console.log("값 ", text);
     this.setState({ text: text });
   };
 
-  postMakeRoom() {
-    let body = {
+  postMakeRoom = async () => {
+    let data = {
       location: this.state.localPoint,
       spot: this.state.surfPoint,
       date: this.state.dateText,
       text: this.state.text
     };
-    posts("POST", body);
-  }
-
-  componentDidMount() {
-    this.setState({ location: locationInfo });
-    //지역패치
-  }
+    if (
+      data.date === "날짜선택" ||
+      !data.location ||
+      !data.spot ||
+      !data.text
+    ) {
+      if (data.date === "날짜선택") {
+        Alert.alert("날짜를 선택해주세요");
+      }
+      if (!data.location) {
+        Alert.alert("지역을 선택해주세요");
+      }
+      if (!data.spot) {
+        Alert.alert("상세 위치를 선택해주세요");
+      }
+      if (!data.text) {
+        Alert.alert("내용을 입력해주세요");
+      }
+    } else {
+      let token = await AsyncStorage.getItem("userToken");
+      console.log(token, "----------------", data);
+      await makeRoom(data, `${token}`)
+        .then(res => res.json())
+        .then(json => this.setState({ postId: json }));
+      // this.props.navigation.navigate()
+    }
+  };
 
   render() {
     console.log("스테이트 상태체크", this.state);
     return (
-      <SafeAreaView style={styles.inputContainer}>
-        <View style={styles.eachBox}>
-          <Button
-            // style={styles.text1}
-            title={this.state.dateText}
-            onPress={() =>
-              this.showDatePicker({
-                date: this.state.date
-              })
-            }
-          ></Button>
-          <SelectLocation
-            location={this.state.location}
-            checkLocation={this.checkLocation}
-          ></SelectLocation>
-          <CheckPoint
-            detailLocation={this.state.detailLocation}
-            checkSpot={this.checkSpot}
-          ></CheckPoint>
+      <SafeAreaView style={styles.container}>
+        {/* 111 */}
+        <View style={styles.eachBox1}>
+          {/* <ImageBackground
+          source={require("../../assets/images/sky1.png")}
+          style={styles.eachBox1}
+        > */}
+          <View style={styles.eachBox11}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() =>
+                this.showDatePicker({
+                  date: this.state.date
+                })
+              }
+            >
+              <Text
+                style={{
+                  fontFamily: "gaegu_regular",
+                  fontSize: 22,
+                  // left: 7,
+                  color: "navy"
+                }}
+              >
+                {this.state.dateText}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.eachBox12}>
+            <View style={styles.eachBox121}>
+              <SelectLocation
+                location={this.state.location}
+                checkLocation={this.checkLocation}
+              ></SelectLocation>
+            </View>
+            <View style={styles.eachBox122}>
+              <CheckPoint
+                detailLocation={this.state.detailLocation}
+                checkSpot={this.checkSpot}
+              ></CheckPoint>
+            </View>
+          </View>
+          {/* </ImageBackground> */}
         </View>
-        <View>
-          <View>
-            {this.state.currWeather ? (
-              <Weather currWeather={this.state.currWeather}></Weather>
-            ) : null}
-          </View>
-          <View>
-            <InputText textInput={this.textInput}></InputText>
-          </View>
+
+        {/* 222 */}
+        <View style={styles.eachBox2}>
+          {this.state.currWeather ? (
+            <Weather currWeather={this.state.currWeather}></Weather>
+          ) : null}
+        </View>
+        {/* 3333 */}
+        <View style={styles.eachBox3}>
+          <InputText textInput={this.textInput}></InputText>
+        </View>
+        {/* 444 */}
+        <View style={styles.eachBox4}>
           <Button title="방만들기" onPress={this.postMakeRoom}></Button>
+        </View>
+        <View style={styles.banner}>
+          <AdBanner />
         </View>
       </SafeAreaView>
     );
@@ -178,29 +245,75 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
 }
 
 export default Inputroom;
+interface Style {
+  container: ViewStyle;
+  eachBox1: ViewStyle;
+  eachBox11: ViewStyle;
+  eachBox12: ViewStyle;
+  eachBox121: ViewStyle;
+  eachBox122: ViewStyle;
+  eachBox2: ViewStyle;
+  eachBox3: ViewStyle;
+  eachBox4: ViewStyle;
+  banner: ViewStyle;
+  button: ViewStyle;
+}
 
 const styles = StyleSheet.create<Style>({
-  inputContainer: {
+  container: {
+    top: 10,
+    flex: 1,
+    margin: 10
+  },
+  eachBox1: {
     flex: 1
+    // backgroundColor: "pink"
   },
-  eachBox: {
-    flex: 0.7,
-    top: 100,
-    backgroundColor: "pink"
-  },
-  text: {
-    backgroundColor: "yellow",
-    justifyContent: "center",
-    alignItems: "flex-start"
-  },
-  text1: {
-    backgroundColor: "grey",
-    borderColor: "white",
-    borderWidth: 1,
-    height: 50,
-    padding: 10,
-    margin: 5,
+  eachBox11: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center"
+  },
+  eachBox12: {
+    flex: 1,
+    flexDirection: "row"
+    // backgroundColor: "grey"
+  },
+  eachBox121: {
+    flex: 1
+  },
+  eachBox122: {
+    flex: 1
+  },
+
+  eachBox2: {
+    flex: 2,
+    flexDirection: "row"
+    // backgroundColor: "yellow"
+  },
+  eachBox3: {
+    flex: 2,
+    // backgroundColor: "red",
+    padding: 10
+  },
+  eachBox4: {
+    top: 15,
+    flex: 1,
+    fontFamily: "gaegu_regular"
+    // backgroundColor: "orange"
+  },
+  banner: {
+    position: "absolute",
+    bottom: 0
+  },
+  button: {
+    width: 150,
+    height: 35,
+    marginBottom: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    fontFamily: "gaegu_regular",
+    backgroundColor: "orange",
+    borderRadius: 60 / 2
   }
 });

@@ -32,11 +32,9 @@ class RoomInfo extends Component<Props, State> {
 
     let datachunk = await GetRoomlistOrGetRoominfo(`${token}`, postid)
       .then(res => {
-        console.log("Room res", res);
         return res.json();
       })
       .then(res => {
-        console.log("DATa", res);
         this.props.addRoom(res);
       });
 
@@ -106,6 +104,7 @@ function dispatchState(dispatch: any) {
     addRoom: (room: RoomData): void => dispatch(roominfo(room))
   };
 }
+
 const Styles = StyleSheet.create({
   mainWrap: { flexDirection: "row", height: "100%" },
   sideBar: {

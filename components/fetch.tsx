@@ -109,6 +109,7 @@ export const GetRoomlistOrGetRoominfo = async function(
   // console.log(post_Id);
   if (post_Id) {
     server = `http://15.164.218.247:3000/post?post_id=${post_Id}`;
+
   }
   // console.log("serverurl", server);
   return fetch(server, {
@@ -120,6 +121,7 @@ export const GetRoomlistOrGetRoominfo = async function(
     credentials: "include"
   });
 };
+
 export const GetMyRooms = async (token: any) => {
   let data = await fetch(server + "/posts/my_list", {
     method: "GET",

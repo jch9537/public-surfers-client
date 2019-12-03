@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, Alert } from 'react-native';
+import { View, ScrollView, Text, Alert, AsyncStorage } from 'react-native';
 import ListView from '../Board/BoardList';
 import { fakeRoomList } from '../fakeData/board';
-import Logout from "../utils/logout";
+import { posts } from "../fetch";
 interface State {
     myRooms: Array<Posts>;
 }
@@ -19,19 +19,21 @@ export default class MyRooms extends Component<Props, State> {
     state = {
         myRooms: []
     };
-    componentDidMount() {
-        this.setState({
-            myRooms: fakeRoomList
-        });
-        fetch('url/posts/userID')
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 200) {
+    async componentDidMount() {
+        let token = await AsyncStorage.getItem("userToken")
+        console.log("myroom token", token);
+        await posts("GET", `${token}`, null, null, "my_list")
+            .then(res => {
+                console.log("MyRooms res", res);
+                return res.json()
+            })
+            .then(res => {
+                if (res.status === 200) {
                     this.setState({
-                        myRooms: data
-                    });
+                        myRooms: res
+                    })
                 }
-            });
+            })
     }
     render() {
         return (

@@ -5,12 +5,13 @@ import {
   StyleSheet,
   Text,
   Alert,
-  ImageBackground
+  AsyncStorage
 } from "react-native";
-import { post } from "../fetch";
+import { posts, RoomlistInfo } from "../fetch";
 import { fakeBoard } from "../fakeData/board";
 import BoardList from "./BoardList";
 import Choice from "./Choice";
+import { BooleanLiteral } from "@babel/types";
 
 interface Props {
   navigation: any;
@@ -18,9 +19,13 @@ interface Props {
 
 interface Posts {
   id: number;
+  host_id: number;
   host_name: string;
   location_name: string;
   date: string;
+  participate: boolean;
+  spot_name: string;
+  text: string
 }
 
 interface State {
@@ -46,18 +51,22 @@ export default class Board extends Component<Props, State> {
     date: ""
   };
   async componentDidMount() {
-    await this.setState({
-      board: fakeBoard,
-      filteredBoard: fakeBoard
-    });
-    // post("GET")
-    //     .then(res => { console.log("res", res); return res.json() })
-    //     .then(data => {
-    //         console.log(data);
-    //         return this.setState({
-    //             board: data
-    //         })
-    //     })
+    let token = await AsyncStorage.getItem("userToken", data => data)
+    console.log("board token", token)
+    return await RoomlistInfo(`${token}`)
+      .then(res => {
+        console.log("Board res", res);
+        return res.json()
+      })
+      .then(res => {
+        console.log("STate", res);
+        let data = this.state.board.concat(res);
+        if (res.status === 200) {
+          return this.setState({
+            board: data
+          })
+        }
+      })
   }
   changeLocal = (value: string): any => {
     if (value === "모든지역") {

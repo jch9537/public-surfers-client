@@ -51,17 +51,18 @@ export default class sigininpage extends Component<Props, State> {
   }
 
   SignIn = async () => {
+    console.log("-----------------------");
     let body = {
       email: this.state.email,
       password: this.state.password
     };
 
     //푸쉬토큰 DB에 등록.
-    await registerForPushNotificationsAsync(
-      "http://15.164.218.247:3000/chat/push_token",
-      this.state.email
-    );
-
+    // await registerForPushNotificationsAsync(
+    //   "http://15.164.218.247:3000/chat/push_token",
+    //   this.state.email
+    // );
+    console.log("~~~~~~~~~~~~~~~~~~~~~");
     await fetch("http://15.164.218.247:3000/user/signin", {
       method: "POST",
       headers: {

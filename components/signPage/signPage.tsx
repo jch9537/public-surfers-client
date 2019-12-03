@@ -47,20 +47,20 @@ export default class signpage extends Component<Props, State> {
     return this.state.fontLoaded ? (
       <KeyboardAvoidingView style={Styles.center}>
         {this.state.togglePage ? (
-          <SignUp></SignUp>
+          <SignUp togglePage={this.changeToggle}></SignUp>
         ) : (
-          <SignIn navigation={this.props.navigation}></SignIn>
-        )}
+            <SignIn navigation={this.props.navigation}></SignIn>
+          )}
         <TouchableOpacity onPress={this.changeToggle} style={Styles.button}>
           {this.state.togglePage ? (
             <Text style={{ fontFamily: "gaegu_regular", fontSize: 23 }}>
               로그인 하기
             </Text>
           ) : (
-            <Text style={{ fontFamily: "gaegu_regular", fontSize: 23 }}>
-              회원가입 하기
+              <Text style={{ fontFamily: "gaegu_regular", fontSize: 23 }}>
+                회원가입 하기
             </Text>
-          )}
+            )}
         </TouchableOpacity>
       </KeyboardAvoidingView>
     ) : null;

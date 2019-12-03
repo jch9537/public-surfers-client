@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text } from "react-native";
+import { Text, View, Image, StyleSheet } from "react-native";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 
 import { createStackNavigator } from "react-navigation-stack";
@@ -7,6 +7,7 @@ import { createDrawerNavigator } from "react-navigation-drawer";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 
 import { Icon } from "react-native-elements";
+import { Feather, FontAwesome, Ionicons } from "react-native-vector-icons";
 import * as firebase from "firebase";
 import { firebaseConfig } from "./firebaseConfig";
 import { RoomInfo } from "./components/src/redux/reducer";
@@ -40,9 +41,16 @@ const BoardStack = createStackNavigator({
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "Main";
       let headerRight = (
-        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
-          Logout
-        </Text>
+        <View style={styles.container}>
+          <Image
+            source={require("./assets/images/logout.png")}
+            resizeMode="contain"
+            style={styles.image}
+          ></Image>
+          <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+            Logout
+          </Text>
+        </View>
       );
 
       return {
@@ -56,9 +64,16 @@ const BoardStack = createStackNavigator({
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "Board";
       let headerRight = (
-        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
-          Logout
-        </Text>
+        <View style={styles.container}>
+          <Image
+            source={require("./assets/images/logout.png")}
+            resizeMode="contain"
+            style={styles.image}
+          ></Image>
+          <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+            Logout
+          </Text>
+        </View>
       );
 
       return {
@@ -72,9 +87,16 @@ const BoardStack = createStackNavigator({
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "MyRooms";
       let headerRight = (
-        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
-          Logout
-        </Text>
+        <View style={styles.container}>
+          <Image
+            source={require("./assets/images/logout.png")}
+            resizeMode="contain"
+            style={styles.image}
+          ></Image>
+          <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+            Logout
+          </Text>
+        </View>
       );
 
       return {
@@ -88,9 +110,16 @@ const BoardStack = createStackNavigator({
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "Chat";
       let headerRight = (
-        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
-          Logout
-        </Text>
+        <View style={styles.container}>
+          <Image
+            source={require("./assets/images/logout.png")}
+            resizeMode="contain"
+            style={styles.image}
+          ></Image>
+          <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+            Logout
+          </Text>
+        </View>
       );
 
       return {
@@ -104,9 +133,16 @@ const BoardStack = createStackNavigator({
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "Room";
       let headerRight = (
-        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
-          Logout
-        </Text>
+        <View style={styles.container}>
+          <Image
+            source={require("./assets/images/logout.png")}
+            resizeMode="contain"
+            style={styles.image}
+          ></Image>
+          <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+            Logout
+          </Text>
+        </View>
       );
 
       return {
@@ -120,9 +156,16 @@ const BoardStack = createStackNavigator({
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "MakeRoom";
       let headerRight = (
-        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
-          Logout
-        </Text>
+        <View style={styles.container}>
+          <Image
+            source={require("./assets/images/logout.png")}
+            resizeMode="contain"
+            style={styles.image}
+          ></Image>
+          <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+            Logout
+          </Text>
+        </View>
       );
 
       return {
@@ -136,9 +179,16 @@ const BoardStack = createStackNavigator({
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "Setting";
       let headerRight = (
-        <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
-          Logout
-        </Text>
+        <View style={styles.container}>
+          <Image
+            source={require("./assets/images/logout.png")}
+            resizeMode="contain"
+            style={styles.image}
+          ></Image>
+          <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
+            Logout
+          </Text>
+        </View>
       );
 
       return {
@@ -152,13 +202,13 @@ const MainTab = createBottomTabNavigator({
   Surf: {
     screen: BoardStack,
     navigationOptions: {
-      tabBarIcon: () => <Icon name="home" size={29}></Icon>
+      tabBarIcon: () => <Ionicons name="ios-analytics" size={30}></Ionicons>
     }
   },
-  Info: {
+  User: {
     screen: Setting,
     navigationOptions: {
-      tabBarIcon: () => <Icon name="face" size={29}></Icon>
+      tabBarIcon: () => <FontAwesome name="grav" size={26}></FontAwesome>
     }
   }
 });
@@ -184,3 +234,16 @@ export default class App extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  image: {
+    width: 30,
+    height: 30,
+    margin: 5
+  }
+});

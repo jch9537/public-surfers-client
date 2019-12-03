@@ -1,12 +1,17 @@
 import React, { Component } from "react";
-import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  AsyncStorage
+} from "react-native";
 import { RoomData, roominfo } from "../src/redux/actions";
 import { Text, Button } from "react-native-elements";
 import { rooms } from "../fakeData/roomData";
 import Weather from "./weather";
 import { connect } from "react-redux";
-import { post } from "../fetch";
-import Logout from '../utils/logout';
+import { posts } from "../fetch";
 import AdBanner from "../AdBanner";
 interface Props {
   Room: RoomData;
@@ -14,11 +19,17 @@ interface Props {
   addRoom(obj: RoomData): any;
 }
 class RoomInfo extends Component<Props> {
-  componentDidMount() {
-    this.props.addRoom(rooms);
-    // fetch(`url/post/${this.props.navigation.getParam("PostId")}`)
-    //     .then(res => res.json())
-    //     .then(data => {})
+  async componentDidMount() {
+    let token = await AsyncStorage.getItem("userToken");
+    posts("GET", `${token}`, null, this.props.Room.id, null)
+      .then(res => {
+        console.log("Room res", res);
+        return res.json();
+      })
+      .then(res => {
+        console.log(res);
+        this.props.addRoom(res);
+      });
   }
   editButtonPress = () => {
     //edit페이지로 이동

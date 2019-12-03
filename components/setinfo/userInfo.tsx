@@ -8,33 +8,44 @@ import {
   TextInput,
   Image,
   Button,
-  PushNotificationIOS,
-  Alert
+  KeyboardAvoidingView,
+  Alert,
+  ImageBackground,
+  SafeAreaView
 } from "react-native";
 import * as Font from "expo-font";
+import {
+  Foundation,
+  Feather,
+  MaterialIcons,
+  AntDesign
+} from "react-native-vector-icons";
 // import ImagePicker from "react-native-image-picker";
 
 export interface UserInfoProps {
-  editInfo: any;
+  addPhoto: any;
+  editName: any;
+  checkCurrPassword: any;
+  editNewPassword: any;
+  matchNewPassword: any;
+  photo: any;
 }
 
 export interface UserInfoState {
-  name: string | null;
-  password: string | null;
-  photo: Image | null;
+  checkPassword: string | null;
   fontend: boolean;
 }
 
 class UserInfo extends React.Component<UserInfoProps, UserInfoState> {
-  //   constructor(props: UserInfoProps) {
-  //     super(props);
+  // constructor(props: UserInfoProps) {
+  //   super(props);
+
   state = {
-    name: "",
-    password: "",
-    photo: null,
+    checkPassword: "",
     fontend: false
   };
 
+  clearInput = React.createRef();
   //   uploadImage = () => {
   //     const options = { noData: true };
   //     ImagePicker.launchImageLibrary(options, res => {
@@ -44,29 +55,8 @@ class UserInfo extends React.Component<UserInfoProps, UserInfoState> {
   //     });
   //   };
 
-  editName = (name?: string | null): void => {
-    // 안적으면 자동으로 void가 됨: 지워도 됨
-    console.log("이름", name);
-    this.setState({ name: name });
-  };
-
-  editCurrPassword = async (password?: string | null): void => {
-    console.log("비밀번호", password);
-    //fetch를 보내서 현재tokenID와 현재비번과 맞는지 확인 fetch('/user', 'PUT')
-    // let checkCurrPassword = await (res) => {
-    //     if(비번이 아니면){
-    //         Alert.alert('비밀번호가 일치하지 않습니다.')
-    //     }
-    // }
-  };
-
-  editNewPassword = (password?: string | null): void => {
-    console.log("비밀번호", password);
-    // this.setState({ password: password });
-  };
-
-  checkNewPassword = (password?: string | null): void => {
-    console.log("비밀번호", password);
+  checkNewPassword = (password: string | null) => {
+    this.setState({ checkPassword: password });
   };
 
   async componentDidMount() {
@@ -77,63 +67,86 @@ class UserInfo extends React.Component<UserInfoProps, UserInfoState> {
   }
   //   }
   render() {
-    console.log("프롭확인 ", this.props);
+    // console.log("프롭확인 ", this.props);
     console.log("인포스테이트", this.state);
     return (
       <View style={styles.container}>
         <View style={styles.inputImg}>
-          <Text>이미지삽입</Text>
-          {/* {this.state.photo && (
-            <Image
-              source={{ uri: this.state.photo.uri }}
-              style={{ width: 250, height: 250 }}
-            ></Image>
-          )} */}
+          {/* <Text>이미지삽입</Text>
+          {this.props.photo && ( */}
+          <Image
+            source={require("../../assets/images/surfer.png")}
+            style={{
+              width: 170,
+              height: 170,
+              borderRadius: 170 / 2
+            }}
+          ></Image>
+          {/* )} */}
           {/* <Button title="사진넣기" onPress={this.uploadImage}></Button> */}
         </View>
         <View style={styles.inputText}>
-          {/* <View style={styles.eachTextInput}> */}
-          <TextInput
-            style={styles.eachTextInput}
-            placeholder="변경할 이름을 적어주세요"
-            placeholderTextColor="navy"
-            onChangeText={name => this.editName(name)}
-          />
-          {/* <Text>{"New Name: " + this.state.name}</Text> */}
-          <TextInput
-            style={styles.eachTextInput}
-            placeholder="등록된 비밀번호를 적어주세요"
-            placeholderTextColor="navy"
-            onChangeText={(currPassword): string =>
-              this.editCurrPassword(currPassword)
-            }
-          />
-          <TextInput
-            style={styles.eachTextInput}
-            placeholder="변경할 비밀번호를 적어주세요"
-            placeholderTextColor="navy"
-            onChangeText={(newPassword): string =>
-              this.editNewPassword(newPassword)
-            }
-          />
-          <TextInput
-            style={styles.eachTextInput}
-            placeholder="새로운 비밀번호 확인"
-            placeholderTextColor="navy"
-            onChangeText={(checkPassword): string =>
-              this.checkNewPassword(checkPassword)
-            }
-          />
+          <View style={styles.inputTextContainer}>
+            <View style={styles.eachContainer}>
+              <Feather name="user" size={27} />
+              <TextInput
+                style={styles.eachTextInput}
+                placeholder="변경할 이름"
+                placeholderTextColor="navy"
+                onChangeText={name => this.props.editName(name)}
+              />
+            </View>
+            <View style={styles.eachContainer}>
+              <MaterialIcons name="lock-open" size={27} />
+              <TextInput
+                style={styles.eachTextInput}
+                placeholder="등록된 비밀번호"
+                placeholderTextColor="navy"
+                onChangeText={(currPassword): string =>
+                  this.props.checkCurrPassword(currPassword)
+                }
+              />
+            </View>
+            <View style={styles.eachContainer}>
+              <MaterialIcons name="lock-outline" size={27} />
+              <TextInput
+                style={styles.eachTextInput}
+                placeholder="변경할 비밀번호"
+                placeholderTextColor="navy"
+                onChangeText={(newPassword): string =>
+                  this.props.editNewPassword(newPassword)
+                }
+              />
+            </View>
+            <View style={styles.eachContainer}>
+              <Feather name="check" size={27} />
+              <TextInput
+                style={styles.eachTextInput}
+                placeholder="변경할 비밀번호 확인"
+                placeholderTextColor="navy"
+                onChangeText={checkPassword =>
+                  this.checkNewPassword(checkPassword)
+                }
+              ></TextInput>
+              <TouchableOpacity
+                style={styles.button1}
+                onPress={() =>
+                  this.props.matchNewPassword(this.state.checkPassword)
+                }
+              >
+                <Text
+                  style={{
+                    fontFamily: "gaegu_regular",
+                    fontSize: 22,
+                    color: "orange"
+                  }}
+                >
+                  V 확인
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-        {/* </View> */}
-        {/* <TouchableOpacity
-            title="Edit"
-            style={{ width: 50 }}
-            onPress={this.props.editInfo}
-          >
-            <Text>EDIT</Text>
-          </TouchableOpacity> */}
-        {/* </View> */}
       </View>
     );
   }
@@ -145,32 +158,58 @@ interface Style {
   container: ViewStyle;
   inputImg?: ViewStyle;
   inputText?: ViewStyle;
+  inputTextContainer: ViewStyle;
+  eachContainer: ViewStyle;
   eachTextInput: ViewStyle;
+  button1: ViewStyle;
 }
 
 const styles = StyleSheet.create<Style>({
   container: {
+    resizeMode: "contain",
+    top: 10,
     flex: 1,
     alignContent: "center"
   },
   inputImg: {
     flex: 1,
-    backgroundColor: "darkseagreen"
+    top: 10,
+    alignItems: "center"
+    // backgroundColor: "darkseagreen"
   },
   inputText: {
     alignItems: "center",
-    justifyContent: "center",
-    flex: 2,
-    backgroundColor: "violet"
+    // justifyContent: "center",
+    flex: 2
+    // backgroundColor: "violet"
+  },
+  inputTextContainer: {
+    top: 30,
+    width: 320,
+    height: 240
+    // backgroundColor: "white"
+  },
+  eachContainer: {
+    flexDirection: "row",
+    alignItems: "center"
+    // backgroundColor: "blue"
   },
   eachTextInput: {
-    width: 300,
+    width: 230,
     height: 50,
-    margin: 5,
+    margin: 6,
     padding: 10,
-    borderWidth: 1,
-    borderRadius: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: "orange",
     fontFamily: "gaegu_regular",
     fontSize: 20
+  },
+  button1: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 40,
+    width: 60
+    // backgroundColor: "white",
+    // borderRadius: 5
   }
 });

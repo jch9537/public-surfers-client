@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ImageBackground } from "react-native";
 import { MaterialCommunityIcons, Feather, Ionicons } from "@expo/vector-icons";
 
 export interface WeatherProps {
@@ -63,13 +63,16 @@ const weatherIcon = (item: any) => {
 };
 
 const Weather: React.SFC<WeatherProps> = (props: WeatherProps) => {
-  console.log("웨더 프롭", props);
+  // console.log("웨더 프롭", props);
   return (
-    <View style={styles.weatherContainer}>
+    <ImageBackground
+      source={require("../../assets/images/background3.png")}
+      style={styles.weatherContainer}
+    >
       {props.currWeather.map((item: any): any => {
         return weatherIcon(item);
       })}
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -78,10 +81,10 @@ export default Weather;
 const styles = StyleSheet.create({
   weatherContainer: {
     flex: 1,
-    backgroundColor: "green",
+    // backgroundColor: "green",
     flexDirection: "row",
     margin: 10,
-    justifyContent: "center",
+    // justifyContent: "center",
     alignItems: "center"
   },
   weatherValues: {

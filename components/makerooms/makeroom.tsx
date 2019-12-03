@@ -1,6 +1,12 @@
 import * as React from "react";
-import { Component } from "react";
-import { View, Text, StyleSheet, ViewStyle, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  Alert,
+  SafeAreaView
+} from "react-native";
 import Logout from "../utils/logout";
 import Inputroom from "./inputroom";
 
@@ -8,12 +14,18 @@ interface Style {
   room: ViewStyle;
 }
 
-class MakeRoom extends Component {
-  // state = { :  }
+interface MakeRoomProps {
+  navigation: any;
+}
+
+class MakeRoom extends React.Component<MakeRoomProps> {
+  constructor(props: MakeRoomProps) {
+    super(props);
+  }
   render() {
     return (
       <SafeAreaView style={styles.room}>
-        <Inputroom></Inputroom>
+        <Inputroom navigation={this.props.navigation}></Inputroom>
       </SafeAreaView>
     );
   }

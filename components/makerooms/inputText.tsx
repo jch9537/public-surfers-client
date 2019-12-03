@@ -1,5 +1,12 @@
 import * as React from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  ImageBackground
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as Font from "expo-font";
 
@@ -26,19 +33,27 @@ class InputText extends React.Component<InputTextProps, InputTextState> {
   }
   render() {
     return (
-      <View style={styles.textInput}>
-        <View style={{ flex: 2, backgroundColor: "brown" }}>
+      <ImageBackground
+        source={require("../../assets/images/together1.png")}
+        style={styles.textInput}
+      >
+        <View
+          style={{
+            flex: 2
+            // backgroundColor: "brown"
+          }}
+        >
           {/* <Text style={{ fontSize: 20 }}>내용 : </Text> */}
           <TextInput
-            style={{ fontFamily: "gaegu_regular", fontSize: 20 }}
-            placeholder="내용을 적으세요"
+            style={{ fontFamily: "gaegu_regular", fontSize: 22 }}
+            placeholder="내용을 적으세요(모임시간, 모임장소)"
             onChangeText={text => this.setState({ text: text })}
           ></TextInput>
         </View>
         <View
           style={{
             flex: 1,
-            backgroundColor: "blue",
+            // backgroundColor: "blue",
             alignItems: "center",
             justifyContent: "flex-end"
           }}
@@ -47,12 +62,18 @@ class InputText extends React.Component<InputTextProps, InputTextState> {
             style={styles.botton}
             onPress={() => this.props.textInput(this.state.text)}
           >
-            <Text style={{ fontFamily: "gaegu_regular", fontSize: 20 }}>
+            <Text
+              style={{
+                fontFamily: "gaegu_regular",
+                fontSize: 25,
+                color: "navy"
+              }}
+            >
               내용넣기
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ImageBackground>
     );
   }
 }
@@ -61,6 +82,7 @@ export default InputText;
 
 const styles = StyleSheet.create({
   textInput: {
+    top: 10,
     flex: 1
   },
   botton: {
@@ -68,7 +90,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 40,
     width: 120,
-    backgroundColor: "powderblue",
+    // backgroundColor: "powderblue",
     borderRadius: 10
   }
 });

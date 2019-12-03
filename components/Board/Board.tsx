@@ -61,7 +61,7 @@ export default class Board extends Component<Props, State> {
         let dataChunk: any = await GetRoomlistOrGetRoominfo(`${token}`);
         let boardList = await dataChunk.json();
 
-        console.log("boardList: ", boardList);
+        // console.log("boardList: ", boardList);
 
         await this.setState({
           ...this.state,

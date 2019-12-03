@@ -67,6 +67,9 @@ export default class Loading extends Component<any, any> {
 
   async _routeToPages() {
     let token = await this._getUserToken();
+    if (token === null) {
+      this.props.navigation.navigate("SignPart");
+    }
     let verify = await this._verifyToken(token);
     // console.log("token verify: ", verify);
     if (verify === false) {

@@ -30,7 +30,7 @@ class RoomInfo extends Component<Props, State> {
     let token = await AsyncStorage.getItem("userToken");
     let postid = this.props.navigation.state.params.Post_id;
 
-    await GetRoomlistOrGetRoominfo(`${token}`, postid)
+    let datachunk = await GetRoomlistOrGetRoominfo(`${token}`, postid)
       .then(res => {
         return res.json();
       })
@@ -127,7 +127,7 @@ const Styles = StyleSheet.create({
     alignItems: "center"
   },
   weatherBox: {
-    backgroundColor: "#e5ffe5",
+    backgroundColor: "#f6f6f6",
     borderRadius: 15,
     width: "95%",
     marginTop: 8,
@@ -141,7 +141,7 @@ const Styles = StyleSheet.create({
     height: "100%",
     marginLeft: 8,
     marginRight: 8,
-    backgroundColor: "#e5ffe5",
+    backgroundColor: "#f6f6f6",
     borderRadius: 15,
     padding: 10,
     marginBottom: 8

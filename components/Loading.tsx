@@ -72,10 +72,10 @@ export default class Loading extends Component<any, any> {
     }
     let verify = await this._verifyToken(token);
     // console.log("token verify: ", verify);
-    if (verify === false) {
-      this.props.navigation.navigate("SignPart");
-    } else {
+    if (verify === true) {
       this.props.navigation.navigate("MainPart");
+    } else {
+      this.props.navigation.navigate("SignPart");
     }
   }
 

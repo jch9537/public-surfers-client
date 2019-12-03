@@ -30,7 +30,7 @@ class RoomInfo extends Component<Props, State> {
     let token = await AsyncStorage.getItem("userToken");
     let postid = this.props.navigation.state.params.Post_id;
 
-    await GetRoomlistOrGetRoominfo(`${token}`, postid)
+    let datachunk = await GetRoomlistOrGetRoominfo(`${token}`, postid)
       .then(res => {
         console.log("Room res", res);
         return res.json();

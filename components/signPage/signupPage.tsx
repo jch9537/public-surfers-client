@@ -83,30 +83,36 @@ export default class sigininpage extends Component<{}, State> {
           placeholder=" Name"
           onChangeText={(text: string) => this.ChangeState(text, "name")}
           leftIcon={
-            <Icon name="user" type="antdesign" size={18} color="black" />
+            <Icon name="user" type="antdesign" size={18} color="gray" />
           }
+          leftIconContainerStyle={{ marginRight: 15 }}
+          inputContainerStyle={{ marginBottom: 5 }}
         />
         <Input
           placeholder=" Email"
           onChangeText={(text: string) => this.ChangeState(text, "email")}
           leftIcon={
-            <Icon name="idcard" type="antdesign" size={18} color="black" />
+            <Icon name="idcard" type="antdesign" size={18} color="gray" />
           }
+          leftIconContainerStyle={{ marginRight: 15 }}
+          inputContainerStyle={{ marginBottom: 5 }}
         />
         <Input
           placeholder=" Password"
           secureTextEntry={true}
           onChangeText={(text: string) => this.ChangeState(text, "password")}
-          leftIcon={
-            <Icon name="key" type="antdesign" size={18} color="black" />
-          }
+          leftIcon={<Icon name="key" type="antdesign" size={18} color="gray" />}
+          leftIconContainerStyle={{ marginRight: 15 }}
+          inputContainerStyle={{ marginBottom: 5 }}
         />
         <Input
           placeholder=" Phone"
           onChangeText={(text: string) => this.ChangeState(text, "phone")}
           leftIcon={
-            <Icon name="phone" type="antdesign" size={18} color="black" />
+            <Icon name="phone" type="antdesign" size={18} color="gray" />
           }
+          leftIconContainerStyle={{ marginRight: 15 }}
+          inputContainerStyle={{ marginBottom: 5 }}
         />
         <TouchableOpacity onPress={this.fetchSignUp} style={Styles.button}>
           <Text style={{ fontFamily: "gaegu_regular", fontSize: 23 }}>

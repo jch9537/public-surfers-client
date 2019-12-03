@@ -25,7 +25,7 @@ interface Posts {
   date: string;
   participate: boolean;
   spot_name: string;
-  text: string
+  text: string;
 }
 
 interface State {
@@ -37,6 +37,7 @@ interface State {
   pickLocal: string;
 }
 export default class Board extends Component<Props, State> {
+  public focusListener: any;
   constructor(props: Props) {
     super(props);
     this.changeLocal = this.changeLocal.bind(this);
@@ -52,10 +53,29 @@ export default class Board extends Component<Props, State> {
   };
   async componentDidMount() {
     let token = await AsyncStorage.getItem("userToken");
-    console.log("board token", token)
-    return GetRoomlistOrGetRoominfo(`${token}`)
+
+    //화면 띄웠을때 항상 방목록 다시 불러오기.
+    this.focusListener = await this.props.navigation.addListener(
+      "didFocus",
+      async () => {
+        let dataChunk: any = await GetRoomlistOrGetRoominfo(`${token}`);
+        let boardList = await dataChunk.json();
+
+        console.log("boardList: ", boardList);
+
+        await this.setState({
+          ...this.state,
+          board: boardList.reverse(),
+          filteredBoard: boardList.reverse()
+        });
+      }
+    );
+
+    //방목록 불러오기.
+    // console.log("board token", token)
+    await GetRoomlistOrGetRoominfo(`${token}`)
       .then(res => {
-        console.log("Res", res)
+        // console.log("Res", res)
         if (res["status"] === 200) {
           return res.json();
         } else {
@@ -63,14 +83,14 @@ export default class Board extends Component<Props, State> {
         }
       })
       .then(res => {
-        console.log("res", res)
+        // console.log("res", res)
         let data = this.state.board.concat(res);
-        console.log("DAta", data)
+        // console.log("DAta", data)
         return this.setState({
-          board: data,
-          filteredBoard: data
-        })
-      })
+          board: data.reverse(),
+          filteredBoard: data.reverse()
+        });
+      });
   }
   changeLocal = (value: string): any => {
     if (value === "모든지역") {
@@ -109,12 +129,12 @@ export default class Board extends Component<Props, State> {
   };
 
   render() {
-    console.log("this.state", this.state.board)
+    // console.log("this.state", this.state.board);
     return (
       <View>
         <Choice list={this.state.ListLocal} func={this.changeLocal} />
         <ScrollView horizontal={false} showsHorizontalScrollIndicator={false}>
-          {this.state.filteredBoard.map((item: any) => (
+          {this.state.filteredBoard.reverse().map((item: any) => (
             <BoardList
               key={item["id"]}
               hostName={item["host_name"]}
@@ -123,6 +143,7 @@ export default class Board extends Component<Props, State> {
               navigation={this.props.navigation}
               PostId={item["id"]}
               participate={item["participate"]}
+              spotName={item.spot_name}
             />
           ))}
           <Text style={{ paddingBottom: 30 }}> </Text>

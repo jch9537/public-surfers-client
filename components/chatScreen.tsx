@@ -106,7 +106,7 @@ export class ChatScreen extends React.Component<
     const newmessages = messages;
     newmessages[0].post_id = post_id;
     let push_token: any = await AsyncStorage.getItem("pushToken");
-    console.log("push_token: ", push_token);
+    // console.log("push_token: ", push_token);
     // authorization:push_token
 
     // console.log("newmessages: ", newmessages);
@@ -197,7 +197,7 @@ export class ChatScreen extends React.Component<
 
   render() {
     return Platform.OS === "android" ? (
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" enabled>
+      <View style={{ flex: 1 }}>
         <AdBanner />
         <GiftedChat
           messages={this.state.messages}
@@ -214,9 +214,13 @@ export class ChatScreen extends React.Component<
           }}
         />
         {Platform.OS === "android" && (
-          <KeyboardAvoidingView behavior="padding" enabled />
+          <KeyboardAvoidingView
+            behavior="padding"
+            keyboardVerticalOffset={100}
+            enabled
+          />
         )}
-      </KeyboardAvoidingView>
+      </View>
     ) : null;
   }
 }
@@ -264,7 +268,7 @@ const Styles = StyleSheet.create({
     flexDirection: "row"
   },
   outGoingText: {
-    backgroundColor: "#0BB5FF",
+    backgroundColor: "#88D8B0",
     padding: 8,
     borderRadius: 15,
     alignSelf: "flex-end"

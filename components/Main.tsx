@@ -33,7 +33,6 @@ export default class Main extends Component<Props, State> {
 
   async componentDidMount() {
     await Font.loadAsync({
-      NanumPenScript: require("../assets/NanumPenScript-Regular.ttf"),
       gaegu_regular: require("../assets/fonts/Gaegu-Regular.ttf")
     });
     this.setState({
@@ -50,7 +49,7 @@ export default class Main extends Component<Props, State> {
   render() {
     return this.state.fontend ? (
       <ImageBackground
-        source={require("../assets/images/main_background.jpg")}
+        source={require("../assets/images/background.png")}
         style={Styles.wrap}
       >
         <View style={{ marginBottom: "35%" }}>
@@ -83,7 +82,7 @@ export default class Main extends Component<Props, State> {
 }
 const Styles = StyleSheet.create<Style>({
   button: {
-    backgroundColor: "#e5ffe5",
+    backgroundColor: "#f6f6f6",
     alignItems: "center",
     justifyContent: "center",
     height: 50,

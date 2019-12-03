@@ -87,7 +87,7 @@ const Styles = StyleSheet.create({
     padding: 18,
     borderBottomWidth: 1,
     borderBottomColor: "#CCCDC6",
-    backgroundColor: "#e5ffe5"
+    backgroundColor: "#f6f6f6"
   },
   profileImage: {
     width: 35,

@@ -152,7 +152,7 @@ const Styles = StyleSheet.create({
   },
   head: {
     height: 100,
-    backgroundColor: "#88D8B0",
+    backgroundColor: "#d3d3d3",
     justifyContent: "center",
     alignContent: "center",
     paddingTop: 60,

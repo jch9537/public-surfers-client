@@ -13,3 +13,5 @@ npm install --save react-native-firebase
 expo install expo-ads-admob
 
 npm install --save expo-server-sdk
+
+expo install expo-permissions

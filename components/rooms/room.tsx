@@ -11,7 +11,7 @@ import { RoomData, roominfo } from "../src/redux/actions";
 import { Text } from "react-native-elements";
 import Weather from "./weather";
 import { connect } from "react-redux";
-import { GetRoomlistOrGetRoominfo, identifyUser, DeleteRoom } from "../fetch";
+import { GetRoomlistOrGetRoominfo, identifyUser, DeleteRoom, EditRoom } from "../fetch";
 import AdBanner from "../AdBanner";
 import Edit from "../rooms/edit";
 
@@ -23,11 +23,13 @@ interface Props {
 interface State {
     amIHost: boolean;
     edit: boolean;
+    editText: string
 }
 class RoomInfo extends Component<Props, State> {
     state: State = {
         amIHost: false,
-        edit: false
+        edit: false,
+        editText: ""
     };
 
     async componentDidMount() {
@@ -40,6 +42,9 @@ class RoomInfo extends Component<Props, State> {
             })
             .then(res => {
                 this.props.addRoom(res);
+                this.setState({
+                    editText: res["text"]
+                })
             });
 
         let userInfo = await identifyUser(token);
@@ -56,6 +61,33 @@ class RoomInfo extends Component<Props, State> {
             edit: !this.state.edit
         })
     };
+
+    changeContents: any = (text: string): void => {
+        this.setState({
+            editText: text
+        })
+    }
+    PressEidit = () => {
+        let body = {
+            post_id: this.props.Room.id,
+            text: this.state.editText
+        }
+        this.editButtonPress();
+        // return EditRoom(body)
+        //     .then(res => {
+        //         if (res.status === 200) {
+        //             return res.json()
+        //         }
+        //         else {
+        //             Alert.alert("다시 시도해주세요")
+        //         }
+        //     })
+        //     .then(resData => {
+        //         if (resData) {
+        //             return this.editButtonPress();
+        //         }
+        //     })
+    }
     deleteButtonPress = async () => {
         let token = await AsyncStorage.getItem("userToken");
         return Alert.alert(
@@ -78,6 +110,7 @@ class RoomInfo extends Component<Props, State> {
         )
     };
     render() {
+        console.log("this.state", this.state.editText)
         return (
             <View>
                 <View style={Styles.mainWrap}>
@@ -90,26 +123,35 @@ class RoomInfo extends Component<Props, State> {
                             <Weather />
                         </View>
                         {this.state.edit ?
-                            <Edit editState={this.editButtonPress} contents={this.props.Room.text} postId={this.props.Room.id} />
+                            <Edit
+                                editContent={this.changeContents}
+                                contents={this.state.editText} />
                             : <ScrollView style={Styles.textBox}>
                                 <Text>{this.props.Room.text}</Text>
                             </ScrollView>}
-                        {this.state.amIHost ? (
-                            <View style={Styles.buttonBox}>
+                        {this.state.amIHost ?
+                            this.state.edit ?
                                 <TouchableOpacity
-                                    style={[Styles.button, { backgroundColor: "#ffffb1" }]}
-                                    onPress={this.editButtonPress}
-                                >
-                                    <Text> EDIT </Text>
+                                    style={Styles.button}
+                                    onPress={this.PressEidit}>
+                                    <Text> 수정 완료!</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={[Styles.button, { backgroundColor: "#ffb2b2" }]}
-                                    onPress={this.deleteButtonPress}
-                                >
-                                    <Text> DELETE </Text>
-                                </TouchableOpacity>
-                            </View>
-                        ) : null}
+                                :
+                                <View style={Styles.buttonBox}>
+                                    <TouchableOpacity
+                                        style={[Styles.button, { backgroundColor: "#ffffb1" }]}
+                                        onPress={this.editButtonPress}
+                                    >
+                                        <Text> EDIT </Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={[Styles.button, { backgroundColor: "#ffb2b2" }]}
+                                        onPress={this.deleteButtonPress}
+                                    >
+                                        <Text> DELETE </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            : null}
                     </View>
                 </View>
                 <View style={{ bottom: 0, position: "absolute" }}>
@@ -187,3 +229,4 @@ const Styles = StyleSheet.create({
     }
 });
 export default connect(mapStatesProps, dispatchState)(RoomInfo);
+

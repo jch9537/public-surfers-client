@@ -94,10 +94,7 @@ class SideBar extends Component<Props, State> {
                 <View style={Styles.head}>
                     <View style={{ justifyContent: "center", alignItems: "center" }}>
                         <Image
-                            source={{
-                                uri:
-                                    "https://www.clipartwiki.com/clipimg/detail/31-312536_surf-icon-illustration.png"
-                            }}
+                            source={{ uri: "https://www.clipartwiki.com/clipimg/detail/31-312536_surf-icon-illustration.png" }}
                             style={Styles.host_image}
                         />
                         <Text style={Styles.host_name}>{this.props.Room.host_name}</Text>
@@ -112,7 +109,6 @@ class SideBar extends Component<Props, State> {
                         </Text>
                     ))}
                 </ScrollView>
-
                 {/* 하단버튼 */}
                 {this.state.amIParticipant ? (
                     <View style={Styles.buttonWrap}>
@@ -145,6 +141,7 @@ class SideBar extends Component<Props, State> {
 }
 
 const Styles = StyleSheet.create({
+
     wrap: {
         flex: 1,
         justifyContent: "center",
@@ -152,7 +149,7 @@ const Styles = StyleSheet.create({
     },
     head: {
         height: 100,
-        backgroundColor: "#88D8B0",
+        backgroundColor: "#d3d3d3",
         justifyContent: "center",
         alignContent: "center",
         paddingTop: 60,

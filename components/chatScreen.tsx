@@ -69,15 +69,15 @@ export class ChatScreen extends React.Component<
       post_id: this.props.Room.id
     });
 
+    //옛날 채팅 로딩
+    if (!this.state.chatLoaded) {
+      await this._loadOldMessage();
+      this.state.chatLoaded = true;
+    }
+
     //소켓 연결
     const socket = io.connect("http://15.164.218.247:3000/chatroom");
     const post_id = this.state.post_id;
-
-    //옛날 채팅 로딩
-    if (!this.state.chatLoaded) {
-      this._loadOldMessage();
-      this.state.chatLoaded = true;
-    }
 
     //채팅방 참가
     socket.emit("joinRoom", "" + post_id);
@@ -268,8 +268,9 @@ const Styles = StyleSheet.create({
     flexDirection: "row"
   },
   outGoingText: {
-    backgroundColor: "#88D8B0",
-    padding: 8,
+    backgroundColor: "#82CAFA",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
     borderRadius: 15,
     alignSelf: "flex-end"
   },

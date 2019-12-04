@@ -44,7 +44,6 @@ class RoomInfo extends Component<Props, State> {
                     editText: res["text"]
                 })
             });
-
         let userInfo = await identifyUser(token);
 
         if (this.props.Room.host_id === userInfo.id) {

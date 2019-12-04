@@ -137,7 +137,6 @@ class SideBar extends Component<Props, State> {
 }
 
 const Styles = StyleSheet.create({
-
     wrap: {
         flex: 1,
         justifyContent: "center",

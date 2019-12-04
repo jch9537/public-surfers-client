@@ -3,13 +3,14 @@ interface settingInfo {
   password: string;
   newPassword: string;
 }
-interface joinChatbody {
+interface body {
   post_id: number;
+  text?: string
 }
 //login 하는 fetch
 let server = "http://15.164.218.247:3000";
 
-export const userSignin = function(body: any) {
+export const userSignin = function (body: any) {
   let server = "http://15.164.218.247:3000/user/signin";
   return fetch(server, {
     method: "POST",
@@ -21,7 +22,7 @@ export const userSignin = function(body: any) {
   });
 };
 //회원가입하는 fetch
-export const userSignup = function(body: any) {
+export const userSignup = function (body: any) {
   let server = "http://15.164.218.247:3000/user/signup";
   return fetch(server, {
     method: "POST",
@@ -33,7 +34,7 @@ export const userSignup = function(body: any) {
   });
 };
 //user 정보 수정하는 fetch
-export const userSetting = function(
+export const userSetting = function (
   method: string,
   token: string,
   body?: settingInfo | null
@@ -61,7 +62,7 @@ export const userSetting = function(
   }
 };
 //스팟이나 지역 정보 가져오는 fetch
-export const GetLocationOrSpot = function(takeInfo: string, token: string) {
+export const GetLocationOrSpot = function (takeInfo: string, token: string) {
   let server;
   if (takeInfo === "location") {
     server = "http://15.164.218.247:3000/location";
@@ -87,7 +88,7 @@ export const GetLocationOrSpot = function(takeInfo: string, token: string) {
 };
 
 //방 만드는 fetch
-export const makeRoom = function(body: any, token: string) {
+export const makeRoom = function (body: any, token: string) {
   let server = "http://15.164.218.247:3000/posts";
   return fetch(server, {
     method: "POST",
@@ -101,7 +102,7 @@ export const makeRoom = function(body: any, token: string) {
 };
 
 //방 이름들 혹은 방 정보 가져오는 fetch
-export const GetRoomlistOrGetRoominfo = async function(
+export const GetRoomlistOrGetRoominfo = async function (
   token: string,
   post_Id?: number | null
 ) {
@@ -135,14 +136,13 @@ export const GetMyRooms = async (token: any) => {
 };
 
 //sideBar에서 chat쪽 참여 하는 fetch 부분
-export const JoinChatfromSideBar = function(
+export const JoinChatfromSideBar = function (
   token: string,
-  post_id?: number | null,
-  body?: null | joinChatbody
+  post_id?: number,
+  body?: null | body
 ) {
-  let server = "http://15.164.218.247:3000/post";
   if (body) {
-    return fetch(server, {
+    return fetch(server + "/post", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -152,8 +152,7 @@ export const JoinChatfromSideBar = function(
       credentials: "include"
     });
   } else {
-    server += `?post_id=${post_id}`;
-    return fetch(server, {
+    return fetch(server + `/post_id=${post_id}`, {
       method: "DELETE",
       headers: {
         "Content-type": "application/json",
@@ -163,7 +162,7 @@ export const JoinChatfromSideBar = function(
     });
   }
 };
-export const weatherAPI = function(url: string, method: string) {
+export const weatherAPI = function (url: string, method: string) {
   return fetch(url, {
     method: method,
     headers: {
@@ -193,3 +192,24 @@ export const participateRoom = async (token: any, post_id: number) => {
     body: JSON.stringify({ post_id: post_id })
   });
 };
+export const DeleteRoom = async (post_id: number, token: string) => {
+  return await fetch(server + `/delete?post_id=${post_id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token
+    },
+    credentials: "include"
+  });
+}
+export const EditRoom = function (body: body, token: string) {
+  return fetch(server + `/edit`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token
+    },
+    body: JSON.stringify(body),
+    credentials: "include"
+  });
+}

@@ -45,7 +45,7 @@ interface NewChatScreenStates {
 export class ChatScreen extends React.Component<
   NewChatScreenProps,
   NewChatScreenStates
-> {
+  > {
   public messages: any;
   constructor(props: NewChatScreenProps) {
     super(props);
@@ -68,7 +68,6 @@ export class ChatScreen extends React.Component<
       ...this.state,
       post_id: this.props.Room.id
     });
-
     //소켓 연결
     const socket = io.connect("http://15.164.218.247:3000/chatroom");
     const post_id = this.state.post_id;
@@ -177,27 +176,27 @@ export class ChatScreen extends React.Component<
         </View>
       </View>
     ) : (
-      <View style={Styles.outGoingWarp}>
-        <View style={Styles.outGoingText}>
-          <Text
-            style={{
-              fontSize: 15,
-              fontWeight: "600",
-              marginBottom: 3
+        <View style={Styles.outGoingWarp}>
+          <View style={Styles.outGoingText}>
+            <Text
+              style={{
+                fontSize: 15,
+                fontWeight: "600",
+                marginBottom: 3
+              }}
+            >
+              {message.user.name}
+            </Text>
+            <Text style={{}}>{message.text}</Text>
+          </View>
+          <Image
+            source={{
+              uri: message.user.avatar
             }}
-          >
-            {message.user.name}
-          </Text>
-          <Text style={{}}>{message.text}</Text>
+            style={Styles.outGoingImg}
+          />
         </View>
-        <Image
-          source={{
-            uri: message.user.avatar
-          }}
-          style={Styles.outGoingImg}
-        />
-      </View>
-    );
+      );
   }
 
   async _getMyInfo() {

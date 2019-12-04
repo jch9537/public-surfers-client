@@ -1,7 +1,6 @@
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import { AsyncStorage } from "react-native";
-
 const PUSH_ENDPOINT = "http://15.164.218.247:3000/chat/push_token";
 
 export default async function registerForPushNotificationsAsync(
@@ -12,19 +11,17 @@ export default async function registerForPushNotificationsAsync(
     Permissions.NOTIFICATIONS
   );
   let finalStatus = existingStatus;
-
   if (existingStatus !== "granted") {
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
     finalStatus = status;
   }
-
   if (finalStatus !== "granted") {
     return;
   }
 
   let token = await Notifications.getExpoPushTokenAsync();
   await AsyncStorage.setItem("pushToken", token);
-
+  console.log("token", token);
   let body = {
     push_token: token,
     email: email

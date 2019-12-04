@@ -202,11 +202,12 @@ export const DeleteRoom = async (post_id: number, token: string) => {
     credentials: "include"
   });
 }
-export const EditRoom = function (body: body) {
+export const EditRoom = function (body: body, token: string) {
   return fetch(server + `/edit`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: token
     },
     body: JSON.stringify(body),
     credentials: "include"

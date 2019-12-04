@@ -9,7 +9,6 @@ interface State {
     text: string
 }
 export default class Edit extends Component<Props, State> {
-
     render() {
         return (
             <View style={{ alignItems: "center" }}>

@@ -14,7 +14,6 @@ import { connect } from "react-redux";
 import { GetRoomlistOrGetRoominfo, identifyUser, DeleteRoom, EditRoom } from "../fetch";
 import AdBanner from "../AdBanner";
 import Edit from "../rooms/edit";
-
 interface Props {
     Room: RoomData;
     navigation: any;
@@ -31,11 +30,10 @@ class RoomInfo extends Component<Props, State> {
         edit: false,
         editText: ""
     };
-
     async componentDidMount() {
         let token = await AsyncStorage.getItem("userToken");
-        let postid = this.props.navigation.state.params.Post_id;
-
+        let postid = this.props.navigation.state.params.post_id;
+        console.log("postid", postid, typeof postid)
         await GetRoomlistOrGetRoominfo(`${token}`, postid)
             .then(res => {
                 return res.json();
@@ -67,26 +65,28 @@ class RoomInfo extends Component<Props, State> {
             editText: text
         })
     }
-    PressEidit = () => {
+    PressEidit = async () => {
         let body = {
             post_id: this.props.Room.id,
             text: this.state.editText
         }
-        this.editButtonPress();
-        // return EditRoom(body)
-        //     .then(res => {
-        //         if (res.status === 200) {
-        //             return res.json()
-        //         }
-        //         else {
-        //             Alert.alert("다시 시도해주세요")
-        //         }
-        //     })
-        //     .then(resData => {
-        //         if (resData) {
-        //             return this.editButtonPress();
-        //         }
-        //     })
+        let token = await AsyncStorage.getItem("userToken");
+        return EditRoom(body, `${token}`)
+            .then(res => {
+                if (res.status === 200) {
+                    return res.json()
+                }
+                else {
+                    Alert.alert("다시 시도해주세요")
+                }
+            })
+            .then(resData => {
+                if (resData) {
+                    console.log("resData", resData)
+                    this.props.addRoom(resData);
+                    return this.editButtonPress();
+                }
+            })
     }
     deleteButtonPress = async () => {
         let token = await AsyncStorage.getItem("userToken");
@@ -228,5 +228,5 @@ const Styles = StyleSheet.create({
         borderRadius: 5
     }
 });
-export default connect(mapStatesProps, dispatchState)(RoomInfo);
 
+export default connect(mapStatesProps, dispatchState)(RoomInfo);

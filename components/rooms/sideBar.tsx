@@ -36,11 +36,9 @@ class SideBar extends Component<Props, State> {
 
     async componentDidMount() {
         let token = await AsyncStorage.getItem("userToken");
-
-        //참여여부 확인
         let userData = await identifyUser(token);
         let participants = this.props.Room.participants;
-
+        console.log("??", participants)
         if (participants.includes(userData.name)) {
             this.setState({
                 ...this.state,
@@ -88,7 +86,7 @@ class SideBar extends Component<Props, State> {
     };
 
     render() {
-        console.log("sidebarState: ", this.state);
+        // console.log("sidebarState: ", this.props.Room);
         return (
             <View style={Styles.wrap}>
                 <View style={Styles.head}>
@@ -100,7 +98,6 @@ class SideBar extends Component<Props, State> {
                         <Text style={Styles.host_name}>{this.props.Room.host_name}</Text>
                     </View>
                 </View>
-
                 <Text style={Styles.title}>참여자 목록</Text>
                 <ScrollView>
                     {this.props.Room.participants.map((data, index) => (
@@ -109,7 +106,6 @@ class SideBar extends Component<Props, State> {
                         </Text>
                     ))}
                 </ScrollView>
-                {/* 하단버튼 */}
                 {this.state.amIParticipant ? (
                     <View style={Styles.buttonWrap}>
                         <TouchableOpacity style={Styles.button} onPress={this.joinChat}>

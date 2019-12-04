@@ -52,26 +52,23 @@ export default class sigininpage extends Component<Props, State> {
   }
 
   SignIn = async () => {
-    console.log("-----------------------");
     let body = {
       email: this.state.email,
       password: this.state.password
     };
 
     //푸쉬토큰 DB에 등록.
-    // await registerForPushNotificationsAsync(
-    //   "http://15.164.218.247:3000/chat/push_token",
-    //   this.state.email
-    // );
+    registerForPushNotificationsAsync(
+      "http://15.164.218.247:3000/chat/push_token",
+      this.state.email
+    );
+
     return userSignin(body)
       .then(res => {
-        console.log("Res", res);
         return res.json();
       })
       .then(res => {
-        console.log("Res", res);
         AsyncStorage.setItem("userToken", res.token);
-        console.log("sign in: ", res);
         return res.message;
       })
       .then(res => {
@@ -145,7 +142,7 @@ const Styles = StyleSheet.create({
   button: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#e5ffe5",
+    backgroundColor: "#f6f6f6",
     height: 40,
     width: 150,
     marginBottom: 10,

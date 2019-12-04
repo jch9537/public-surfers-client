@@ -45,7 +45,7 @@ interface NewChatScreenStates {
 export class ChatScreen extends React.Component<
   NewChatScreenProps,
   NewChatScreenStates
-> {
+  > {
   public messages: any;
   constructor(props: NewChatScreenProps) {
     super(props);
@@ -68,16 +68,9 @@ export class ChatScreen extends React.Component<
       ...this.state,
       post_id: this.props.Room.id
     });
-
     //소켓 연결
     const socket = io.connect("http://15.164.218.247:3000/chatroom");
     const post_id = this.state.post_id;
-
-    //옛날 채팅 로딩
-    if (!this.state.chatLoaded) {
-      this._loadOldMessage();
-      this.state.chatLoaded = true;
-    }
 
     //채팅방 참가
     socket.emit("joinRoom", "" + post_id);
@@ -97,6 +90,20 @@ export class ChatScreen extends React.Component<
       user_id: myInfo.id,
       user_name: myInfo.name,
       user_image: myInfo.img_url
+    });
+
+    let oldMessages;
+    //옛날 채팅 로딩
+    if (!this.state.chatLoaded) {
+      oldMessages = await this._loadOldMessage();
+      this.state.chatLoaded = true;
+    }
+
+    let sortedMessages = await this._sortChats(oldMessages);
+
+    await this.setState({
+      ...this.state,
+      messages: sortedMessages
     });
   }
 
@@ -127,17 +134,28 @@ export class ChatScreen extends React.Component<
     });
   }
 
-  _loadOldMessage() {
+  async _loadOldMessage() {
     const post_id = this.state.post_id;
-    fetch("http://15.164.218.247:3000/chat?post_id=" + post_id)
-      .then(res => res.json())
-      .then(datas => {
-        this.setState({
-          ...this.state,
-          messages: datas.reverse()
-        });
-        // console.log(datas);
-      });
+    let dataChunk = await fetch(
+      "http://15.164.218.247:3000/chat?post_id=" + post_id
+    );
+    let parsedData = dataChunk.json();
+
+    await console.log("messages: ", parsedData);
+
+    return parsedData;
+  }
+
+  async _sortChats(chatArray: Array<any>) {
+    return chatArray.sort((a, b) => {
+      if (a._id > b._id) {
+        return -1;
+      }
+      if (a._id < b._id) {
+        return 1;
+      }
+      return 0;
+    });
   }
 
   _renderMessager(message: Message) {
@@ -158,27 +176,27 @@ export class ChatScreen extends React.Component<
         </View>
       </View>
     ) : (
-      <View style={Styles.outGoingWarp}>
-        <View style={Styles.outGoingText}>
-          <Text
-            style={{
-              fontSize: 15,
-              fontWeight: "600",
-              marginBottom: 3
+        <View style={Styles.outGoingWarp}>
+          <View style={Styles.outGoingText}>
+            <Text
+              style={{
+                fontSize: 15,
+                fontWeight: "600",
+                marginBottom: 3
+              }}
+            >
+              {message.user.name}
+            </Text>
+            <Text style={{}}>{message.text}</Text>
+          </View>
+          <Image
+            source={{
+              uri: message.user.avatar
             }}
-          >
-            {message.user.name}
-          </Text>
-          <Text style={{}}>{message.text}</Text>
+            style={Styles.outGoingImg}
+          />
         </View>
-        <Image
-          source={{
-            uri: message.user.avatar
-          }}
-          style={Styles.outGoingImg}
-        />
-      </View>
-    );
+      );
   }
 
   async _getMyInfo() {
@@ -268,8 +286,9 @@ const Styles = StyleSheet.create({
     flexDirection: "row"
   },
   outGoingText: {
-    backgroundColor: "#88D8B0",
-    padding: 8,
+    backgroundColor: "#82CAFA",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
     borderRadius: 15,
     alignSelf: "flex-end"
   },

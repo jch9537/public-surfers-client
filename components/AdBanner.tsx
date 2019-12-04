@@ -20,7 +20,7 @@ export default class AdBanner extends React.Component<
       <View style={{ alignItems: "center", justifyContent: "center" }}>
         <AdMobBanner
           bannerSize="fullBanner"
-          adUnitID="ca-app-pub-9828921339355562/9508765107"
+          adUnitID="ca-app-pub-9828921339355562/7945708906"
           testDeviceID="EMULATOR"
           servePersonalizedAds={true}
         />

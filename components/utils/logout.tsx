@@ -3,18 +3,18 @@ import { AsyncStorage } from "react-native";
 import { Alert, View, Image, Text, StyleSheet } from "react-native";
 
 const logoutAlert = (nav: any): void => {
-  return Alert.alert("로그아웃 하기", "", [
+  return Alert.alert("", "로그아웃 하시겠습니까?", [
     {
-      text: "나가기",
+      text: "취소",
+      onPress: () => console.log("Cancel Pressed"),
+      style: "cancel"
+    },
+    {
+      text: "확인",
       onPress: () => {
         AsyncStorage.removeItem("userToken");
         nav.navigate("SignPart");
       }
-    },
-    {
-      text: "Cancel",
-      onPress: () => console.log("Cancel Pressed"),
-      style: "cancel"
     }
   ]);
 };

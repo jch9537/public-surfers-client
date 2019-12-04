@@ -11,6 +11,8 @@ import { Input, Icon } from "react-native-elements";
 import * as Font from "expo-font";
 import { userSignup } from "../fetch";
 
+interface Props {}
+
 export interface State {
   name: string;
   email: string;
@@ -19,7 +21,11 @@ export interface State {
   error: boolean;
   fontLoaded: boolean;
 }
-export default class sigininpage extends Component<{}, State> {
+export default class SignUp extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+  }
+
   state = {
     name: "",
     email: "",
@@ -66,7 +72,6 @@ export default class sigininpage extends Component<{}, State> {
       userSignup(body)
         .then(res => res.json())
         .then(resData => {
-          console.log(resData);
           if (resData.message === "회원가입 성공") {
             Alert.alert("성공", "회원가입에 성공하였습니다.");
           } else {
@@ -133,7 +138,7 @@ const Styles = StyleSheet.create({
   button: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#e5ffe5",
+    backgroundColor: "#f6f6f6",
     height: 40,
     width: 150,
     marginBottom: 10,

@@ -11,15 +11,15 @@ import {
   KeyboardAvoidingView,
   AsyncStorage,
   TouchableOpacity,
-  ImageBackground
+  ImageBackground,
+  Platform
 } from "react-native";
 import { Header } from "react-native-elements";
 import * as Font from "expo-font";
 
 import Logout from "../utils/logout";
 import UserInfo from "./userInfo";
-import { userSetting } from "../fetch";
-import { string } from "prop-types";
+import { userSetting, settingInfo } from "../fetch";
 
 export interface SettingProps {}
 export interface SettingState {
@@ -27,6 +27,7 @@ export interface SettingState {
   password?: string | null;
   newPassword?: string | null;
   photo?: string | null;
+  fontend: boolean;
 }
 
 class Setting extends Component<SettingProps, SettingState> {
@@ -71,17 +72,19 @@ class Setting extends Component<SettingProps, SettingState> {
 
   changeUserInfo = async () => {
     let token = await AsyncStorage.getItem("userToken");
-    let body = {
+    let body: settingInfo = {
       name: this.state.name,
       currPassword: this.state.password,
-      newPassword: this.state.newPassword,
-      photo: this.state.photo
+      newPassword: this.state.newPassword
+      // photo: this.state.photo 이미지는 따로보내기
     };
-    if (!(body.name || body.currPassword || body.newPassword || body.photo)) {
+    if (!(body.name || body.currPassword || body.newPassword)) {
       Alert.alert("수정한 내용이 없습니다.");
     } else {
       console.log(body);
-      // userSetting("PUT", `${token}`, body);
+      userSetting("PUT", `${token}`, body)
+        .then((res: any) => res.json())
+        .then((json: any) => console.log(json));
     }
   };
   async componentDidMount() {
@@ -113,10 +116,15 @@ class Setting extends Component<SettingProps, SettingState> {
             containerStyle={{
               backgroundColor: "white",
               justifyContent: "space-around"
-              // shadowColor: "black",
-              // shadowOffset: { width: 100, height: 100 },
-              // shadowOpacity: 1
             }}
+            // rightComponent={{
+            //   text: "logout",
+            //   style: {
+            //     color: "black",
+            //     fontSize: 12,
+            //     fontWeight: "bold"
+            //   }
+            // }}
           />
           <View style={styles.infoContainer}>
             <UserInfo
@@ -141,6 +149,13 @@ class Setting extends Component<SettingProps, SettingState> {
               </Text>
             </TouchableOpacity>
           </View>
+          {Platform.OS === "android" && (
+            <KeyboardAvoidingView
+              behavior="padding"
+              keyboardVerticalOffset={100}
+              enabled
+            />
+          )}
         </ImageBackground>
       </View>
     );

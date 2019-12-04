@@ -1,7 +1,7 @@
-interface settingInfo {
-  name: string;
-  password: string;
-  newPassword: string;
+export interface settingInfo {
+  name: string | null;
+  currPassword: string | null;
+  newPassword: string | null;
 }
 interface body {
   post_id: number;
@@ -110,7 +110,6 @@ export const GetRoomlistOrGetRoominfo = async function (
   // console.log(post_Id);
   if (post_Id) {
     server = `http://15.164.218.247:3000/post?post_id=${post_Id}`;
-
   }
   // console.log("serverurl", server);
   return fetch(server, {

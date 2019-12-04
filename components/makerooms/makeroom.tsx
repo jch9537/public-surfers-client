@@ -1,12 +1,5 @@
 import * as React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ViewStyle,
-  Alert,
-  SafeAreaView
-} from "react-native";
+import { View, Text, StyleSheet, ViewStyle, SafeAreaView } from "react-native";
 import Logout from "../utils/logout";
 import Inputroom from "./inputroom";
 

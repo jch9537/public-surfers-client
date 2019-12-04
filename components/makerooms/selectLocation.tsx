@@ -21,19 +21,11 @@ class SelectLocation extends React.Component<
     this.setState({ location: local });
   };
 
-  // async componentDidMount() {
-  //   await Font.loadAsync({
-  //     gaegu_regular: require("../../assets/fonts/Gaegu-Regular.ttf")
-  //   });
-  //   this.setState({ fontend: true });
-  //   // this.setState({ photo: require("../../assets/images/surfer.png") });
-  // }
   render() {
     // console.log("셀렉트로케이션 프롭", this.props);
     return (
       <View>
         <Picker
-          // style={styles.picker}
           selectedValue={this.state.location}
           onValueChange={itemValue => {
             this.updateLocation(itemValue);
@@ -41,7 +33,6 @@ class SelectLocation extends React.Component<
           }}
         >
           <Picker.Item key="unselectedItem" label="지역선택"></Picker.Item>
-          {/* this.props를 null로 돌리면 문제생김 */}
           {this.props.location.map((item: any) => (
             <Picker.Item label={item} value={item} key={item} />
           ))}

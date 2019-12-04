@@ -15,13 +15,11 @@ export interface InputTextProps {
 }
 
 export interface InputTextState {
-  text: string;
   fontend: boolean;
 }
 
 class InputText extends React.Component<InputTextProps, InputTextState> {
   state = {
-    text: "",
     fontend: false
   };
 
@@ -37,20 +35,14 @@ class InputText extends React.Component<InputTextProps, InputTextState> {
         source={require("../../assets/images/together1.png")}
         style={styles.textInput}
       >
-        <View
-          style={{
-            flex: 2
-            // backgroundColor: "brown"
-          }}
-        >
-          {/* <Text style={{ fontSize: 20 }}>내용 : </Text> */}
+        <View style={{ flex: 2 }}>
           <TextInput
             style={{ fontFamily: "gaegu_regular", fontSize: 22 }}
             placeholder="내용을 적으세요(모임시간, 모임장소)"
-            onChangeText={text => this.setState({ text: text })}
+            onChangeText={text => this.props.textInput(text)}
           ></TextInput>
         </View>
-        <View
+        {/* <View
           style={{
             flex: 1,
             // backgroundColor: "blue",
@@ -72,7 +64,7 @@ class InputText extends React.Component<InputTextProps, InputTextState> {
               내용넣기
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </ImageBackground>
     );
   }
@@ -84,13 +76,13 @@ const styles = StyleSheet.create({
   textInput: {
     top: 10,
     flex: 1
-  },
-  botton: {
-    alignItems: "center",
-    justifyContent: "center",
-    height: 40,
-    width: 120,
-    // backgroundColor: "powderblue",
-    borderRadius: 10
   }
+  // botton: {
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  //   height: 40,
+  //   width: 120,
+  //   // backgroundColor: "powderblue",
+  //   borderRadius: 10
+  // }
 });

@@ -28,7 +28,7 @@ class RoomInfo extends Component<Props, State> {
 
   async componentDidMount() {
     let token = await AsyncStorage.getItem("userToken");
-    let postid = this.props.navigation.state.params.Post_id;
+    let postid = this.props.navigation.state.params.post_id;
 
     await GetRoomlistOrGetRoominfo(`${token}`, postid)
       .then(res => {

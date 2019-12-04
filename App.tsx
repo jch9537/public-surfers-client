@@ -1,12 +1,10 @@
 import React, { Component } from "react";
-import { Text, View, Image, StyleSheet } from "react-native";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 
 import { createStackNavigator } from "react-navigation-stack";
 import { createDrawerNavigator } from "react-navigation-drawer";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 
-import { Icon } from "react-native-elements";
 import { Feather, FontAwesome, Ionicons } from "react-native-vector-icons";
 import * as firebase from "firebase";
 import { firebaseConfig } from "./firebaseConfig";
@@ -41,19 +39,7 @@ const BoardStack = createStackNavigator({
     screen: Main,
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "Main";
-      let headerRight = (
-        <View style={styles.container}>
-          <Image
-            source={require("./assets/images/logout.png")}
-            resizeMode="contain"
-            style={styles.image}
-          ></Image>
-          <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
-            Logout
-          </Text>
-        </View>
-      );
-
+      let headerRight = Logout(navigation);
       return {
         headerTitle,
         headerRight
@@ -64,20 +50,7 @@ const BoardStack = createStackNavigator({
     screen: Board,
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "Board";
-      let headerRight = (
-
-        <View style={styles.container}>
-          <Image
-            source={require("./assets/images/logout.png")}
-            resizeMode="contain"
-            style={styles.image}
-          ></Image>
-          <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
-            Logout
-          </Text>
-        </View>
-      );
-
+      let headerRight = Logout(navigation);
       return {
         headerTitle,
         headerRight
@@ -88,19 +61,7 @@ const BoardStack = createStackNavigator({
     screen: MyRoomList,
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "MyRooms";
-      let headerRight = (
-        <View style={styles.container}>
-          <Image
-            source={require("./assets/images/logout.png")}
-            resizeMode="contain"
-            style={styles.image}
-          ></Image>
-          <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
-            Logout
-          </Text>
-        </View>
-      );
-
+      let headerRight = Logout(navigation);
       return {
         headerTitle,
         headerRight
@@ -108,23 +69,10 @@ const BoardStack = createStackNavigator({
     }
   },
   Chat: {
-
     screen: ChatScreen,
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "Chat";
-      let headerRight = (
-        <View style={styles.container}>
-          <Image
-            source={require("./assets/images/logout.png")}
-            resizeMode="contain"
-            style={styles.image}
-          ></Image>
-          <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
-            Logout
-          </Text>
-        </View>
-      );
-
+      let headerRight = Logout(navigation);
       return {
         headerTitle,
         headerRight
@@ -135,19 +83,7 @@ const BoardStack = createStackNavigator({
     screen: DrawSide,
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "Room";
-      let headerRight = (
-        <View style={styles.container}>
-          <Image
-            source={require("./assets/images/logout.png")}
-            resizeMode="contain"
-            style={styles.image}
-          ></Image>
-          <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
-            Logout
-          </Text>
-        </View>
-      );
-
+      let headerRight = Logout(navigation);
       return {
         headerTitle,
         headerRight
@@ -158,19 +94,7 @@ const BoardStack = createStackNavigator({
     screen: MakeRoom,
     navigationOptions: ({ navigation }: any) => {
       let headerTitle = "MakeRoom";
-      let headerRight = (
-        <View style={styles.container}>
-          <Image
-            source={require("./assets/images/logout.png")}
-            resizeMode="contain"
-            style={styles.image}
-          ></Image>
-          <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
-            Logout
-          </Text>
-        </View>
-      );
-
+      let headerRight = Logout(navigation);
       return {
         headerTitle,
         headerRight
@@ -178,27 +102,7 @@ const BoardStack = createStackNavigator({
     }
   },
   Setting: {
-    screen: Setting,
-    navigationOptions: ({ navigation }: any) => {
-      let headerTitle = "Setting";
-      let headerRight = (
-        <View style={styles.container}>
-          <Image
-            source={require("./assets/images/logout.png")}
-            resizeMode="contain"
-            style={styles.image}
-          ></Image>
-          <Text style={{ marginRight: 10 }} onPress={() => Logout(navigation)}>
-            Logout
-          </Text>
-        </View>
-      );
-
-      return {
-        headerTitle,
-        headerRight
-      };
-    }
+    screen: Setting
   }
 });
 const MainTab = createBottomTabNavigator({
@@ -237,16 +141,3 @@ export default class App extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  image: {
-    width: 30,
-    height: 30,
-    margin: 5
-  }
-});

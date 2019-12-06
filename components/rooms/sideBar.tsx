@@ -70,7 +70,7 @@ class SideBar extends Component<Props, State> {
     getOut = async () => {
         let token = await AsyncStorage.getItem("userToken");
         let userData = await identifyUser(token);
-        let deleteJoin = [];
+        let deleteJoin = [this.props.Room.host_name];
         for (let i = 0; i < this.state.participants.length; i++) {
             if (this.state.participants[i] !== userData.name) {
                 deleteJoin.push(this.state.participants[i])

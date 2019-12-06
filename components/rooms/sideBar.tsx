@@ -5,9 +5,10 @@ import {
     StyleSheet,
     ScrollView,
     AsyncStorage,
-    Image
+    Image,
+    Alert
 } from "react-native";
-import { RoomData, joinChat } from "../src/redux/actions";
+import { RoomData } from "../src/redux/actions";
 import { Text } from "react-native-elements";
 import { connect } from "react-redux";
 import {
@@ -19,18 +20,18 @@ import {
 interface Props {
     navigation: any;
     Room: RoomData;
-    join: boolean;
-    JoinChat(): void;
 }
 
 interface State {
     participants: string[]
+    amIHost: boolean
     amIParticipant: boolean;
 }
 
 class SideBar extends Component<Props, State> {
     state: State = {
         participants: [],
+        amIHost: false,
         amIParticipant: false
     };
 
@@ -38,6 +39,12 @@ class SideBar extends Component<Props, State> {
         let token = await AsyncStorage.getItem("userToken");
         let userData = await identifyUser(token);
         let participants = this.props.Room.participants;
+        if (this.props.Room.host_name === userData.name) {
+            console.log("this.", this.props.Room.host_name)
+            this.setState({
+                amIHost: true
+            })
+        }
         this.setState({
             participants: participants
         })
@@ -71,9 +78,13 @@ class SideBar extends Component<Props, State> {
         let token = await AsyncStorage.getItem("userToken");
         let userData = await identifyUser(token);
         let deleteJoin = [this.props.Room.host_name];
-        for (let i = 0; i < this.state.participants.length; i++) {
-            if (this.state.participants[i] !== userData.name) {
-                deleteJoin.push(this.state.participants[i])
+        if (this.state.amIHost) {
+            Alert.alert("주인은 나갈 수 없습니다.")
+        } else {
+            for (let i = 0; i < this.state.participants.length; i++) {
+                if (this.state.participants[i] !== userData.name) {
+                    deleteJoin.push(this.state.participants[i])
+                }
             }
         }
         this.setState({

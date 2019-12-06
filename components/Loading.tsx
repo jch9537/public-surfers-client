@@ -75,7 +75,8 @@ export default class Loading extends Component<any, any> {
     if (verify === true) {
       this.props.navigation.navigate("MainPart");
     } else {
-      this.props.navigation.navigate("SignPart");
+      await AsyncStorage.clear()
+      await this.props.navigation.navigate("SignPart");
     }
   }
 

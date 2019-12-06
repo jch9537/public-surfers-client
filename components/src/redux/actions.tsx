@@ -19,7 +19,6 @@ export interface RoomData {
 //join 의 타입 결정
 export interface RoomInfomation {
   room?: RoomData;
-  Join?: boolean;
   post_id?: number;
 }
 //액션 생성 함수의 타입
@@ -27,9 +26,7 @@ export interface RoomInfo {
   type: typeof addRoomInfo;
   Room: RoomData;
 }
-export interface JoinChatRoom {
-  type: typeof JoinChatingRoom;
-}
+
 export interface GetPostId {
   type: typeof GettingPostId;
 }
@@ -41,8 +38,7 @@ export function roominfo(room: RoomData): RoomInfo {
     Room: room
   };
 }
-export const joinChat = (): JoinChatRoom => ({ type: JoinChatingRoom });
 export const getPostId = (): GetPostId => ({
   type: GettingPostId
 });
-export type addRoom = RoomInfo | JoinChatRoom | GetPostId;
+export type addRoom = RoomInfo | GetPostId;

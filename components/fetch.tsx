@@ -1,3 +1,4 @@
+
 export interface settingInfo {
   name: string | null;
   currPassword: string | null;
@@ -151,7 +152,8 @@ export const JoinChatfromSideBar = function(
       credentials: "include"
     });
   } else {
-    return fetch(server + `/post_id=${post_id}`, {
+    console.log("post", post_id)
+    return fetch(server + `/post?post_id=${post_id}`, {
       method: "DELETE",
       headers: {
         "Content-type": "application/json",

@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import {
     View,
@@ -9,10 +10,11 @@ import {
 } from "react-native";
 import { RoomData, roominfo } from "../src/redux/actions";
 import { Text } from "react-native-elements";
-import Weather from "./weather";
+import Weather from "../makerooms/weather";
 import { connect } from "react-redux";
-import { GetRoomlistOrGetRoominfo, identifyUser, DeleteRoom, EditRoom } from "../fetch";
+import { GetRoomlistOrGetRoominfo, identifyUser, DeleteRoom, EditRoom, GetLocationOrSpot } from "../fetch";
 import AdBanner from "../AdBanner";
+import { realTimeWeather } from "../utils/weatherUtil";
 import Edit from "../rooms/edit";
 interface Props {
     Room: RoomData;
@@ -23,17 +25,18 @@ interface State {
     amIHost: boolean;
     edit: boolean;
     editText: string
+    weather: object[]
 }
 class RoomInfo extends Component<Props, State> {
     state: State = {
         amIHost: false,
         edit: false,
-        editText: ""
+        editText: "",
+        weather: [],
     };
     async componentDidMount() {
         let token = await AsyncStorage.getItem("userToken");
         let postid = this.props.navigation.state.params.post_id;
-        console.log("postid", postid, typeof postid)
         await GetRoomlistOrGetRoominfo(`${token}`, postid)
             .then(res => {
                 return res.json();
@@ -45,7 +48,18 @@ class RoomInfo extends Component<Props, State> {
                 })
             });
         let userInfo = await identifyUser(token);
-
+        GetLocationOrSpot(this.props.Room.location_name, `${token}`)
+            .then(res => res.json())
+            .then(async data => {
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i][this.props.Room.spot_name]) {
+                        let result = await realTimeWeather(data[i][this.props.Room.spot_name]["x"], data[i][this.props.Room.spot_name]["y"])
+                        this.setState({
+                            weather: result
+                        })
+                    }
+                }
+            })
         if (this.props.Room.host_id === userInfo.id) {
             await this.setState({
                 ...this.state,
@@ -81,7 +95,6 @@ class RoomInfo extends Component<Props, State> {
             })
             .then(resData => {
                 if (resData) {
-                    console.log("resData", resData)
                     this.props.addRoom(resData);
                     return this.editButtonPress();
                 }
@@ -109,7 +122,6 @@ class RoomInfo extends Component<Props, State> {
         )
     };
     render() {
-        console.log("this.state", this.state.editText)
         return (
             <View>
                 <View style={Styles.mainWrap}>
@@ -119,7 +131,7 @@ class RoomInfo extends Component<Props, State> {
                     />
                     <View style={Styles.contents}>
                         <View style={Styles.weatherBox}>
-                            <Weather />
+                            <Weather currWeather={this.state.weather} />
                         </View>
                         {this.state.edit ?
                             <Edit

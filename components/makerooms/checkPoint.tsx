@@ -12,7 +12,7 @@ export interface CheckPointState {
   fontent: boolean;
 }
 
-class CheckPoint extends React.Component<CheckPointProps, CheckPointState> {
+class  CheckPoint extends React.Component<CheckPointProps, CheckPointState> {
   state = {
     surfPoint: "",
     fontend: false

@@ -12,7 +12,8 @@ import {
   Alert,
   TouchableOpacity,
   Text,
-  ImageBackground
+  ImageBackground,
+  KeyboardAvoidingView
 } from "react-native";
 
 import { getFormatDate, realTimeWeather } from "../utils/weatherUtil";
@@ -132,6 +133,7 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
   };
 
   postMakeRoom = async () => {
+    console.log("-----------------------");
     let data = {
       location: this.state.localPoint,
       spot: this.state.surfPoint,
@@ -172,7 +174,7 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
   render() {
     // console.log("스테이트 상태체크", this.state);
     return (
-      <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView behavior="padding" enabled style={styles.container}>
         {/* 111 */}
         <View style={styles.eachBox1}>
           {/* <ImageBackground
@@ -228,13 +230,29 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
           <InputText textInput={this.textInput}></InputText>
         </View>
         {/* 444 */}
-        <View style={styles.eachBox4}>
-          <Button title="방만들기" onPress={this.postMakeRoom}></Button>
+        <View style={styles.eachBox1}>
+          <View style={styles.eachBox4}>
+            <TouchableOpacity style={styles.button} onPress={this.postMakeRoom}>
+              <Text
+                style={{
+                  fontFamily: "gaegu_regular",
+                  fontSize: 22,
+                  // left: 7,
+                  color: "navy"
+                }}
+              >
+                방만들기
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
+        {/* <View style={styles.eachBox4}>
+          <Button title="방만들기" onPress={this.postMakeRoom}></Button>
+        </View> */}
         <View style={styles.banner}>
           <AdBanner />
         </View>
-      </SafeAreaView>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -268,7 +286,8 @@ const styles = StyleSheet.create<Style>({
   eachBox11: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    fontFamily: "gaegu_regular"
   },
   eachBox12: {
     flex: 1,
@@ -281,7 +300,6 @@ const styles = StyleSheet.create<Style>({
   eachBox122: {
     flex: 1
   },
-
   eachBox2: {
     flex: 2,
     flexDirection: "row"
@@ -295,7 +313,8 @@ const styles = StyleSheet.create<Style>({
   eachBox4: {
     top: 15,
     flex: 1,
-    fontFamily: "gaegu_regular"
+    fontFamily: "gaegu_regular",
+    alignItems: "center"
     // backgroundColor: "orange"
   },
   banner: {
@@ -309,7 +328,7 @@ const styles = StyleSheet.create<Style>({
     alignItems: "center",
     justifyContent: "center",
     fontFamily: "gaegu_regular",
-    backgroundColor: "orange",
-    borderRadius: 60 / 2
+    backgroundColor: "#f6f6f6",
+    borderRadius: 10
   }
 });

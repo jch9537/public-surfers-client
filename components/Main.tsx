@@ -49,10 +49,10 @@ export default class Main extends Component<Props, State> {
   render() {
     return this.state.fontend ? (
       <ImageBackground
-        source={require("../assets/images/background.png")}
+        source={require("../assets/images/beach1.jpg")}
         style={Styles.wrap}
       >
-        <View style={{ marginBottom: "35%" }}>
+        <View style={{ marginBottom: "20%" }}>
           <TouchableOpacity
             style={Styles.button}
             onPress={() => this.props.navigation.navigate("MakeRoom")}

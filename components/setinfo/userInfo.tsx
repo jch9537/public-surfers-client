@@ -71,20 +71,6 @@ class UserInfo extends React.Component<UserInfoProps, UserInfoState> {
     console.log("인포스테이트", this.state);
     return (
       <View style={styles.container}>
-        <View style={styles.inputImg}>
-          {/* <Text>이미지삽입</Text>
-          {this.props.photo && ( */}
-          <Image
-            source={require("../../assets/images/surfer.png")}
-            style={{
-              width: 170,
-              height: 170,
-              borderRadius: 170 / 2
-            }}
-          ></Image>
-          {/* )} */}
-          {/* <Button title="사진넣기" onPress={this.uploadImage}></Button> */}
-        </View>
         <View style={styles.inputText}>
           <View style={styles.inputTextContainer}>
             <View style={styles.eachContainer}>
@@ -138,12 +124,26 @@ class UserInfo extends React.Component<UserInfoProps, UserInfoState> {
                   style={{
                     fontFamily: "gaegu_regular",
                     fontSize: 22,
-                    color: "orange"
+                    color: "black"
                   }}
                 >
                   V 확인
                 </Text>
               </TouchableOpacity>
+            </View>
+            <View style={styles.inputImg}>
+              {/* <Text>이미지삽입</Text>
+                      {this.props.photo && ( */}
+              <Image
+                source={require("../../assets/images/surfer2.png")}
+                style={{
+                  width: 170,
+                  height: 170,
+                  borderRadius: 170 / 2
+                }}
+              ></Image>
+              {/* )} */}
+              {/* <Button title="사진넣기" onPress={this.uploadImage}></Button> */}
             </View>
           </View>
         </View>
@@ -167,13 +167,13 @@ interface Style {
 const styles = StyleSheet.create<Style>({
   container: {
     resizeMode: "contain",
-    top: 10,
+    // top: 0,
     flex: 1,
     alignContent: "center"
   },
   inputImg: {
     flex: 1,
-    top: 10,
+    top: 45,
     alignItems: "center"
     // backgroundColor: "darkseagreen"
   },
@@ -200,7 +200,7 @@ const styles = StyleSheet.create<Style>({
     margin: 6,
     padding: 10,
     borderBottomWidth: 2,
-    borderBottomColor: "orange",
+    borderBottomColor: "black",
     fontFamily: "gaegu_regular",
     fontSize: 20
   },

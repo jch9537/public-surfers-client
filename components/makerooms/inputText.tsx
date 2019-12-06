@@ -31,10 +31,11 @@ class InputText extends React.Component<InputTextProps, InputTextState> {
   }
   render() {
     return (
-      <ImageBackground
-        source={require("../../assets/images/together1.png")}
-        style={styles.textInput}
-      >
+      // <ImageBackground
+      //   source={require("../../assets/images/sunset2.jpg")}
+      //   style={styles.textInput}
+      // >
+      <View style={styles.textInput}>
         <View style={{ flex: 2 }}>
           <TextInput
             style={{ fontFamily: "gaegu_regular", fontSize: 22 }}
@@ -42,7 +43,8 @@ class InputText extends React.Component<InputTextProps, InputTextState> {
             onChangeText={text => this.props.textInput(text)}
           ></TextInput>
         </View>
-        {/* <View
+      </View>
+      /* <View
           style={{
             flex: 1,
             // backgroundColor: "blue",
@@ -64,8 +66,8 @@ class InputText extends React.Component<InputTextProps, InputTextState> {
               내용넣기
             </Text>
           </TouchableOpacity>
-        </View> */}
-      </ImageBackground>
+        </View> */
+      // </ImageBackground>
     );
   }
 }

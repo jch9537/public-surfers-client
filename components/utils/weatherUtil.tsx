@@ -151,8 +151,8 @@ export function realTimeWeather(x: number, y: number) {
   var ForecastGribURL =
     "http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastSpaceData";
   ForecastGribURL += "?ServiceKey=" + apikey;
-  ForecastGribURL += "&base_date=" + today;
-  ForecastGribURL += "&base_time=" + basetime;
+  ForecastGribURL += "&base_date=" + today; //"20191204"
+  ForecastGribURL += "&base_time=" + basetime; //"0100";
   ForecastGribURL += "&nx=" + _nx + "&ny=" + _ny;
   ForecastGribURL += "&pageNo=1&numOfRows=14";
   ForecastGribURL += "&_type=json";
@@ -188,7 +188,7 @@ function makeWeatherData(obj: any) {
   const weatherInfo = [];
 
   if (obj) {
-    // console.log('전체 인자', obj.response.body.items.item);
+    // console.log("전체 인자", obj.response.body.items.item);
     let announceTime = obj.response.body.items.item[0].fcstTime.toString();
     let itemObj = obj.response.body.items.item;
     // console.log('값', announceTime);
@@ -247,6 +247,6 @@ function makeWeatherData(obj: any) {
       }
     }
   }
-  // console.log("날씨", weatherInfo);
+  console.log("날씨", weatherInfo);
   return weatherInfo;
 }

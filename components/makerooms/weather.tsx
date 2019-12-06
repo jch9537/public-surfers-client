@@ -65,14 +65,14 @@ const weatherIcon = (item: any) => {
 const Weather: React.SFC<WeatherProps> = (props: WeatherProps) => {
   // console.log("웨더 프롭", props);
   return (
-    <ImageBackground
-      source={require("../../assets/images/background3.png")}
+    <View
+      // source={require("../../assets/images/background3.png")}
       style={styles.weatherContainer}
     >
       {props.currWeather.map((item: any): any => {
         return weatherIcon(item);
       })}
-    </ImageBackground>
+    </View>
   );
 };
 

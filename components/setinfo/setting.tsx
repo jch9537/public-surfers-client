@@ -99,9 +99,14 @@ class Setting extends Component<SettingProps, SettingState> {
     // console.log('세팅프롭', this.props);
     console.log("여기스테이트 :", this.state);
     return (
+      // <KeyboardAvoidingView
+      //   behavior="padding"
+      //   enabled
+      //   style={styles.setContainer}
+      // >
       <View style={styles.setContainer}>
         <ImageBackground
-          source={require("../../assets/images/wave.png")}
+          source={require("../../assets/images/wave3.jpg")}
           style={{ flex: 1, margin: 5 }}
         >
           <Header
@@ -127,13 +132,6 @@ class Setting extends Component<SettingProps, SettingState> {
             // }}
           />
           <View style={styles.infoContainer}>
-            <UserInfo
-              addPhoto={this.addPhoto}
-              editName={this.editName}
-              checkCurrPassword={this.checkCurrPassword}
-              editNewPassword={this.editNewPassword}
-              matchNewPassword={this.matchNewPassword}
-            ></UserInfo>
             <TouchableOpacity
               style={styles.button}
               onPress={this.changeUserInfo}
@@ -148,15 +146,16 @@ class Setting extends Component<SettingProps, SettingState> {
                 회원정보 수정
               </Text>
             </TouchableOpacity>
+            <UserInfo
+              addPhoto={this.addPhoto}
+              editName={this.editName}
+              checkCurrPassword={this.checkCurrPassword}
+              editNewPassword={this.editNewPassword}
+              matchNewPassword={this.matchNewPassword}
+            ></UserInfo>
           </View>
-          {Platform.OS === "android" && (
-            <KeyboardAvoidingView
-              behavior="padding"
-              keyboardVerticalOffset={100}
-              enabled
-            />
-          )}
         </ImageBackground>
+        {/* </KeyboardAvoidingView> */}
       </View>
     );
   }
@@ -179,18 +178,19 @@ const styles = StyleSheet.create<Style>({
   infoContainer: {
     flex: 1,
     alignItems: "center",
-    margin: 10,
+    // margin: 10,
     padding: 10
     // backgroundColor: "yellow"
   },
   button: {
+    top: 15,
     width: 150,
     height: 40,
     marginBottom: 10,
     alignItems: "center",
     justifyContent: "center",
     fontFamily: "gaegu_regular",
-    backgroundColor: "orange",
-    borderRadius: 20
+    backgroundColor: "#A4DBFF",
+    borderRadius: 10
   }
 });

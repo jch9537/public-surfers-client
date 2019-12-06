@@ -11,7 +11,9 @@ export default class google extends Component<Props> {
       const result = await Google.logInAsync({
         clientId: ClientId
       });
+      console.log("..", result)
       if (result.type === "success") {
+        console.log("res", result);
         const { email, givenName } = result.user;
         this.props.navigation.navigate("Main");
       }

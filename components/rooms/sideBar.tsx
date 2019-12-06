@@ -4,16 +4,14 @@ import {
     TouchableOpacity,
     StyleSheet,
     ScrollView,
-    Alert,
     AsyncStorage,
     Image
 } from "react-native";
 import { RoomData, joinChat } from "../src/redux/actions";
-import { Text, Icon } from "react-native-elements";
+import { Text } from "react-native-elements";
 import { connect } from "react-redux";
 import {
     JoinChatfromSideBar,
-    GetMyRooms,
     identifyUser,
     participateRoom
 } from "../fetch";
@@ -26,11 +24,13 @@ interface Props {
 }
 
 interface State {
+    participants: string[]
     amIParticipant: boolean;
 }
 
 class SideBar extends Component<Props, State> {
     state: State = {
+        participants: [],
         amIParticipant: false
     };
 
@@ -38,7 +38,9 @@ class SideBar extends Component<Props, State> {
         let token = await AsyncStorage.getItem("userToken");
         let userData = await identifyUser(token);
         let participants = this.props.Room.participants;
-        console.log("??", participants)
+        this.setState({
+            participants: participants
+        })
         if (participants.includes(userData.name)) {
             this.setState({
                 ...this.state,
@@ -46,7 +48,6 @@ class SideBar extends Component<Props, State> {
             });
         }
     }
-
     //채팅창 입장
     joinChat = async () => {
         return this.props.navigation.navigate("Chat");
@@ -56,9 +57,11 @@ class SideBar extends Component<Props, State> {
     joinRoom = async () => {
         let token = await AsyncStorage.getItem("userToken");
         await participateRoom(token, this.props.Room.id);
-
-        await this.setState({
+        let userData = await identifyUser(token);
+        let JoinRooms = this.state.participants.concat([userData.name])
+        this.setState({
             ...this.state,
+            participants: JoinRooms,
             amIParticipant: true
         });
     };
@@ -66,27 +69,30 @@ class SideBar extends Component<Props, State> {
     //방에서 나가기
     getOut = async () => {
         let token = await AsyncStorage.getItem("userToken");
-        await JoinChatfromSideBar(`${token}`, this.props.Room.id)
-            .then(res => {
-                if (res.status === 200) {
-                    return res.json();
-                } else {
-                    Alert.alert("나가기 실패");
-                }
-            })
+        let userData = await identifyUser(token);
+        let deleteJoin = [];
+        for (let i = 0; i < this.state.participants.length; i++) {
+            if (this.state.participants[i] !== userData.name) {
+                deleteJoin.push(this.state.participants[i])
+            }
+        }
+        this.setState({
+            participants: deleteJoin
+        })
+        return JoinChatfromSideBar(`${token}`, this.props.Room.id)
+            .then(res => res.json())
             .then(res => {
                 if (res) {
-                    this.props.JoinChat();
+                    this.setState({
+                        ...this.state,
+                        amIParticipant: false
+                    });
                 }
             });
-        await this.setState({
-            ...this.state,
-            amIParticipant: false
-        });
+        // await 
     };
 
     render() {
-        // console.log("sidebarState: ", this.props.Room);
         return (
             <View style={Styles.wrap}>
                 <View style={Styles.head}>
@@ -100,7 +106,7 @@ class SideBar extends Component<Props, State> {
                 </View>
                 <Text style={Styles.title}>참여자 목록</Text>
                 <ScrollView>
-                    {this.props.Room.participants.map((data, index) => (
+                    {this.state.participants.map((data, index) => (
                         <Text key={index} style={Styles.contents}>
                             {data}
                         </Text>

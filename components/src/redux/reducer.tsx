@@ -6,10 +6,6 @@ import {
   GettingPostId
 } from "./actions";
 
-// state = {
-//     Join: null,
-//     User_id: 0
-// };
 export const Room: RoomInfomation = {
   room: {
     id: 0,
@@ -21,8 +17,7 @@ export const Room: RoomInfomation = {
     pay: 0,
     spot_name: "",
     participants: []
-  },
-  Join: false
+  }
 };
 export function RoomInfo(
   state: RoomInfomation = Room,
@@ -32,12 +27,6 @@ export function RoomInfo(
     case addRoomInfo:
       return {
         room: action.Room,
-        Join: state.Join
-      };
-    case JoinChatingRoom:
-      return {
-        room: state.room,
-        Join: !state.Join
       };
     case GettingPostId:
       return {

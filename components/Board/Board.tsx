@@ -61,36 +61,15 @@ export default class Board extends Component<Props, State> {
         let dataChunk: any = await GetRoomlistOrGetRoominfo(`${token}`);
         let boardList = await dataChunk.json();
 
-        // console.log("boardList: ", boardList);
+        await this._sortByDate(boardList);
 
         await this.setState({
           ...this.state,
-          board: boardList.reverse(),
-          filteredBoard: boardList.reverse()
+          board: boardList,
+          filteredBoard: boardList
         });
       }
     );
-
-    //방목록 불러오기.
-    // console.log("board token", token)
-    await GetRoomlistOrGetRoominfo(`${token}`)
-      .then(res => {
-        // console.log("Res", res)
-        if (res["status"] === 200) {
-          return res.json();
-        } else {
-          Alert.alert("다음번에..");
-        }
-      })
-      .then(res => {
-        // console.log("res", res)
-        let data = this.state.board.concat(res);
-        // console.log("DAta", data)
-        return this.setState({
-          board: data.reverse(),
-          filteredBoard: data.reverse()
-        });
-      });
   }
   changeLocal = (value: string): any => {
     if (value === "모든지역") {
@@ -127,6 +106,17 @@ export default class Board extends Component<Props, State> {
       });
     }
   };
+
+  async _sortByDate(array: Posts[]) {
+    await array.sort((a: Posts, b: Posts) => {
+      if (a.date > b.date) {
+        return 1;
+      } else if (a.date < b.date) {
+        return -1;
+      }
+      return 0;
+    });
+  }
 
   render() {
     // console.log("this.state", this.state.board);

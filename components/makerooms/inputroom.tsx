@@ -14,16 +14,13 @@ import {
   Text,
   ImageBackground
 } from "react-native";
-import { createAppContainer } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
 
-import { getFormatDate, realTimeWeather } from "../utils/util";
+import { getFormatDate, realTimeWeather } from "../utils/weatherUtil";
 import { GetLocationOrSpot, makeRoom } from "../fetch";
 import SelectLocation from "./selectLocation";
 import CheckPoint from "./checkPoint";
 import Weather from "./weather";
 import InputText from "./inputText";
-import RoomInfo from "../rooms/room";
 import AdBanner from "../AdBanner";
 
 export interface InputroomProps {
@@ -40,7 +37,6 @@ export interface InputroomState {
   dateText: string;
   currWeather: any;
   text: string;
-  postId: number | null;
   fontend: boolean;
 }
 
@@ -57,7 +53,6 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
       dateText: "날짜선택",
       currWeather: null,
       text: "",
-      postId: null,
       fontend: false
     };
   }
@@ -89,9 +84,6 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
   }
 
   checkLocation = async (location: any) => {
-    // if (this.state.dateText === "날짜선택") {
-    //   Alert.alert("날짜를 선택해주세요");
-    // }
     let locationDetail: string[] = [];
     console.log("큰지역선택", location);
     // console.log('스테이트포인트', this.state);
@@ -165,17 +157,20 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
         Alert.alert("내용을 입력해주세요");
       }
     } else {
+      console.log("데이타", data);
       let token = await AsyncStorage.getItem("userToken");
       console.log(token, "----------------", data);
-      await makeRoom(data, `${token}`)
+      return makeRoom(data, `${token}`)
         .then(res => res.json())
-        .then(json => this.setState({ postId: json }));
-      // this.props.navigation.navigate()
+        .then(json => {
+          console.log(json);
+          this.props.navigation.navigate("Room", json);
+        });
     }
   };
 
   render() {
-    console.log("스테이트 상태체크", this.state);
+    // console.log("스테이트 상태체크", this.state);
     return (
       <SafeAreaView style={styles.container}>
         {/* 111 */}
@@ -245,6 +240,7 @@ class Inputroom extends Component<InputroomProps, InputroomState> {
 }
 
 export default Inputroom;
+
 interface Style {
   container: ViewStyle;
   eachBox1: ViewStyle;

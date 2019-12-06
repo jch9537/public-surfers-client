@@ -28,7 +28,7 @@ export interface UserInfoProps {
   checkCurrPassword: any;
   editNewPassword: any;
   matchNewPassword: any;
-  photo: any;
+  // photo: any;
 }
 
 export interface UserInfoState {

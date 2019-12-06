@@ -8,7 +8,6 @@ import {
   AsyncStorage
 } from "react-native";
 import { GetRoomlistOrGetRoominfo } from "../fetch";
-import { fakeBoard } from "../fakeData/board";
 import BoardList from "./BoardList";
 import Choice from "./Choice";
 import { BooleanLiteral } from "@babel/types";

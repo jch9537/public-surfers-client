@@ -45,7 +45,7 @@ interface NewChatScreenStates {
 export class ChatScreen extends React.Component<
   NewChatScreenProps,
   NewChatScreenStates
-  > {
+> {
   public messages: any;
   constructor(props: NewChatScreenProps) {
     super(props);
@@ -124,6 +124,7 @@ export class ChatScreen extends React.Component<
     const socket = io.connect("http://15.164.218.247:3000/chatroom");
     socket.emit("message", newmessages[0]);
 
+    //푸쉬알림 보내기.
     await fetch("http://15.164.218.247:3000/chat/push_noti", {
       method: "POST",
       headers: {
@@ -176,27 +177,27 @@ export class ChatScreen extends React.Component<
         </View>
       </View>
     ) : (
-        <View style={Styles.outGoingWarp}>
-          <View style={Styles.outGoingText}>
-            <Text
-              style={{
-                fontSize: 15,
-                fontWeight: "600",
-                marginBottom: 3
-              }}
-            >
-              {message.user.name}
-            </Text>
-            <Text style={{}}>{message.text}</Text>
-          </View>
-          <Image
-            source={{
-              uri: message.user.avatar
+      <View style={Styles.outGoingWarp}>
+        <View style={Styles.outGoingText}>
+          <Text
+            style={{
+              fontSize: 15,
+              fontWeight: "600",
+              marginBottom: 3
             }}
-            style={Styles.outGoingImg}
-          />
+          >
+            {message.user.name}
+          </Text>
+          <Text style={{}}>{message.text}</Text>
         </View>
-      );
+        <Image
+          source={{
+            uri: message.user.avatar
+          }}
+          style={Styles.outGoingImg}
+        />
+      </View>
+    );
   }
 
   async _getMyInfo() {

@@ -6,7 +6,7 @@
     "slug": "surf-client",
     "privacy": "public",
     "sdkVersion": "35.0.0",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "entryPoint": "node_modules/expo/AppEntry.js",
     "platforms": ["ios", "android", "web"],
     "icon": "./assets/icon.png",
@@ -16,7 +16,8 @@
       "backgroundColor": "#ffffff"
     },
     "android": {
-      "package": "com.hyun133.surfclub",
+      "package": "com.hyun133.surfers",
+      "versionCode": 1,
       "googleServicesFile": "./google-services.json",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-9828921339355562~2396561843"

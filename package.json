@@ -1,34 +1,64 @@
 {
+  "main": "node_modules/expo/AppEntry.js",
+  "rnpm": {
+    "assets": [
+      ".assets/fonts"
+    ]
+  },
   "scripts": {
-    "postinstall": "jetify",
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
     "web": "expo start --web",
-    "start": "react-native start",
-    "test": "jest"
+    "eject": "expo eject"
   },
   "dependencies": {
     "expo": "^35.0.0",
+    "expo-ads-admob": "~7.0.0",
+    "expo-google-app-auth": "^7.0.0",
+    "expo-server-sdk": "^3.4.0",
+    "firebase": "^7.3.0",
     "react": "16.8.3",
     "react-dom": "16.8.3",
-    "react-native": "0.59.10",
-    "react-native-gesture-handler": "~1.3.0",
-    "react-native-reanimated": "~1.2.0",
-    "react-native-screens": "1.0.0-alpha.23",
-    "react-native-unimodules": "~0.5.4",
-    "react-native-web": "^0.11.7"
+    "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
+    "react-native-elements": "^1.2.7",
+    "react-native-firebase": "^5.5.6",
+    "react-native-gesture-handler": "^1.5.2",
+    "react-native-gifted-chat": "^0.12.0-beta-0",
+    "react-native-image-picker": "^1.1.0",
+    "react-native-keyboard-aware-scrollview": "^2.1.0",
+    "react-native-reanimated": "^1.4.0",
+    "react-native-screens": "^1.0.0-alpha.23",
+    "react-native-vector-icons": "^6.6.0",
+    "react-native-web": "^0.11.7",
+    "react-navigation": "^4.0.10",
+    "react-navigation-drawer": "^2.3.3",
+    "react-navigation-stack": "^1.10.3",
+    "react-navigation-tabs": "^2.6.0",
+    "react-redux": "^7.1.3",
+    "redux": "^4.0.4",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.0",
     "@types/react": "^16.8.23",
+    "@types/react-dom": "^16.9.4",
     "@types/react-native": "^0.57.65",
-    "babel-preset-expo": "^7.0.0",
-    "jest-expo": "^35.0.0",
-    "jetifier": "^1.6.4",
-    "typescript": "^3.4.5"
-  },
-  "jest": {
-    "preset": "react-native"
+    "@types/react-redux": "^7.1.5",
+    "@types/socket.io": "^2.1.4",
+    "@types/socket.io-client": "^1.4.32",
+    "babel-preset-expo": "^7.1.0",
+    "lint-staged": "^9.4.2",
+    "prettier": "^1.19.1",
+    "prettier-tslint": "^0.4.2",
+    "pretty-quick": "^2.0.1",
+    "redux-devtools": "^3.5.0",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "typescript": "^3.6.3",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   },
   "private": true
 }

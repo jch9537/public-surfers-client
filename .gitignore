@@ -9,11 +9,16 @@ npm-debug.*
 *.orig.*
 web-build/
 web-report/
-.prettierrc
+.prettierrc.json
+./firebaseConfig.tsx
+google-services.json
+package-lock.json
 
+## json file ##
+
+google-services.json
 
 
 # macOS
 .DS_Store
-
 
